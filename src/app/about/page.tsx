@@ -1,5 +1,11 @@
-export default function About(){
-    return(
-        <div className="p-10 text-center text-3xl text-orange-500">This is About</div>
-    );
+"use client";
+
+import AboutSection from "@/components/AboutUsSection";
+
+export default function AboutPage() {
+  return (
+    <main>
+      <AboutSection />
+    </main>
+  );
 }
