@@ -11,7 +11,13 @@ export default function Button({ href, children }: ButtonProps) {
   return (
     <Link
       href={href}
-      className="inline-block bg-[#e98c42] border-2 border-green-900 text-green-900 font-bold px-5 py-2 rounded shadow-sm hover:bg-[#d67a35] transition"
+      className="inline-flex items-center justify-center
+                 px-4 py-1.5 text-sm font-bold uppercase tracking-wide
+                 rounded-md border-2
+                 text-[#0b3d2e] border-[#0b3d2e]
+                 bg-[#e39a5b] shadow-[0_2px_0_#0b3d2e]
+                 hover:bg-[#d18548] transition"
+      style={{ minWidth: "180px" }} // keeps it narrower + text centered
     >
       {children}
     </Link>
