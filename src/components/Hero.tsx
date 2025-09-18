@@ -22,48 +22,56 @@ export default function Hero() {
               Integer in quam justo vestibulum lectus etiam. A sit imperdiet aliquam tortor tincidunt..
             </p>
 
-            <div className="mt-7 flex gap-3">
+            <div className="mt-7 flex gap-2 md:gap-3">
               <Link
-                href="#about"
-                className="flex items-center justify-center 
-                            min-w-[80px] h-[36px] px-3 text-xs   
-                            md:min-w-[100px] md:h-[48px] md:px-4 md:text-sm 
-                            bg-[#EF9748] border-2 border-[#073027] text-[#073027]
-                            rounded-md font-semibold 
-                            hover:bg-[#FAB170] transition"
+                href="/about"
+                className="flex items-center justify-center
+                          min-w-[140px] h-[44px] px-4 text-[13px]   /* mobile */
+                          md:min-w-[180px] md:h-[56px] md:px-5 md:text-[15px]  /* md+ */
+                          rounded-[12px] bg-[#EF9748] border-2 border-[#073027] text-[#073027] font-extrabold
+                          shadow-[0_4px_0_0_#073027] md:shadow-[0_5px_0_0_#073027]
+                          hover:translate-y-[1px] hover:shadow-[0_4px_0_0_#073027] hover:bg-[#FAB170] transition-transform duration-150
+                          active:translate-y-[3px] active:shadow-[0_3px_0_0_#073027]"
               >
                 ABOUT RESTAURANT
               </Link>
+
               <Link
-                href="#reserve"
-                className="flex items-center justify-center 
-                            min-w-[80px] h-[36px] px-3 text-xs  
-                            md:min-w-[100px] md:h-[48px] md:px-4 md:text-sm 
-                            bg-[#EF9748] border-2 border-[#073027] text-[#073027]
-                            rounded-md font-semibold shadow-md 
-                            hover:bg-[#FAB170] transition"
+                href="/reserve"
+                className="flex items-center justify-center
+                          min-w-[140px] h-[44px] px-4 text-[13px]
+                          md:min-w-[180px] md:h-[56px] md:px-5 md:text-[15px]
+                          rounded-[12px] bg-[#EF9748] border-2 border-[#073027] text-[#073027] font-extrabold
+                          shadow-[0_4px_0_0_#073027] md:shadow-[0_5px_0_0_#073027]
+                          hover:translate-y-[1px] hover:shadow-[0_4px_0_0_#073027] hover:bg-[#FAB170] transition-transform duration-150
+                          active:translate-y-[3px] active:shadow-[0_3px_0_0_#073027]"
               >
                 RESERVE A TABLE
               </Link>
             </div>
 
-            <div className="my-5 grid grid-cols-2 gap-8 justify-items-center md:flex md:items-center md:gap-12 md:justify-start">
+            <div className="my-8 grid grid-cols-2 gap-6 justify-items-center md:flex md:items-center md:gap-12 md:justify-start">
               <div className="flex flex-col items-center text-center md:flex-row md:text-left md:items-center md:gap-4">
-                <Image src="/images/Award1.png" alt="Michelin Gourmand" width={70} height={70} />
-                <div className="mt-3 md:mt-0 leading-tight">
-                  <p className="text-[#073027] font-extrabold tracking-wide text-sm md:text-[15px]">MICHELIN GOURMAND</p>
-                  <p className="text-[11px] md:text-xs text-black/60">2018–2025</p>
+                <div className="grid h-20 w-20 md:h-16 md:w-16 place-items-center rounded-full bg-white shadow-[0_8px_24px_rgba(0,0,0,0.08)] ring-1 ring-black/5">
+                  <Image src="/images/Award1.png" alt="Michelin Gourmand" width={44} height={44} className="md:w-[35px] md:h-[35px]" />
+                </div>
+                <div className="mt-2 md:mt-0 leading-tight text-center md:text-left">
+                  <p className="text-[#073027] font-extrabold tracking-tighter text-lg md:text-[15px] whitespace-nowrap">MICHELIN GOURMAND</p>
+                  <p className="text-[10px] md:text-xs text-black/60">2018–2025</p>
                 </div>
               </div>
 
               <div className="flex flex-col items-center text-center md:flex-row md:text-left md:items-center md:gap-4">
-                <Image src="/images/Award2.png" alt="Thai Select" width={70} height={70} />
-                <div className="mt-3 md:mt-0 leading-tight">
-                  <p className="text-[#073027] font-extrabold tracking-wide text-sm md:text-[15px]">THAI SELECT</p>
-                  <p className="text-[11px] md:text-xs text-black/60">2020</p>
+                <div className="grid h-20 w-20 md:h-16 md:w-16 place-items-center rounded-full bg-white shadow-[0_8px_24px_rgba(0,0,0,0.08)] ring-1 ring-black/5">
+                  <Image src="/images/Award2.png" alt="Thai Select" width={44} height={44} className="md:w-[40px] md:h-[40px]" />
+                </div>
+                <div className="mt-2 md:mt-0 leading-tight text-center md:text-left">
+                  <p className="text-[#073027] font-extrabold tracking-tighter text-lg md:text-[15px] whitespace-nowrap">THAI SELECT</p>
+                  <p className="text-[10px] md:text-xs text-black/60">2020</p>
                 </div>
               </div>
             </div>
+
           </div>
 
           <div className="order-1 md:order-2 flex-1 relative min-h-[440px] md:min-h-[680px]">
