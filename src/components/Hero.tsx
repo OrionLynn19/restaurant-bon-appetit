@@ -3,8 +3,8 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="relative bg-[#FFF9EF] overflow-visible">
-      <div className="container w-full max-w-[1200px] px-6 md:px-0 md:pl-10">
+    <section className="relative bg-[#FFFCF1] overflow-visible">
+      <div className="container w-full max-w-[1200px] lg:max-w-[100%] px-6 md:px-0 md:pl-10">
         <div className="min-h-[92vh] flex flex-col md:flex-row items-center justify-between md:gap-10">
           <div className="order-2 md:order-1 flex-1 md:max-w-none">
             <div className="flex items-center gap-3">
