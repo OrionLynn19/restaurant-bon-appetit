@@ -27,3 +27,9 @@ body {
   color: var(--foreground);
   font-family: var(--font-schibsted), Arial, Helvetica, sans-serif;
 }
+
+.swiper-wrapper {
+  pointer-events: none;
+  transition-timing-function: linear !important;
+}
+
