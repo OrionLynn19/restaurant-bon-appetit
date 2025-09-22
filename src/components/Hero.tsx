@@ -12,11 +12,11 @@ export default function Hero() {
               <p className="text-[13px] font-semibold tracking-[0.18em] text-[#EA7D33]">SINCE 2012</p>
             </div>
 
-            <h1 className="mt-5 text-[15px] md:text-[30px] font-extrabold leading-snug text-[#073027]">
+            <h1 className="mt-5 text-[24px] md:text-[40px] font-['Bebas_Neue'] font-bold leading-snug text-[#073027]">
               A TASTE OF EUROPE, A CULINARY JOURNEY
             </h1>
 
-            <p className="mt-6 text-[13px] md:text-[18px] text-[#2E3A36]">
+            <p className="mt-6 font-['Schibsted_Grotesk'] text-[14px] md:text-[20px] text-[#2E3A36]">
               Welcome to Bon AppÉtit, where culinary traditions blend seamlessly. Our menu is a celebration of flavors, offering a delightful fusion of Thai and European cuisines. 
               Experience the artistry of our chefs as they craft each dish with passion and precision. Join us for an unforgettable dining experience that tantalizes your taste buds and warms your heart.
             </p>
@@ -27,7 +27,7 @@ export default function Hero() {
                 className="flex items-center justify-center
                           min-w-[140px] h-[44px] px-4 text-[13px]   /* mobile */
                           md:min-w-[180px] md:h-[56px] md:px-5 md:text-[15px]  /* md+ */
-                          rounded-[12px] bg-[#EF9748] border-2 border-[#073027] text-[#073027] font-extrabold
+                          rounded-[12px] bg-[#EF9748] border-2 border-[#073027] text-[#073027] font-['Bebas_Neue'] font-extrabold
                           shadow-[0_4px_0_0_#073027] md:shadow-[0_5px_0_0_#073027]
                           hover:translate-y-[1px] hover:shadow-[0_4px_0_0_#073027] hover:bg-[#FAB170] transition-transform duration-150
                           active:translate-y-[3px] active:shadow-[0_3px_0_0_#073027]"
@@ -40,7 +40,7 @@ export default function Hero() {
                 className="flex items-center justify-center
                           min-w-[140px] h-[44px] px-4 text-[13px]
                           md:min-w-[180px] md:h-[56px] md:px-5 md:text-[15px]
-                          rounded-[12px] bg-[#EF9748] border-2 border-[#073027] text-[#073027] font-extrabold
+                          rounded-[12px] bg-[#EF9748] border-2 border-[#073027] text-[#073027] font-['Bebas_Neue'] font-extrabold
                           shadow-[0_4px_0_0_#073027] md:shadow-[0_5px_0_0_#073027]
                           hover:translate-y-[1px] hover:shadow-[0_4px_0_0_#073027] hover:bg-[#FAB170] transition-transform duration-150
                           active:translate-y-[3px] active:shadow-[0_3px_0_0_#073027]"
@@ -80,7 +80,7 @@ export default function Hero() {
               width={650}
               height={650}
               priority
-              className="absolute left-1/2 top-1/2 z-10 w-[78vw] max-w-[400px] md:max-w-[500px] -translate-x-1/2 -translate-y-1/2 md:right-[250px] md:top-[50%] md:w-[82%]"
+              className="absolute left-1/2 top-1/2 z-10 w-[78vw] max-w-[350px] md:max-w-[500px] -translate-x-1/2 -translate-y-1/2 md:right-[250px] md:top-[50%] md:w-[75%]"
             />
 
             <Image
