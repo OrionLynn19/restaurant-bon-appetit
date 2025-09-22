@@ -23,16 +23,16 @@ export default function Homepage_FAQ() {
     id: faq.id,
     trigger: (
       <span
-        className={`${questionClasses} text-[${COLORS.primary}]`}
-        style={{ fontFamily: FONTS.primary }}
+        className={`${questionClasses}`}
+        style={{ fontFamily: FONTS.primary, color: COLORS.primary }}
       >
         {faq.q}
       </span>
     ),
     content: (
       <div
-        className={`${answerClasses} text-black`}
-        style={{ fontFamily: FONTS.secondary }}
+        className={`${answerClasses}`}
+        style={{ fontFamily: FONTS.secondary, color: COLORS.textDark }}
       >
         <div
           className="w-full border-t mt-4 mb-6"
@@ -49,7 +49,7 @@ export default function Homepage_FAQ() {
       <div className="flex flex-col md:flex-row md:justify-between py-[48px] md:py-[96px]">
         <div className="w-full md:w-[646px] items-start justify-start">
           <h2
-            className="hidden md:block text-[20px] md:text-[32px] leading-[120%] md:leading-[100%] tracking-[0px] capitalize break-words whitespace-normal w-full text-center mb-8"
+            className="hidden md:block md:text-[40px] leading-[120%] md:leading-[100%] tracking-[0px] capitalize break-words whitespace-normal w-full text-center mb-8"
             style={{
               fontFamily: FONTS.primary,
               color: COLORS.primary,
