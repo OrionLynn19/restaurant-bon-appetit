@@ -12,14 +12,13 @@ export default function Hero() {
               <p className="text-[13px] font-semibold tracking-[0.18em] text-[#EA7D33]">SINCE 2012</p>
             </div>
 
-            <h1 className="mt-5 text-[32px] md:text-[36px] font-extrabold leading-snug text-[#073027]">
+            <h1 className="mt-5 text-[15px] md:text-[30px] font-extrabold leading-snug text-[#073027]">
               A TASTE OF EUROPE, A CULINARY JOURNEY
             </h1>
 
-            <p className="mt-6 max-w-[560px] text-[15px] leading-7 text-[#2E3A36]">
-              Lorem ipsum dolor sit amet consectetur. Dui et varius vel est. Integer in quam justo vestibulum lectus etiam. 
-              A sit imperdiet aliquam tortor tincidunt.Lorem ipsum dolor sit amet consectetur. Dui et varius vel est. 
-              Integer in quam justo vestibulum lectus etiam. A sit imperdiet aliquam tortor tincidunt..
+            <p className="mt-6 text-[13px] md:text-[18px] text-[#2E3A36]">
+              Welcome to Bon AppÉtit, where culinary traditions blend seamlessly. Our menu is a celebration of flavors, offering a delightful fusion of Thai and European cuisines. 
+              Experience the artistry of our chefs as they craft each dish with passion and precision. Join us for an unforgettable dining experience that tantalizes your taste buds and warms your heart.
             </p>
 
             <div className="mt-7 flex gap-2 md:gap-3">
@@ -81,7 +80,7 @@ export default function Hero() {
               width={650}
               height={650}
               priority
-              className="absolute left-1/2 top-1/2 z-10 w-[78vw] max-w-[400px] -translate-x-1/2 -translate-y-1/2 md:right-[250px] md:top-[50%] md:w-[82%]"
+              className="absolute left-1/2 top-1/2 z-10 w-[78vw] max-w-[400px] md:max-w-[500px] -translate-x-1/2 -translate-y-1/2 md:right-[250px] md:top-[50%] md:w-[82%]"
             />
 
             <Image
@@ -104,7 +103,7 @@ export default function Hero() {
               alt="Side bowl"
               width={160}
               height={160}
-              className="absolute left-[-200px] bottom-[10px] mt-3 w-[28vw] max-w-[90px] md:left-[10%] md:top-[80px] md:bottom-auto md:w-[120px] pointer-events-none"
+              className="absolute left-[-170px] bottom-[10px] mt-3 w-[90px] max-w-[90px] md:left-[50px] md:top-[20px] md:bottom-auto md:w-[160px] md:max-w-[160px] pointer-events-none"
             />
 
             <Image
@@ -128,7 +127,7 @@ export default function Hero() {
               alt="Tomatoes"
               width={120}
               height={120}
-              className="absolute left-[-200px] z-10 mt-3 w-[28vw] max-w-[90px] md:left-[25px] md:bottom-[90px] md:top-auto md:translate-x-0 md:mt-0 md:w-[120px] md:max-w-none"
+              className="absolute left-[-170px] z-10 mt-3 w-[90px] max-w-[90px] md:left-[15px] md:bottom-[90px] md:top-auto md:translate-x-0 md:mt-0 md:w-[160px] md:max-w-[160px]"
             />
           </div>
         </div>
