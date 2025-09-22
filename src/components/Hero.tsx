@@ -81,7 +81,7 @@ export default function Hero() {
               width={650}
               height={650}
               priority
-              className="absolute left-1/2 top-1/2 z-10 w-[78vw] max-w-[360px] -translate-x-1/2 -translate-y-1/2 md:left-[250px] md:top-[50%] md:w-[82%]"
+              className="absolute left-1/2 top-1/2 z-10 w-[78vw] max-w-[400px] -translate-x-1/2 -translate-y-1/2 md:right-[250px] md:top-[50%] md:w-[82%]"
             />
 
             <Image
@@ -104,7 +104,7 @@ export default function Hero() {
               alt="Side bowl"
               width={160}
               height={160}
-              className="absolute left-[-150px] bottom-[10px] mt-3 w-[28vw] max-w-[90px] md:left-[10%] md:top-[80px] md:bottom-auto md:w-[120px] pointer-events-none"
+              className="absolute left-[-200px] bottom-[10px] mt-3 w-[28vw] max-w-[90px] md:left-[10%] md:top-[80px] md:bottom-auto md:w-[120px] pointer-events-none"
             />
 
             <Image
@@ -128,7 +128,7 @@ export default function Hero() {
               alt="Tomatoes"
               width={120}
               height={120}
-              className="absolute left-[-150px] z-10 mt-3 w-[28vw] max-w-[90px] md:left-[25px] md:bottom-[90px] md:top-auto md:translate-x-0 md:mt-0 md:w-[120px] md:max-w-none"
+              className="absolute left-[-200px] z-10 mt-3 w-[28vw] max-w-[90px] md:left-[25px] md:bottom-[90px] md:top-auto md:translate-x-0 md:mt-0 md:w-[120px] md:max-w-none"
             />
           </div>
         </div>
