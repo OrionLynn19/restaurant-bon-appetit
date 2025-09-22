@@ -89,7 +89,7 @@ export default function Hero() {
               alt="Chili"
               width={160}
               height={160}
-              className="hidden md:block absolute right-[-12px] top-[3px] w-[120px] lg:w-[150px] pointer-events-none"
+              className="hidden md:block absolute right-[0px] top-[3px] w-[120px] lg:w-[150px] pointer-events-none"
             />
             <Image
               src="/images/Cucumber.png"
@@ -120,7 +120,7 @@ export default function Hero() {
               alt="Tomatoes"
               width={100}
               height={100}
-              className="hidden md:block absolute bottom-[30px] right-[-5px] pointer-events-none"
+              className="hidden md:block absolute bottom-[30px] right-[0px] pointer-events-none"
             />
 
             <Image
