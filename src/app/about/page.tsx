@@ -1,10 +1,16 @@
+
+import WhyUs from "@/components/WhyUs";
 import OurStory from "@/components/ourStory";
 
-export default function About(){
-    return(
-        <>
-        <div className="p-10 text-center text-3xl text-orange-500">This is About</div>
-        <OurStory />
-        </>
-    );
+export default function About() {
+  return (
+    <>
+      <div className="p-10 text-center text-3xl text-orange-500">
+        This is About
+      </div>
+      <WhyUs />
+      <OurStory />
+    </>
+  );
 }
+
