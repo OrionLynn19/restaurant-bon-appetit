@@ -11,65 +11,81 @@ const montserrat = Montserrat({
 
 export default function AboutUsSection() {
   return (
-    <section
-      className={`${montserrat.className} max-w-6xl mx-auto px-6 py-16`}
-    >
-      {/* Heading above */}
-      <h2 className="text-center text-2xl font-bold text-green-900 mb-12">
+    <section className={`${montserrat.className} max-w-6xl mx-auto px-6 py-16`}>
+      {/* Section title */}
+      <h2 className="text-center text-2xl font-bold text-green-900 mb-6">
         ABOUT US
       </h2>
 
-      <div className="grid md:grid-cols-2 gap-10 items-center">
-        {/* Left: Text */}
-        <div>
-          <h3 className="text-2xl font-extrabold text-green-900 leading-snug mb-4">
-            AT BON APPÉTIT, EVERY DISH <br /> IS CRAFTED WITH LOVE.
-          </h3>
-          <p className="text-gray-800 mb-6">
-            At Bon Appétit, We Believe That Every Meal Tells A Story. Our Chefs
-            Pour Their Passion Into Each Dish, Using Only The Finest Ingredients
-            Sourced From Local Farms. With A Commitment To Excellence, We Create
-            A Dining Experience That Delights The Senses And Warms The Heart.
-            Join Us To Savor The Flavors Of Our Culinary Journey.
-          </p>
+      {/* MOBILE hero image (hidden on md+) */}
+      <div className="md:hidden mb-8">
+        {/* Pick the most appetizing shot for mobile hero; change to Hungry2/3 if you prefer */}
+        <Image
+          src="/images/Hungry1.jpg"
+          alt="Featured dish"
+          width={1200}
+          height={800}
+          className="w-full h-56 rounded-lg object-cover"
+          priority
+        />
+      </div>
 
-          {/* Button */}
+      {/* Grid for md+ ; stack on mobile */}
+      <div className="grid md:grid-cols-2 gap-10 items-center">
+        {/* Text block */}
+        <div className="text-center md:text-left">
+         <h3 className="text-lg md:text-2xl font-extrabold text-green-900 mb-4 text-center md:text-left leading-snug">
+          AT BON APPÉTIT, EVERY DISH IS CRAFTED WITH LOVE.
+        </h3>
+
+        <p className="text-sm md:text-base text-gray-900 font-bold mb-6 text-center md:text-left leading-relaxed">
+          At Bon Appétit, We Believe That Every Meal Tells A Story. Our Chefs
+          Pour Their Passion Into Each Dish, Using Only The Finest Ingredients
+          Sourced From Local Farms. With A Commitment To Excellence, We Create
+          A Dining Experience That Delights The Senses And Warms The Heart.
+          Join Us To Savor The Flavors Of Our Culinary Journey.
+        </p>
+
+
+
+          {/* Center the button on mobile, left-align on md+ */}
+          <div className="flex justify-center md:justify-start">
           <Button href="/reserve">RESERVE A TABLE</Button>
         </div>
 
-        {/* Right: Equal image layout */}
-        {/* Right: Equal-size image layout (left centered) */}
-        <div className="grid grid-cols-2 gap-4 items-stretch">
-        {/* Left image: fixed height, centered vertically */}
-        <div className="flex items-center justify-center">
-            <Image
-            src="/images/Hungry1.jpg"
-            alt="Dish 1"
-            width={600}
-            height={400}
-            className="h-48 w-full rounded-lg object-cover"
-            />
+
         </div>
 
-        {/* Right column: two stacked images, same height */}
-        <div className="grid grid-rows-2 gap-4">
+        {/* Image collage (shown only on md+) */}
+        <div className="hidden md:grid grid-cols-2 gap-4">
+          {/* Left image vertically centered relative to the two right images */}
+          <div className="flex items-center">
             <Image
-            src="/images/Hungry2.jpg"
-            alt="Dish 2"
-            width={600}
-            height={400}
-            className="h-48 w-full rounded-lg object-cover"
+              src="/images/Hungry1.jpg"
+              alt="Dish 1"
+              width={600}
+              height={400}
+              className="h-48 w-full rounded-lg object-cover"
             />
-            <Image
-            src="/images/Hungry3.jpg"
-            alt="Dish 3"
-            width={600}
-            height={400}
-            className="h-48 w-full rounded-lg object-cover"
-            />
-        </div>
-        </div>
+          </div>
 
+          <div className="grid grid-rows-2 gap-4">
+            <Image
+              src="/images/Hungry2.jpg"
+              alt="Dish 2"
+              width={600}
+              height={300}
+              className="h-48 w-full rounded-lg object-cover"
+            />
+            <Image
+              src="/images/Hungry3.jpg"
+              alt="Dish 3"
+              width={600}
+              height={300}
+              className="h-48 w-full rounded-lg object-cover"
+            />
+          </div>
+        </div>
       </div>
     </section>
   );
