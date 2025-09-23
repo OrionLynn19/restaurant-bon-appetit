@@ -27,3 +27,101 @@ body {
   color: var(--foreground);
   font-family: var(--font-schibsted), Arial, Helvetica, sans-serif;
 }
+
+@keyframes shake-left {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-0.5px);
+  }
+
+  50% {
+    transform: translateX(-1px);
+  }
+
+  75% {
+    transform: translateX(-0.5px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes shake-right {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(0.5px);
+  }
+
+  50% {
+    transform: translateX(1px);
+  }
+
+  75% {
+    transform: translateX(0.5px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes shake-center {
+  0% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.99);
+  }
+
+  75% {
+    transform: scale(0.98);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.shake-left {
+  animation: shake-left 0.8s ease;
+}
+
+.shake-right {
+  animation: shake-right 0.8s ease;
+}
+
+.shake-center {
+  animation: shake-center 0.5s ease;
+}
+
+.text-dissolve {
+  position: relative;
+  display: inline-block;
+  animation: dissolveText 0.8s ease-in-out;
+}
+
+@keyframes dissolveText {
+  0% {
+    opacity: 0.3
+  }
+
+  50% {
+    opacity: 0.6
+  }
+
+  100% {
+    opacity: 1
+  }
+}
