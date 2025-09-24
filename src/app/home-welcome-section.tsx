@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function HomeWelcomeSection() {
     return (
-        <main className="flex flex-col items-center max-w-[90%] mx-auto">
+        <main className="flex flex-col items-center max-w-[90%] mx-auto pt-12 pb-8">
             <section className="flex flex-col md:flex-row w-full  ">
                 <div className="w-full md:w-1/2 rounded-2xl overflow-hidden">
                     <Image
