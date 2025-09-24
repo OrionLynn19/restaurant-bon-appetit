@@ -1,11 +1,14 @@
 import HomeMenuSlider from "@/app/home-menu-slider";
 import Image from "next/image";
+import Hero from "@/components/Hero";
+import Homepage_FAQ from "../components/Homepage_FAQ";
 
 export default function Home() {
   return (
     <>
     <div>
-      <div className="p-10 text-center text-3xl text-orange-500">This is Home Page</div>
+      <Hero />
+      <Homepage_FAQ />
     </div>
     <div>
        <div className="text-center text-[#EF9748]" style={{fontFamily:"var(--font-bebas)"}}>- Special Picks -</div>

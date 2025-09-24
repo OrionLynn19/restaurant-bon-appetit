@@ -1,32 +1,44 @@
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Schibsted+Grotesk:wght@400;700&display=swap");
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #171717;
   --font-bebas: "Bebas Neue", sans-serif;
   --font-schibsted: "Schibsted Grotesk", sans-serif;
 }
 
+
+@layer base {
+  @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Schibsted+Grotesk:wght@400;700&display=swap");
+  
+
 /* @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-geist-sans);    
   --font-mono: var(--font-geist-mono);
 } */
 
-@media (prefers-color-scheme: dark) {
+
   :root {
-    --background: #ffffff;
-    --foreground: #ededed;
+    --background: var(--color-background);
+    --foreground: var(--color-foreground);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #ffffff;
+      --foreground: #ededed;
+    }
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-schibsted), Arial, Helvetica, sans-serif;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-schibsted), Arial, Helvetica, sans-serif;
-}
 
 .swiper-wrapper {
   pointer-events: none;
