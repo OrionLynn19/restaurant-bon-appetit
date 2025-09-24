@@ -1,4 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Schibsted+Grotesk:wght@400;700&display=swap");
 @import "tailwindcss";
+
 @theme {
   --color-background: #ffffff;
   --color-foreground: #171717;
@@ -8,9 +10,7 @@
 
 
 @layer base {
-  @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Schibsted+Grotesk:wght@400;700&display=swap");
   
-
 /* @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
