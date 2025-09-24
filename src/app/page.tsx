@@ -1,13 +1,26 @@
+import HomeMenuSlider from "@/app/home-menu-slider";
 import Image from "next/image";
 import HomeTestimonial from "./home-testimonial";
+import HomeWelcomeSection from "./home-welcome-section";
+import Hero from "@/components/Hero";
+import Homepage_FAQ from "../components/Homepage_FAQ";
+
+
 
 export default function Home() {
   return (
     <>
-    <div>
-      <div className="p-10 text-center text-3xl text-orange-500">This is Home Page</div>
+    <div className="bg-[rgba(255,252,241,1)]">
+      <Hero />
+       <div>
+       <div className="text-center text-[#EF9748]" style={{fontFamily:"var(--font-bebas)"}}>- Special Picks -</div>
+       <div className="text-center text-2xl text-[#073027] pb-5" style={{fontFamily:"var(--font-bebas)"}}>Popular Menus</div>
+        <HomeMenuSlider />
+        <HomeWelcomeSection /> 
+       </div>
+        <HomeTestimonial/>
+        <Homepage_FAQ />
     </div>
-    <div><HomeTestimonial/></div>
     </>
   );
 }
