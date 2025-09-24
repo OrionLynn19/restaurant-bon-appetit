@@ -10,15 +10,15 @@ export default function HomeTestimonial() {
 
     const text = [
         {
-            name: "Nisha Oliver",
+            name: "NISHA OLIVER",
             content: "I HAD AN INCREDIBLE EXPERENCE! THE STAFF'S DEDICATION AND METICULOUS CARE MADE ALL THE DIFFERENCE.I'M ALREADY LOOKING FORWARD TO MY NEXT VISIT!",
         },
         {
-            name: "Nisha Oliver",
+            name: "NISHA OLIVER",
             content: "DINING HERE WAS A TRUE PLEASURE! THE STAFF'S PASSION FOR SERVICE AND METICULOUS CARE MADE MY MEAL UNFORGETTABLE. I'M ALREADY LOOKING FORWARD TO MY NEXT VISIT!",
         },
         {
-            name: "Nisha Oliver",
+            name: "NISHA OLIVER",
             content: "WHAT AN INCREDIBLE DINING EXPERIENCE! THE TEAM'S DEDICATION AND THOUGHTFUL SERVICE REALLY STOOD OUT.I CAN'T WAIT TO COME BACK FOR ANOTHER MEAL!",
         }
     ];
@@ -46,7 +46,7 @@ export default function HomeTestimonial() {
     };
 
     return (
-        <div className="container relative max-w-4xl mx-auto p-8 my-5 ">
+        <div className="container relative max-w-5xl mx-auto p-8 my-5 ">
             <div className="absolute md:-top-15 -top-10 left-0">
                 <Image src="/images/test1.svg" alt="corner 1" width={150} height={120} className="md:w-[150px] md:h-[120px] w-[120px] h-[100px]" />
             </div>
@@ -73,11 +73,11 @@ export default function HomeTestimonial() {
                 <Image src="/images/testquote.png" alt="icon" width={30} height={30} />
             </div>
 
-            <div className= "text-center font-normal mb-7 "style={{ fontFamily: "var(--font-bebas)" }}>
-                <p className="mb-2 md:text-3xl text-2xl text-[#000000] text-dissolve" key={active}>
+            <div className= "text-center font-semibold mb-7 font-[bebas]">
+                <p className="mb-2 md:text-2xl text-xl text-[#000000] text-dissolve" key={active}>
                     {text[active].content}
                 </p>
-                <span className={`inline-block md:text-2xl text-xl text-[#EF9748] ${nameShake ? "shake-left" : ""}`}>{text[active].name}</span>
+                <span className={`inline-block md:text-xl text-lg text-[#EF9748] ${nameShake ? "shake-left" : ""}`}>{text[active].name}</span>
             </div>
 
             <div className="flex justify-center gap-4">

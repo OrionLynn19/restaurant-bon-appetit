@@ -1,5 +1,4 @@
 @import "tailwindcss";
-
 @theme {
   --color-background: #ffffff;
   --color-foreground: #171717;
@@ -127,12 +126,12 @@
 .text-dissolve {
   position: relative;
   display: inline-block;
-  animation: dissolveText 0.8s ease-in-out;
+  animation: dissolveText 0.6s ease-in-out;
 }
 
 @keyframes dissolveText {
   0% {
-    opacity: 0.3
+    opacity: 0.2
   }
 
   50% {
