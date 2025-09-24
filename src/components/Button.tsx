@@ -11,16 +11,16 @@ type ButtonProps = {
 export default function Button({ href, children }: ButtonProps) {
   return (
     <Link
-      href={href}
-      className="inline-flex items-center justify-center
-                 px-4 py-1 text-sm font-bold uppercase tracking-wide
-                 rounded-md border-2
-                 text-[#0b3d2e] border-[#0b3d2e]
-                 bg-[#e39a5b] shadow-[0_2px_0_#0b3d2e]
-                 hover:bg-[#d18548] transition"
-      style={{ minWidth: "160px" }}
-    >
-      {children ?? "RESERVE A TABLE"}
-    </Link>
+        href="/reserve"
+        className="flex items-center justify-center
+        min-w-[140px] h-[44px] px-4 text-[13px]
+        md:min-w-[180px] md:h-[56px] md:px-5 md:text-[15px]
+        rounded-[12px] bg-[#EF9748] border-2 border-[#073027] text-[#073027] font-['Bebas_Neue'] font-extrabold
+        shadow-[0_4px_0_0_#073027] md:shadow-[0_5px_0_0_#073027]
+        hover:translate-y-[1px] hover:shadow-[0_4px_0_0_#073027] hover:bg-[#FAB170] transition-transform duration-150
+        active:translate-y-[3px] active:shadow-[0_3px_0_0_#073027]"
+            >
+           RESERVE A TABLE
+      </Link>
   );
 }
