@@ -167,7 +167,7 @@ export default function Navbar() {
               alt="Elevaclinic logo"
               width={43}
               height={32}
-              className="object-contain w-[43px] h-[32px]"
+              className="object-contain w-[45px] h-[45px]"
               priority
             />
           </span>
