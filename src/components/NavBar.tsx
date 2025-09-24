@@ -21,9 +21,8 @@ interface NavLinkProps {
 const NAV_LINKS: NavLinkItem[] = [
   { href: "/", label: "HOME" },
   { href: "/menu", label: "MENU" },
-  { href: "/about", label: "ABOUT US" },
   { href: "/contact", label: "CONTACT US" },
-  
+  { href: "/about", label: "ABOUT US" },
 ];
 
 export default function Navbar() {
@@ -54,7 +53,7 @@ export default function Navbar() {
         href={href}
         onClick={closeMenu}
         className={`px-3 py-2 flex items-center gap-1 transition-all duration-200 font-bebas
-          ${isMobileMenu ? "text-[24px]" : "text-[20px]"}
+          ${isMobileMenu ? "text-[24px]" : "text-[21px]"}
           ${
             isActive
               ? isHome
@@ -161,14 +160,27 @@ export default function Navbar() {
           href="/"
           className="flex items-center gap-2 font-semibold md:py-5 md:px-4"
         >
-          <Image
-            src="/images/eleva_logo.png"
-            alt="Elevaclinic logo"
-            width={43}
-            height={32}
-            className="object-contain w-[43px] h-[32px] md:w-[100px] md:h-[75px]"
-            priority
-          />
+          {/* Mobile: eleva_logo.png, Desktop: logo-and-title.png */}
+          <span className="block md:hidden">
+            <Image
+              src="/images/eleva_logo.png"
+              alt="Elevaclinic logo"
+              width={43}
+              height={32}
+              className="object-contain w-[43px] h-[32px]"
+              priority
+            />
+          </span>
+          <span className="hidden md:block">
+            <Image
+              src="/images/logo-and-title.png"
+              alt="Elevaclinic logo"
+              width={216}
+              height={60}
+              className="object-contain md:w-[216px] md:h-[75px]"
+              priority
+            />
+          </span>
         </Link>
 
         {/* Desktop Nav */}
