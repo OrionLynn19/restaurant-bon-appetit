@@ -17,14 +17,12 @@ export default function HomeWelcomeSection() {
 
                 <div className="w-full md:w-1/2 flex flex-col justify-center font-normal px-0 md:px-6 mt-7 md:mt-0">
                     <h1
-                        className="text-3xl font-normal text-[#073027] mb-4"
-                        style={{ fontFamily: "var(--font-bebas)" }}
+                        className="md:text-3xl text-2xl font-semibold text-[#073027] mb-4 font-[bebas]"
                     >
-                        Welcome to Bon AppÉtit
+                        WELCOME TO BON APPÉTIT
                     </h1>
                     <p
-                        className="text-base font-normal text-black mb-3"
-                        style={{ fontFamily: "var(--font-schibsted)" }}
+                        className="text-xl font-normal text-black mb-3 font-[schibsted]"
                     >
                         Welcome to Bon AppÉtit, where culinary excellence meets a warm
                         atmosphere. Our restaurant is dedicated to providing a unique dining
@@ -33,8 +31,7 @@ export default function HomeWelcomeSection() {
                         with delightful dishes crafted with care and creativity.
                     </p>
                     <p
-                        className="text-base font-normal text-black"
-                        style={{ fontFamily: "var(--font-schibsted)" }}
+                        className="text-xl font-normal text-black font-[schibsted]"
                     >
                         At Bon AppÉtit, we invite you to indulge in a fusion of tastes that
                         will tantalize your palate. Our chefs are passionate about blending
@@ -55,22 +52,20 @@ export default function HomeWelcomeSection() {
 
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center bg-[#073027]/10">
                     <h2
-                        className="text-4xl font-normal text-[#FEFEFE] mb-6"
-                        style={{ fontFamily: "var(--font-bebas)" }}
+                        className="md:text-3xl text-2xl font-semibold text-[#FEFEFE] mb-6 font-[bebas]"
                     >
-                        Give It A Try?
+                        GIVE IT A TRY?
                     </h2>
                     <p
-                        className=" hidden md:block text-2xl font-medium text-[#FEFEFE] mb-8 max-w-xl"
-                        style={{ fontFamily: "var(--font-schibsted)" }}
+                        className=" hidden md:block text-2xl font-normal text-[#FEFEFE] mb-8 max-w-xl font=[schibsted]"
                     >
                         Drop By One of Our location and Experience the best of the Bests
                     </p>
                     <div className="flex gap-5">
-                        <button className="bg-gradient-to-r from-[#EF9748] via-[#EEB685] to-[#EF9748] text-[#073027] font-normal text-xl md:px-6 md:py-2 px-3 py-1 rounded-lg md:border-2 border-1 border-[#073027] hover:from-[#f1aa6a] hover:via-[#efbd91] hover:to-[#f1aa6a]  active:from-[#f1aa6a] active:via-[#efbd91] active:to-[#f1aa6a] transition" style={{ fontFamily: "var(--font-bebas)" }}>
+                        <button className="bg-gradient-to-r from-[#EF9748] via-[#EEB685] to-[#EF9748] text-[#073027] font-semibold md:text-base text-xs md:px-4 md:py-2 px-3 py-2 rounded-lg md:border-2 border-1 border-[#073027] hover:from-[#f1aa6a] hover:via-[#efbd91] hover:to-[#f1aa6a]  active:from-[#f1aa6a] active:via-[#efbd91] active:to-[#f1aa6a] transition font-[bebas]" >
                             SEE OUR MENU
                         </button>
-                        <button className="bg-gradient-to-r from-[#EF9748] via-[#EEB685] to-[#EF9748] text-[#073027] font-normal text-xl md:px-6 md:py-2 px-3 py-1 rounded-lg md:border-2 border-1 border-[#073027] hover:from-[#f1aa6a] hover:via-[#efbd91] hover:to-[#f1aa6a]  active:from-[#f1aa6a] active:via-[#efbd91] active:to-[#f1aa6a] transition" style={{ fontFamily: "var(--font-bebas)" }}>
+                        <button className="bg-gradient-to-r from-[#EF9748] via-[#EEB685] to-[#EF9748] text-[#073027] font-semibold md:text-base  text-xs md:px-4 md:py-2 px-3 py-2 rounded-lg md:border-2 border-1 border-[#073027] hover:from-[#f1aa6a] hover:via-[#efbd91] hover:to-[#f1aa6a]  active:from-[#f1aa6a] active:via-[#efbd91] active:to-[#f1aa6a] transition font-[bebas]">
                             VIEW LOCATIONS
                         </button>
                     </div>

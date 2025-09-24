@@ -12,8 +12,8 @@ export default function Home() {
     <div className="bg-[rgba(255,252,241,1)]">
       <Hero />
        <div>
-       <div className="text-center text-[#EF9748]" style={{fontFamily:"var(--font-bebas)"}}>- Special Picks -</div>
-       <div className="text-center text-2xl text-[#073027] pb-5" style={{fontFamily:"var(--font-bebas)"}}>Popular Menus</div>
+       <div className="text-center font-semibold text-[#EF9748] md:text-base text-sm Font-[bebas]">- SPECIAL PICKS -</div>
+       <div className="text-center font-semibold text-[#073027] md:text-3xl text-2xl pb-8 font-[bebas]" >POPULAR MENUS</div>
         <HomeMenuSlider />
         <HomeWelcomeSection />
        </div>

@@ -22,14 +22,12 @@ export default function MenuCard({ image, name, ingredients }: MenuCardProps) {
       </div>
 
       <p
-        className="text-center pt-4 text-2xl text-[#073027] truncate"
-        style={{ fontFamily: "var(--font-bebas)" }}
+        className="text-center font-semibold pt-3 md:text-lg text-base text-[#073027] font-[bebas] truncate"
       >
         {name}
       </p>
       <p
-        className="flex flex-wrap justify-center gap-2 text-[#000000B3] text-sm"
-        style={{ fontFamily: "var(--font-schibsted)" }}
+        className="flex flex-wrap font-normal justify-center gap-2 text-[#000000B3] md:text-base text-sm font-[schibsted]"
       >
         {ingredients.map((ing, idx) => (
           <span key={idx} className="flex items-center gap-2">
