@@ -149,10 +149,10 @@ export default function Navbar() {
   );
 
   return (
-    <header className="sticky top-0 z-50 w-full">
+    <header className="sticky top-0 z-50 w-full bg-white shadow-sm">
       {/* Hide header content when mobile menu is open */}
       <div
-        className={`flex items-center justify-between w-[375px] h-16 p-4 opacity-100 md:w-full md:h-[115px] md:px-8 ${
+        className={`flex items-center justify-between w-full h-16 p-4 opacity-100 md:h-[115px] md:px-8 ${
           isMenuOpen ? "hidden" : ""
         }`}
       >
