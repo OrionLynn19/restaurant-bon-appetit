@@ -53,7 +53,7 @@ export default function Navbar() {
         href={href}
         onClick={closeMenu}
         className={`px-3 py-2 flex items-center gap-1 transition-all duration-200 font-bebas
-          ${isMobileMenu ? "text-[24px]" : "text-[21px]"}
+          ${isMobileMenu ? "text-[24px] text-[#073027]" : "text-[21px]"}
           ${
             isActive
               ? isHome
@@ -61,7 +61,7 @@ export default function Navbar() {
                 : "font-bold text-black"
               : "text-black"
           }
-          md:hover:text-[#EF9748] md:rounded-lg`}
+          md:hover:text-[#EF9748] md:rounded-lg md:text-[#073027]`}
         style={{
           height: "46px",
           lineHeight: "26px",
@@ -211,7 +211,7 @@ export default function Navbar() {
           <Link
             href="/reserve"
             onClick={closeMenu}
-            className="w-fit mt-8 shadow-[0_4px_6px_-1px_black] border-1 rounded-md bg-[#EF9748] text-black px-5 font-bebas text-[24px] text-center"
+            className="w-fit mt-8 shadow-[0_4px_6px_-1px_black] border-1 rounded-md bg-[#EF9748] text-[#073027] px-5 font-bebas text-[24px] text-center"
             style={{
               fontFamily:
                 "var(--font-bebas), Bebas Neue, Arial, Helvetica, sans-serif",
@@ -297,7 +297,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8 text-[20px] font-bebas">
+        <nav className="hidden md:flex items-center gap-11 text-[21px] font-bebas">
           {NAV_LINKS.map((link) => (
             <NavLink key={link.href} {...link} />
           ))}
@@ -306,7 +306,7 @@ export default function Navbar() {
         {/* Reserve a Table Button (Desktop) */}
         <Link
           href="/reserve"
-          className="hidden md:inline-block shadow-md rounded-lg bg-[#EF9748] text-black px-6 py-3 font- ml-6 transition hover:bg-[#d97d2a] font-bebas text-[20px]"
+          className="hidden md:inline-block shadow-md rounded-lg bg-[#EF9748] text-[#073027] px-6 py-3 font- ml-6 transition hover:bg-[#d97d2a] font-bebas text-[20px]"
           style={{
             fontFamily:
               "var(--font-bebas), Bebas Neue, Arial, Helvetica, sans-serif",
