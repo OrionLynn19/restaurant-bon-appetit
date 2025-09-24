@@ -8,7 +8,7 @@ const NAV = [
 ];
 export default function Footer() {
   return (
-    <footer className="mt-2 text-sm w-full">
+    <footer className="mt-1 text-sm w-full">
       {/* Desktop Footer (unchanged) */}
       <div className="hidden sm:block">
         <Image
@@ -253,7 +253,7 @@ export default function Footer() {
         </div>
       </div>
       {/* Mobile Footer (grid, only on <sm screens) */}
-      <div className="block sm:hidden w-full  bg-white pt-6 pb-20">
+      <div className="block sm:hidden w-full  bg-white pb-20">
         <Image
           className="w-full h-[267px] object-cover object-center sm:h-[200px] xs:h-[120px] pb-3"
           src="/images/footer-background.png"
