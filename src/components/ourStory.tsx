@@ -30,7 +30,7 @@ const Story =  [
 
 export default function OurStory() {
     return (
-        <section className="relative w-full mx-auto bg-[rgba(255,252,241,1)] px-4 sm:px-6 lg:px-8 pb-4 md:pb-4 lg:pb-4">
+        <section className="relative w-full mx-auto bg-[rgba(255,252,241,1)] px-2 sm:px-2 lg:px-2 pb-4 md:pb-4 lg:pb-4">
             <div className="flex justify-center pt-8 pb-1  ">
                 <div 
                     style={{
@@ -91,7 +91,7 @@ export default function OurStory() {
                 }
             `}</style>
 
-            <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20">
+            <div className="container mx-auto px-2 sm:px-2 md:px-2 lg:px-2 xl:px-2">
                 <div className="mt-12 sm:mt-16 md:mt-20 lg:mt-24 space-y-4 md:space-y-4 lg:space-y-4 xl:space-y-4">
                     {Story.map((item, index) => (
                         <div key={index} className="relative">
@@ -100,14 +100,14 @@ export default function OurStory() {
                                 className="absolute w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 rounded-full shadow-lg z-10 dot"
                                 style={{
                                     backgroundColor: 'rgba(239, 151, 72, 1)',
-                                    left: '44%', 
+                                    left: '44.6%', 
                                     top: '50%',
                                     transform: 'translate(-50%, -50%)'
                                 }}
                             ></div>
 
                             <motion.div
-                                className={`relative flex flex-row items-center gap-4 md:gap-6 lg:gap-8 xl:gap-16 ${
+                                className={`lg:px-2 relative flex flex-row items-center gap-4 md:gap-6 lg:gap-8 xl:gap-16 ${
                                     index % 2 !== 0 ? "lg:flex-row-reverse" : ""
                                 }`}
                                 initial={{ opacity: 0, y: 50 }}
@@ -117,16 +117,16 @@ export default function OurStory() {
                             >
                                
                                 <div
-                                    className={`flex-1 text-center pr-4 md:pr-6 ${
+                                    className={`flex-1 text-left pr-4 md:pr-2 ${
                                         index % 2 === 0 
-                                            ? "lg:pr-8 xl:pr-12 lg:text-center" 
-                                            : "lg:pl-8 xl:pl-12 lg:text-center"
+                                            ? "lg:pr-2 xl:pr-4 lg:text-center lg:flex lg:flex-col lg:items-center" 
+                                            : "lg:pl-2 xl:pl-4 lg:text-center lg:flex lg:flex-col lg:items-center"
                                     }`}
                                 >
-                                    <h2 className="text-lg sm:text-xl md:text-2xl lg:text-2.5xl xl:text-2.5xl font-bold mb-2 md:mb-3 lg:mb-4 text-black">
+                                    <h2 className="text-lg sm:text-xl md:text-2xl lg:text-2.5xl xl:text-2.5xl font-bold mb-2 md:mb-3 lg:mb-4 text-black pl-4 lg:pl-0 text-left lg:text-center">
                                         {item.year}
                                     </h2>
-                                    <p className="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed text-black max-w-xs sm:max-w-sm md:max-w-md mx-auto lg:mx-0 hidden md:block">
+                                    <p className="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed text-black max-w-xs sm:max-w-sm md:max-w-md mx-auto lg:mx-0 hidden md:block text-center">
                                         {item.text}
                                     </p>
                                 </div>

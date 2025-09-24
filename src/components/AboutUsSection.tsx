@@ -11,7 +11,7 @@ const montserrat = Montserrat({
 
 export default function AboutUsSection() {
   return (
-    <section className={`${montserrat.className} max-w-6xl mx-auto px-6 py-16`}>
+    <section className={`${montserrat.className} w-full mx-auto px-6 py-16 bg-[rgba(255,252,241,1)]`}>
       {/* Section title */}
       <h2 className="text-center text-2xl font-bold text-green-900 mb-6">
         ABOUT US
