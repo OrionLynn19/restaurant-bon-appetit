@@ -1,11 +1,19 @@
 "use client";
 
+import WhyUs from "@/components/WhyUs";
+import OurStory from "@/components/ourStory";
 import AboutSection from "@/components/AboutUsSection";
 
-export default function AboutPage() {
+export default function About() {
   return (
-    <main>
+    <>
+      <div className="p-10 text-center text-3xl text-orange-500">
+        This is About
+      </div>
       <AboutSection />
-    </main>
+      <OurStory />
+      <WhyUs />
+    </>
+
   );
 }
