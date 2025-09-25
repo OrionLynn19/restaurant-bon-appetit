@@ -45,8 +45,8 @@ export default function Homepage_FAQ() {
 
   return (
     // mobile single, desktop two columns
-    <div className="w-[343px] md:w-full md:max-w-[1440px] flex flex-col gap-[10px] md:gap-[96px] mx-auto md:px-16">
-      <div className="flex flex-col md:flex-row md:justify-between py-[48px] md:py-[96px]">
+    <div className="w-[343px] md:w-full md:max-w-[1440px] flex flex-col gap-[10px] md:gap-[48px] lg:gap-[96px] mx-auto md:px-16">
+      <div className="flex flex-col md:flex-row md:justify-between py-[48px] md:py-[96px] md:gap-[20px] lg:gap-[20px]">
         <div className="w-full md:w-[646px] items-start justify-start">
           <h2
             className="hidden md:block md:text-[40px] leading-[120%] md:leading-[100%] tracking-[0px] capitalize break-words whitespace-normal w-full text-center mb-8"
