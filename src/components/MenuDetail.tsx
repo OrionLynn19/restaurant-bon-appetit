@@ -31,13 +31,26 @@ export default function MenuDetail() {
       <div className="mx-auto max-w-6xl px-6 py-10">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.1fr_0.9fr]">
           <div>
-            <div className="relative rounded-2xl bg-white shadow-sm aspect-[4/3] w-full overflow-hidden">
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-white shadow-sm">
               <Image
                 fill
                 src="/images/Carbonara.png"
                 alt="Carbonara"
-                className="object-cover"
+                className="object-cover z-0"
               />
+
+              <div className="absolute right-0 top-[-5px] z-10">
+                <span
+                  className="
+                    inline-block bg-[#EA7D33] text-black text-sm font-semibold tracking-wide
+                    py-2 pr-5 pl-8
+                    [--notch:18px]
+                    [clip-path:polygon(0_0,100%_0,100%_100%,0_100%,var(--notch)_50%)]
+                  "
+                >
+                  Best Seller
+                </span>
+              </div>
             </div>
 
             <div className="mt-6 space-y-3 text-left">
@@ -48,6 +61,7 @@ export default function MenuDetail() {
               </p>
             </div>
           </div>
+
 
           <div>
             <div className="rounded-2xl bg-[#FFF3DA] p-5 shadow-sm ring-1 ring-black/5">
