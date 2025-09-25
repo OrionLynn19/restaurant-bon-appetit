@@ -1,5 +1,6 @@
 "use client"
 import React,{ useEffect, useState } from "react";
+import Image from "next/image";
 
 function TimePill({ label }: { label: string }) {
   return (
@@ -26,29 +27,51 @@ export default function MenuDetail() {
   const ss = String(secondsLeft % 60).padStart(2, "0");
 
   return (
-  <div className="min-h-screen bg-[#FFF7E9] text-[#073027]">
-    <div className="mx-auto max-w-6xl px-6 py-10">
-      <div className="rounded-2xl bg-[#FFF3DA] p-5 shadow-sm ring-1 ring-black/5">
-        <div className="mb-6 flex items-center justify-between rounded-xl bg-[#155241] px-4 py-4">
+    <div className="min-h-screen bg-[#FFF7E9] text-[#073027]">
+      <div className="mx-auto max-w-6xl px-6 py-10">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.1fr_0.9fr]">
           <div>
-            <div className="text-sm font-extrabold uppercase tracking-wider text-[#EA7D33]">Special Discount</div>
-            <div className="mt-2 flex items-center gap-2">
-              <TimePill label={hh} />
-              <span className="-mx-1 text-xl font-bold">:</span>
-              <TimePill label={mm} />
-              <span className="-mx-1 text-xl font-bold">:</span>
-              <TimePill label={ss} />
+            <div className="relative rounded-2xl bg-white shadow-sm aspect-[4/3] w-full overflow-hidden">
+              <Image
+                fill
+                src="/images/Carbonara.png"
+                alt="Carbonara"
+                className="object-cover"
+              />
+            </div>
+
+            <div className="mt-6 space-y-3 text-left">
+              <h1 className="text-3xl font-extrabold tracking-wide md:text-4xl">CARBONARA</h1>
+              <p className="text-sm leading-relaxed text-[#28564D] md:text-base">
+                Lorem Ipsum Dolor Sit Amet Consectetur. Dui Et Varius Vel Est. Integer In Quam Justo Vestibulum Lectus Etiam.
+                A Sit Imperdiet Aliquam Tortor Tincidunt. Lorem Ipsum Dolor Sit Amet Consectetur. Dui Et Varius Vel Est.
+              </p>
             </div>
           </div>
-          <div className="text-right">
-            <div className="text-sm font-bold tracking-wide text-[#EA7D33]">30% OFF</div>
-            <div className="mt-2 text-lg font-extrabold leading-none text-[#EA7D33]">90 BHT</div>
-            <div className="text-xs line-through text-white/70 opacity-70">150 BHT</div>
+
+          <div>
+            <div className="rounded-2xl bg-[#FFF3DA] p-5 shadow-sm ring-1 ring-black/5">
+              <div className="mb-6 flex items-center justify-between rounded-xl bg-[#155241] px-4 py-4">
+                <div>
+                  <div className="text-sm font-extrabold uppercase tracking-wider text-[#EA7D33]">Special Discount</div>
+                  <div className="mt-2 flex items-center gap-2">
+                    <TimePill label={hh} />
+                    <span className="-mx-1 text-xl font-bold">:</span>
+                    <TimePill label={mm} />
+                    <span className="-mx-1 text-xl font-bold">:</span>
+                    <TimePill label={ss} />
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-bold tracking-wide text-[#EA7D33]">30% OFF</div>
+                  <div className="mt-2 text-lg font-extrabold leading-none text-[#EA7D33]">90 BHT</div>
+                  <div className="text-xs line-through text-white/70 opacity-70">150 BHT</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-);
-
+  );
 }
