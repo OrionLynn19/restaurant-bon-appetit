@@ -4,24 +4,14 @@ import Image from "next/image";
 
 function TimePill({ label }: { label: string }) {
   return (
-    <span className="inline-flex min-w-[2.5rem] items-center justify-center rounded-md bg-white px-2 py-1 text-base font-extrabold leading-none text-[#EA7D33]">
+    <span className="inline-flex min-w-[2rem] min-h-[2rem] items-center justify-center rounded-md bg-white px-2 py-1 text-base font-extrabold leading-none text-[#EA7D33]">
       {label}
     </span>
   );
 }
 
-function RadioRow({
-  name,
-  label,
-  price,
-  checked,
-  onChange,
-}: {
-  name: string;
-  label: string;
-  price: string;
-  checked: boolean;
-  onChange: () => void;
+function RadioRow({ name, label, price, checked, onChange }:{
+  name: string; label: string; price: string; checked: boolean; onChange: () => void;
 }) {
   return (
     <label className="flex cursor-pointer items-center justify-between px-1">
@@ -43,16 +33,8 @@ function RadioRow({
   );
 }
 
-function CheckboxRow({
-  label,
-  price,
-  checked,
-  onChange,
-}: {
-  label: string;
-  price: string;
-  checked: boolean;
-  onChange: () => void;
+function CheckboxRow({ label, price, checked, onChange }:{
+  label: string; price: string; checked: boolean; onChange: () => void;
 }) {
   return (
     <label className="flex cursor-pointer items-center justify-between px-1">
@@ -73,18 +55,8 @@ function CheckboxRow({
   );
 }
 
-function SectionTitle({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <div className={`text-left text-lg font-extrabold tracking-wide text-[#073027] ${className}`}>
-      {children}
-    </div>
-  );
+function SectionTitle({ children, className = "" }:{ children: React.ReactNode; className?: string }) {
+  return <div className={`text-left text-lg font-extrabold tracking-wide text-[#073027] ${className}`}>{children}</div>;
 }
 
 export default function MenuDetail() {
@@ -99,17 +71,13 @@ export default function MenuDetail() {
   ] as const;
 
   type AddOnKey = (typeof addOnList)[number]["key"];
-
   const [addOns, setAddOns] = useState<Record<AddOnKey, boolean>>({
-    cheese: false,
-    bacon: false,
-    sauce: false,
-    egg: false,
+    cheese: false, bacon: false, sauce: false, egg: false,
   });
 
   const [qty, setQty] = useState(1);
 
-  function StepBtn({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
+  function StepBtn({ children, onClick }:{ children: React.ReactNode; onClick: () => void }) {
     return (
       <button
         onClick={onClick}
@@ -140,28 +108,30 @@ export default function MenuDetail() {
   const fmtB = (n: number) => `${n.toFixed(2)} B`;
 
   return (
-    <div className="min-h-screen bg-[#FFF7E9] text-[#073027]">
-      <div className="mx-auto max-w-6xl px-6 py-10">
+    <main className="min-h-dvh bg-[#FFF5E2] text-[#073027] overflow-x-hidden">
+      <div className="mx-auto max-w-6xl px-4 md:px-6 pt-0 pb-6 md:py-3">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-white shadow-sm">
-              <Image fill src="/images/Carbonara.png" alt="Carbonara" className="z-0 object-cover" />
-              <div className="absolute right-0 top-[-5px] z-10">
+          <section>
+            <div className="relative mx-[calc(50%-50vw)] md:mx-0 aspect-[4/3] overflow-hidden rounded-none md:rounded-lg bg-white">
+              <Image fill src="/images/Carbonara.png" alt="Carbonara" className="object-fill object-center" />
+              <div className="absolute right-0 -top-1 z-10">
                 <span className="inline-block bg-[#EF9748] px-6 py-2 pr-5 text-sm tracking-wide text-black [--notch:18px] [clip-path:polygon(0_0,100%_0,100%_100%,0_100%,var(--notch)_50%)]">
                   Best Seller
                 </span>
               </div>
             </div>
+
             <div className="mt-6 space-y-3 text-left">
               <h1 className="text-3xl font-extrabold tracking-wide md:text-4xl">CARBONARA</h1>
               <p className="text-sm text-[#28564D] md:text-base">
-                Lorem Ipsum Dolor Sit Amet Consectetur. Dui Et Varius Vel Est. Integer In Quam Justo Vestibulum Lectus Etiam. A Sit Imperdiet Aliquam Tortor Tincidunt. Lorem Ipsum Dolor Sit Amet Consectetur. Dui Et Varius Vel Est.
+                Lorem Ipsum Dolor Sit Amet Consectetur. Dui Et Varius Vel Est. Integer In Quam Justo Vestibulum Lectus Etiam.
+                A Sit Imperdiet Aliquam Tortor Tincidunt. Lorem Ipsum Dolor Sit Amet Consectetur. Dui Et Varius Vel Est.
               </p>
             </div>
-          </div>
+          </section>
 
-          <div>
-            <div className="rounded-2xl bg-[#FFF3DA] p-5 shadow-sm ring-1 ring-black/5">
+          <aside>
+            <div className="p-0 bg-transparent shadow-none ring-0 md:rounded-2xl md:bg-[#FFF3DA] md:p-5 md:shadow-sm md:ring-1 md:ring-black/5">
               <div className="mb-6 flex items-center justify-between rounded-xl bg-[#155241] px-4 py-4">
                 <div>
                   <div className="text-sm font-extrabold uppercase tracking-wider text-[#EA7D33]">Special Discount</div>
@@ -182,20 +152,8 @@ export default function MenuDetail() {
 
               <SectionTitle>Portion</SectionTitle>
               <div className="mt-3 space-y-2">
-                <RadioRow
-                  name="portion"
-                  label="Regular"
-                  price="Free"
-                  checked={portion === "regular"}
-                  onChange={() => setPortion("regular")}
-                />
-                <RadioRow
-                  name="portion"
-                  label="Large"
-                  price="+ 100 B"
-                  checked={portion === "large"}
-                  onChange={() => setPortion("large")}
-                />
+                <RadioRow name="portion" label="Regular" price="Free" checked={portion === "regular"} onChange={() => setPortion("regular")} />
+                <RadioRow name="portion" label="Large" price="+ 100 B" checked={portion === "large"} onChange={() => setPortion("large")} />
               </div>
 
               <SectionTitle className="mt-6">Add-on</SectionTitle>
@@ -206,12 +164,7 @@ export default function MenuDetail() {
                     label={a.name}
                     price={a.price === 0 ? "Free" : `${a.price} B`}
                     checked={addOns[a.key]}
-                    onChange={() =>
-                      setAddOns((prev) => ({
-                        ...prev,
-                        [a.key]: !prev[a.key],
-                      }))
-                    }
+                    onChange={() => setAddOns((prev) => ({ ...prev, [a.key]: !prev[a.key] }))}
                   />
                 ))}
               </div>
@@ -219,32 +172,29 @@ export default function MenuDetail() {
               <SectionTitle className="mt-6">Add Request</SectionTitle>
               <textarea
                 placeholder="Any Special Request?"
-                className="mt-3 text-sm w-full resize-none rounded-xl border border-[#D9C9A9] bg-white/80 p-4 outline-none ring-0 focus:border-[#155241] focus:bg-white"
+                className="mt-3 text-sm w-full resize-none rounded-xl border border-[#D9C9A9] bg-white/80 p-4 outline-none focus:border-[#155241] focus:bg-white"
                 rows={3}
               />
 
-              <div className="mt-6 flex items-center justify-between">
-                <div className="flex items-center gap-3">
+              <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div className="flex items-center gap-3 mx-auto mb-5 md:mx-0 md:mb-0">
                   <StepBtn onClick={() => setQty((q) => Math.max(1, q - 1))}>−</StepBtn>
                   <span className="min-w-[1.5rem] text-center text-sm">{qty}</span>
                   <StepBtn onClick={() => setQty((q) => q + 1)}>+</StepBtn>
                 </div>
 
-                <button
-                  className="relative inline-flex w-auto items-center justify-between gap-2 rounded-lg bg-[#EA7D33] px-4 py-2 text-sm text-[#073027] ring-2 ring-[#0B3C33] shadow-[0_4px_0_#0B3C33] transition-transform hover:translate-y-[1px] hover:shadow-[0_3px_0_#0B3C33] active:translate-y-[2px] active:shadow-[0_2px_0_#0B3C33]"
-                >
+                <button className="relative inline-flex items-center justify-between gap-2 rounded-lg bg-[#EA7D33] px-4 py-3 text-sm text-[#073027] ring-2 ring-[#0B3C33] shadow-[0_4px_0_#0B3C33] transition-transform hover:translate-y-[1px] hover:shadow-[0_3px_0_#0B3C33] active:translate-y-[2px] active:shadow-[0_2px_0_#0B3C33] w-full md:w-auto">
                   <span className="flex items-center gap-1">
                     Add <span className="font-bold text-[#D62B1F]">{qty}</span> Cart
                   </span>
                   <span className="mx-1">&gt;</span>
                   <span className="text-sm font-bold tracking-wide">{fmtB(total)}</span>
                 </button>
-
               </div>
             </div>
-          </div>
+          </aside>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
