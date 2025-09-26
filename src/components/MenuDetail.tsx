@@ -109,7 +109,7 @@ export default function MenuDetail() {
 
   return (
     <main className="min-h-dvh bg-[#FFF5E2] text-[#073027] overflow-x-hidden">
-      <div className="mx-auto max-w-6xl px-4 md:px-6 pt-0 pb-6 md:py-3">
+      <div className="mx-auto max-w-6xl px-4 md:px-6 pb-6 md:py-10">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.1fr_0.9fr]">
           <section>
             <div className="relative mx-[calc(50%-50vw)] md:mx-0 aspect-[4/3] overflow-hidden rounded-none md:rounded-lg bg-white">
