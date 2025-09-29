@@ -14,7 +14,7 @@ function RadioRow({ name, label, price, checked, onChange }:{
   name: string; label: string; price: string; checked: boolean; onChange: () => void;
 }) {
   return (
-    <label className="flex cursor-pointer items-center justify-between px-1">
+    <label className="flex cursor-pointer items-center justify-between px-1 font-['Schibsted_Grotesk']">
       <div className="flex items-center gap-3">
         <input
           type="radio"
@@ -37,7 +37,7 @@ function CheckboxRow({ label, price, checked, onChange }:{
   label: string; price: string; checked: boolean; onChange: () => void;
 }) {
   return (
-    <label className="flex cursor-pointer items-center justify-between px-1">
+    <label className="flex cursor-pointer items-center justify-between px-1 font-['Schibsted_Grotesk']">
       <div className="flex items-center gap-3">
         <input
           type="checkbox"
@@ -56,7 +56,7 @@ function CheckboxRow({ label, price, checked, onChange }:{
 }
 
 function SectionTitle({ children, className = "" }:{ children: React.ReactNode; className?: string }) {
-  return <div className={`text-left text-lg font-extrabold tracking-wide text-[#073027] ${className}`}>{children}</div>;
+  return <div className={`text-left text-lg font-['Bebas_Neue'] font-extrabold tracking-wide text-[#073027] ${className}`}>{children}</div>;
 }
 
 export default function MenuDetail() {
@@ -81,7 +81,7 @@ export default function MenuDetail() {
     return (
       <button
         onClick={onClick}
-        className="flex h-7 w-7 items-center justify-center rounded-md bg-[#EA7D33] text-white text-lg font-bold leading-none border border-[#073027] shadow-[0_3px_0_#155241]"
+        className="flex h-7 w-7 font-['Schibsted_Grotesk'] items-center justify-center rounded-md bg-[#EA7D33] text-white text-lg font-bold leading-none border border-[#073027] shadow-[0_3px_0_#155241]"
       >
         {children}
       </button>
@@ -115,15 +115,15 @@ export default function MenuDetail() {
             <div className="relative mx-[calc(50%-50vw)] md:mx-0 aspect-[4/3] overflow-hidden rounded-none md:rounded-lg bg-white">
               <Image fill src="/images/Carbonara.png" alt="Carbonara" className="object-fill object-center" />
               <div className="absolute right-0 -top-1 z-10">
-                <span className="inline-block bg-[#EF9748] px-6 py-2 pr-5 text-sm tracking-wide text-black [--notch:18px] [clip-path:polygon(0_0,100%_0,100%_100%,0_100%,var(--notch)_50%)]">
+                <span className="inline-block bg-[#EF9748] px-6 py-2 text-sm font-['Schibsted_Grotesk'] tracking-wide text-black [--notch:18px] [clip-path:polygon(0_0,100%_0,100%_100%,0_100%,var(--notch)_50%)]">
                   Best Seller
                 </span>
               </div>
             </div>
 
             <div className="mt-6 space-y-3 text-left">
-              <h1 className="text-3xl font-extrabold tracking-wide md:text-4xl">CARBONARA</h1>
-              <p className="text-sm text-[#28564D] md:text-base">
+              <h1 className="text-3xl font-['Bebas_Neue'] md:text-4xl">CARBONARA</h1>
+              <p className="text-sm font-['Schibsted_Grotesk'] text-[#28564D] md:text-base">
                 Lorem Ipsum Dolor Sit Amet Consectetur. Dui Et Varius Vel Est. Integer In Quam Justo Vestibulum Lectus Etiam.
                 A Sit Imperdiet Aliquam Tortor Tincidunt. Lorem Ipsum Dolor Sit Amet Consectetur. Dui Et Varius Vel Est.
               </p>
@@ -183,7 +183,7 @@ export default function MenuDetail() {
                   <StepBtn onClick={() => setQty((q) => q + 1)}>+</StepBtn>
                 </div>
 
-                <button className="relative inline-flex items-center justify-between gap-2 rounded-lg bg-[#EA7D33] px-4 py-3 text-sm text-[#073027] ring-2 ring-[#0B3C33] shadow-[0_4px_0_#0B3C33] transition-transform hover:translate-y-[1px] hover:shadow-[0_3px_0_#0B3C33] active:translate-y-[2px] active:shadow-[0_2px_0_#0B3C33] w-full md:w-auto">
+                <button className="relative inline-flex items-center justify-between gap-2 font-['Schibsted_Grotesk'] rounded-lg bg-[#EA7D33] px-4 py-3 text-sm text-[#073027] ring-2 ring-[#0B3C33] shadow-[0_4px_0_#0B3C33] transition-transform hover:translate-y-[1px] hover:shadow-[0_3px_0_#0B3C33] active:translate-y-[2px] active:shadow-[0_2px_0_#0B3C33] w-full md:w-auto">
                   <span className="flex items-center gap-1">
                     Add <span className="font-bold text-[#D62B1F]">{qty}</span> Cart
                   </span>
