@@ -8,7 +8,7 @@ export default function Menu() {
       </div>
 
       {/* Cart button (sticky at bottom-right) */}
-      <CartButton count={1} />
+      <CartButton />
     </main>
   );
 }
