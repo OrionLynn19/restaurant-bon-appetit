@@ -115,7 +115,7 @@ export default function MenuDetail() {
             <div className="relative mx-[calc(50%-50vw)] md:mx-0 aspect-[4/3] overflow-hidden rounded-none md:rounded-lg bg-white">
               <Image fill src="/images/Carbonara.png" alt="Carbonara" className="object-fill object-center" />
               <div className="absolute right-0 -top-1 z-10">
-                <span className="inline-block bg-[#EF9748] px-6 py-2 text-sm font-['Schibsted_Grotesk'] tracking-wide text-black [--notch:18px] [clip-path:polygon(0_0,100%_0,100%_100%,0_100%,var(--notch)_50%)]">
+                <span className="inline-block bg-[#EF9748] px-6 py-2 text-sm font-['Schibsted_Grotesk'] text-black [--notch:18px] [clip-path:polygon(0_0,100%_0,100%_100%,0_100%,var(--notch)_50%)]">
                   Best Seller
                 </span>
               </div>
