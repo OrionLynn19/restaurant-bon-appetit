@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 @theme {
   --color-background: #ffffff;
   --color-foreground: #171717;
@@ -9,9 +10,9 @@
 
 @layer base {
   @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Schibsted+Grotesk:wght@400;700&display=swap");
-  
 
-/* @theme inline {
+
+  /* @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);    
@@ -43,7 +44,6 @@
   pointer-events: none;
   transition-timing-function: linear !important;
 }
-
 
 @keyframes shake-left {
   0% {
@@ -142,4 +142,3 @@
     opacity: 1
   }
 }
-
