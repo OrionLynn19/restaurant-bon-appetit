@@ -1,6 +1,6 @@
 'use client';
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectCoverflow } from "swiper/modules"; 
+import { Autoplay, EffectCoverflow} from "swiper/modules"; 
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/effect-coverflow";
@@ -20,24 +20,24 @@ export default function MenuPageSlider() {
   return (
     <Swiper
       className="menu-slider" 
-      modules={[Autoplay, EffectCoverflow]}
+      modules={[Autoplay, EffectCoverflow ]}
       effect="coverflow"
       coverflowEffect={{
         rotate: 0,
-        stretch: -25,
-        depth: 150,
-        modifier: 1,
-        scale: 0.9,
+        stretch: -20,
+        depth: 160,
+        modifier: 0.8,
+        scale: 0.87,
         slideShadows: false,
       }}
-      speed={4000}
-      autoplay={{ delay: 0, disableOnInteraction: false }}
-      loop
+      speed={3500}
+      autoplay={{ delay: 0 ,}}
+      loop={true}
       centeredSlides={true}
       breakpoints={{
         0: { slidesPerView: 3},  
-        768: { slidesPerView: 4}, 
-        1024: { slidesPerView: 5 } 
+        768: { slidesPerView: 4},
+        1024: { slidesPerView: 5} 
       }}
     >
       {slides.map((src, i) => (
@@ -46,9 +46,9 @@ export default function MenuPageSlider() {
             <Image
               src={src}
               alt={`Menu ${i + 1}`}
-              width={300}
-              height={300}
-              className="rounded-lg w-full h-auto object-cover"
+              width={400}
+              height={400}
+              className="rounded-lg w-full h-auto object-contain"
             />
           </div>
         </SwiperSlide>
