@@ -1,5 +1,5 @@
 "use client"; 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 
 interface ConfirmBoxProps {
@@ -25,14 +25,19 @@ export default function confirmBox({
   onConfirm,
   onCancel,
 }: ConfirmBoxProps) {
+  const [isMessageExpanded, setIsMessageExpanded] = useState(false);
+  const [isNameExpanded, setIsNameExpanded] = useState(false);
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+    <div className="min-w-[343px] min-h-[327px] fixed inset-0 flex items-center justify-center bg-black/50 z-50">
       <div
         className="
-          rounded-lg shadow-lg  text-center
+          rounded-lg shadow-lg text-center
           bg-[rgba(255,254,250,1)]
-          w-[343px] h-[327px]   
-          md:w-[646px] md:h-[682px] 
+          w-[343px] min-h-[327px] h-auto
+          md:w-[646px] md:min-h-[682px] md:h-auto
+          max-h-[90vh] overflow-y-auto
+          py-4 md:py-6
         "
         style={{
           fontFamily: 'var(--font-bebas), Bebas Neue, Arial, Helvetica, sans-serif'
@@ -59,42 +64,62 @@ export default function confirmBox({
 
         
         <div 
-          className="text-[rgba(7, 48, 39, 1)] text-left ml-[24px] md:ml-[133px] mb-[12px] md:mb-[32px] space-y-1 md:space-y-[12px]"
+          className="text-[rgba(7, 48, 39, 1)] text-left mb-[12px] md:mb-[32px] space-y-1 md:space-y-[12px] px-[24px] md:px-[133px] flex-grow"
         >
-          <p className="md:h-[40px] md:flex md:items-center text-[15px] md:text-[20px]">
-            <span className="font-medium">FULL NAME</span> 
-            <span className="ml-[163px] md:ml-[400px]">{fullName}</span>
-          </p>
-          <p className="md:h-[40px] md:flex md:items-center text-[15px] md:text-[20px]">
-            <span className="font-medium">PHONE NUMBER</span> 
-            <span className="ml-[163px] md:ml-[400px]">{phoneNumber}</span>
-          </p>
-          <p className="md:h-[40px] md:flex md:items-center text-[15px] md:text-[20px]">
+          <div className="flex flex-row md:h-[40px] md:items-center items-center text-[15px] md:text-[18px]">
+            <div className="font-normal whitespace-nowrap">FULL NAME</div> 
+            <div 
+              className={`ml-29 max-w-[140px] md:max-w-[220px] font-normal md:ml-54 cursor-pointer ${
+                isNameExpanded 
+                  ? 'break-words text-[10px] md:text-[12px]' 
+                  : 'truncate text-[12px] md:text-[15px]'
+              }`}
+              style={{ fontFamily: 'Schibsted Grotesk, sans-serif' }}
+              onClick={() => setIsNameExpanded(!isNameExpanded)}
+              title={isNameExpanded ? "Click to collapse" : "Click to expand"}
+            >
+              {fullName}
+            </div>
+          </div>
+          <div className="md:h-[40px] md:items-center text-[15px] md:text-[20px]">
+            <span className="font-medium truncate">PHONE NUMBER</span> 
+            <span className="text-[12px] md:text-[15px] max-w-[140px] md:max-w-[200px] font-normal ml-24 md:ml-45.5" style={{ fontFamily: 'Schibsted Grotesk, sans-serif' }}>{phoneNumber}</span>
+          </div>
+          <div className="md:h-[40px] md:items-center text-[15px] md:text-[20px]">
             <span className="font-medium">DATE</span> 
-            <span className="ml-[163px] md:ml-[400px]">{date}</span>
-          </p>
-          <p className="md:h-[40px] md:flex md:items-center text-[15px] md:text-[20px]">
+            <span className="text-[12px] md:text-[15px] max-w-[140px] md:max-w-[200px] font-normal ml-36 md:ml-62" style={{ fontFamily: 'Schibsted Grotesk, sans-serif' }}>{date}</span>
+          </div>
+          <div className="md:h-[40px] md:items-center text-[15px] md:text-[20px]">
             <span className="font-medium">TIME</span> 
-            <span className="ml-[163px] md:ml-[400px]">{time}</span>
-          </p>
-          <p className="md:h-[40px] md:flex md:items-center text-[15px] md:text-[20px] md:pr-0">
+            <span className=" text-[12px] md:text-[15px] max-w-[140px] md:max-w-[200px] font-normal ml-36 md:ml-62.5" style={{ fontFamily: 'Schibsted Grotesk, sans-serif' }}>{time}</span>
+          </div>
+          <div className="md:h-[40px] md:items-center text-[15px] md:text-[20px]">
             <span className="font-medium whitespace-nowrap">RESTAURANT BRANCH</span> 
-            <span className="ml-[163px] md:ml-[400px]">{branch}</span>
-          </p>
-          <p className="md:h-[40px] md:flex md:items-center text-[15px] md:text-[20px]">
+            <span className=" text-[12px] md:text-[15px] max-w-[140px] md:max-w-[200px] font-normal ml-17.5 md:ml-37.5" style={{ fontFamily: 'Schibsted Grotesk, sans-serif' }}>{branch}</span>
+          </div>
+          <div className="md:h-[40px] md:items-center text-[15px] md:text-[20px]">
             <span className="font-medium">AMOUNT OF GUEST</span> 
-            <span className="ml-[163px] md:ml-[400px]">{guests}</span>
-          </p>
-          
-            <p className="md:h-[40px] md:flex md:items-center text-[15px] md:text-[20px]">
-              <span className="font-medium">MESSAGE</span> 
-              <span className="ml-[163px] md:ml-[400px]">{message}</span>
-            </p>
-          
+            <span className="text-[12px] md:text-[15px] max-w-[140px] md:max-w-[200px] font-normal md:ml-42.5 ml-21" style={{ fontFamily: 'Schibsted Grotesk, sans-serif' }}>{guests}</span>
+          </div>
+          <div className=" flex flex-row md:flex md:flex-row md:h-[40px] md:items-center text-[15px] md:text-[20px]">
+            <div className="font-medium ">MESSAGE</div> 
+            <div 
+              className={`ml-31 max-w-[140px] md:max-w-[200px] font-normal md:ml-56 cursor-pointer ${
+                isMessageExpanded 
+                  ? 'break-words text-[8px] md:text-[12px]' 
+                  : 'truncate text-[12px] md:text-[20px]'
+              }`}
+              style={{ fontFamily: 'Schibsted Grotesk, sans-serif' }}
+              onClick={() => setIsMessageExpanded(!isMessageExpanded)}
+              title={isMessageExpanded ? "Click to collapse" : "Click to expand"}
+            >
+              {message}
+            </div>
+          </div>
         </div>
 
       
-        <div className="flex justify-between mt-[0px] mb-[22px] mx-[24px] md:mx-[133px]">
+        <div className="flex justify-between mt-auto mb-[22px] mx-[24px] md:mx-[133px]">
           <button
             onClick={onCancel}
             className="flex items-center justify-center

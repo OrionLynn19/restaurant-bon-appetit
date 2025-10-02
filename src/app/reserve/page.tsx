@@ -1,14 +1,13 @@
-
 "use client";
-
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import{useRouter} from "next/navigation";
+import ConfirmBox from "@/components/confirmBox";
 
 const BRANCHES = [
-  "Bon Appétit Pathum Thani",
-  "Bon Appétit Silom",
-  "Bon Appétit Mo Chit",
+  "Pathum Thani",
+  "Silom",
+  "Mo Chit",
 ];
 
 const ALL_SLOTS = {
@@ -102,6 +101,10 @@ export default function ReservePage() {
   const [showTime, setShowTime] = useState(false);
   const [showBranch, setShowBranch] = useState(false);
 
+  // Add confirmation modal state
+  const [showConfirmBox, setShowConfirmBox] = useState(false);
+  const [showBookingConfirmed, setShowBookingConfirmed] = useState(false);
+
   // selections
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [viewMonth, setViewMonth] = useState<Date>(new Date());
@@ -124,22 +127,33 @@ export default function ReservePage() {
   const phoneValid = phone.length > 0 && isValidPhoneTH(phone);
   const canProceed =
     !!name.trim() && phoneValid && !!selectedDate && !!time && !!branch && guests > 0;
-//Onsumit
+
+  // Update onSubmit function
   function onSubmit() {
-  if (!canProceed || !selectedDate) return;
+    if (!canProceed || !selectedDate) return;
+    
+    // Show confirmation modal instead of navigating immediately
+    setShowConfirmBox(true);
+  }
 
-  const params = new URLSearchParams({
-    fullName: name,
-    phoneNumber: phone,
-    date: isoDate(selectedDate),
-    time,
-    branch,
-    guests: String(guests),
-    message,
-  });
+  // Handle confirmation
+  function handleConfirm() {
+    if (!selectedDate) return;
+    
+    // Close the confirmation modal and show booking confirmed
+    setShowConfirmBox(false);
+    setShowBookingConfirmed(true);
+    
+    // Optional: Auto-close the success modal after 3 seconds
+    setTimeout(() => {
+      setShowBookingConfirmed(false);
+    }, 6000);
+  }
 
-  router.push(`/reserve/confirm?${params.toString()}`);
-}
+  // Handle cancellation
+  function handleCancel() {
+    setShowConfirmBox(false);
+  }
 
   const todayStart = startOfDay(new Date());
 
@@ -532,6 +546,50 @@ export default function ReservePage() {
           </div>
         </div>
       </section>
+      
+      {/* Add ConfirmBox modal at the end */}
+      {showConfirmBox && selectedDate && (
+        <ConfirmBox
+          fullName={name}
+          phoneNumber={phone}
+          date={formatDate(selectedDate)}
+          time={time}
+          branch={branch}
+          guests={guests}
+          message={message}
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+        />
+      )}
+
+      
+      {showBookingConfirmed && (
+        <div className="fixed inset-0 flex items-center justify-center  z-50">
+          <div className="bg-white rounded-lg shadow-xl p-8 max-w-md  mx-4 text-center">
+            <div className="mb-4">
+              <svg 
+                className="mx-auto h-16 w-16 text-rgba(7, 48, 39, 1)" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={3} 
+                  d="M5 13l4 4L19 7" 
+                />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold text-rgba(7, 48, 39, 1) mb-2">
+              Booking Confirmed!
+            </h2>
+            <p className="text-rgba(7, 48, 39, 1) mb-4">
+              Your reservation has been successfully confirmed.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
