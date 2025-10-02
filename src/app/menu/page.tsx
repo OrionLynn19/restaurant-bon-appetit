@@ -1,5 +1,11 @@
-export default function Menu(){
-    return(
-        <div className="p-10 text-center text-3xl text-orange-500 w-full">This is Menu</div>
-    );
+"use client";
+
+import DiscoverOurMenu from "@/components/DiscoverOurMenu";
+
+export default function Menu() {
+  return (
+    <div className="py-12 md:py-24 bg-[rgba(255,252,241,1)]">
+      <DiscoverOurMenu />
+    </div>
+  );
 }
