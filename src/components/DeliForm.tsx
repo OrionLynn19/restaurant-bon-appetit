@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 
 export type DeliverySpot =
   | "Place At Given Spot"
@@ -25,7 +26,7 @@ type Props = {
   spot?: DeliverySpot;
   onSpotChange?: (s: DeliverySpot) => void;
   icons?: IconSlots;
-  className?: string; 
+  className?: string;
 };
 
 export default function DeliForm({
@@ -40,25 +41,78 @@ export default function DeliForm({
   const [open, setOpen] = React.useState(false);
   const [editing, setEditing] = React.useState(false);
 
-  React.useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
-
   const {
-    addressLeft = <span className="text-xl">📍</span>,
-    editRight = <span className="text-xl text-[#EA7D33]">✏️</span>,
-    spotLeft = <span className="text-xl">🛏️</span>,
-    chevron,
-    optionPlace = <span className="text-xl">🛏️</span>,
-    optionHand = <span className="text-xl">🤝</span>,
-    optionPerson = <span className="text-xl">👤</span>,
+    addressLeft = (
+      <Image
+        src="/images/locationIcon.png"
+        alt="Edit address"
+        width={20}
+        height={20}
+        className="object-contain"
+      />
+    ),
+    editRight = (
+      <span
+        className="h-5 w-5 bg-current
+                  [mask-image:url('/images/editIcon.png')]
+                  [mask-size:contain]
+                  [mask-repeat:no-repeat]
+                  [mask-position:center]"
+        aria-hidden="true"
+      />
+    ),
+    spotLeft,
+    chevron = (
+      <Image
+        src="/images/chevronIcon.png"
+        alt="Edit address"
+        width={20}
+        height={20}
+        className="object-contain"
+      />
+    ),
+    optionPlace = (
+      <Image
+        src="/images/deskIcon.png"
+        alt="Edit address"
+        width={24}
+        height={24}
+        className="object-contain"
+      />
+    ),
+    optionHand = (
+      <Image
+        src="/images/handIcon.png"
+        alt="Edit address"
+        width={24}
+        height={24}
+        className="object-contain"
+      />
+    ),
+    optionPerson = (
+      <Image
+        src="/images/leaveIcon.png"
+        alt="Edit address"
+        width={24}
+        height={24}
+        className="object-contain"
+      />
+    ),
   } = icons || {};
 
   const rowCls =
-    "bg-white shadow-[0_2px_0_0_rgba(7,48,39,0.16)] min-h-[56px] px-5 py-[14px]";
+    "bg-white shadow-[0_2px_0_0_rgba(7,48,39,0.16)] min-h-[56px] px-3 py-[14px]";
+
+  const currentSpotIcon = React.useMemo(() => {
+    switch (spot) {
+      case "Hand It To Me":
+        return optionHand;
+      case "Leave It With Someone":
+        return optionPerson;
+      default:
+        return optionPlace;
+    }
+  }, [spot, optionPlace, optionHand, optionPerson]);
 
   return (
     <section
@@ -73,10 +127,9 @@ export default function DeliForm({
         }`}
       >
         <div className="flex items-center gap-3">
-          <div className="h-6 w-6 shrink-0 text-[#0D4A3E] [&>*]:h-6 [&>*]:w-6">
+          <div className="h-6 w-6 shrink-0 text-[#0D4A3E] flex items-center justify-center">
             {addressLeft}
           </div>
-
           {editing ? (
             <input
               value={address}
@@ -92,18 +145,16 @@ export default function DeliForm({
               {address || "Tap to enter address"}
             </span>
           )}
-
           <button
             type="button"
             onClick={() => setEditing((s) => !s)}
-            className="grid h-9 w-9 place-items-center hover:bg-[#EA7D33]/10 focus:outline-none focus:ring-2 focus:ring-[#EA7D33]"
+            className="flex items-center justify-center h-9 w-9 text-[#EA7D33] hover:text-black focus:outline-none"
             aria-label="Edit"
           >
-            <div className="[&>*]:h-5 [&>*]:w-5">{editRight}</div>
+            {editRight}
           </button>
         </div>
       </div>
-
       {mode === "delivery" && (
         <div className="relative">
           <button
@@ -115,40 +166,26 @@ export default function DeliForm({
           >
             <div className="flex min-w-0 items-center gap-3">
               <div className="h-6 w-6 shrink-0 text-[#0D4A3E] [&>*]:h-6 [&>*]:w-6">
-                {spotLeft}
+                {currentSpotIcon}
               </div>
-              <span
-                className={`truncate text-[20px] leading-7 ${
-                  !spot || spot === "Place At Given Spot"
-                    ? "text-[#7C928C]"
-                    : "text-[#0D4A3E]"
-                }`}
-              >
+              <span className={`truncate text-[20px] leading-7 text-[#0D4A3E]`}>
                 {spot ?? "Place At Given Spot"}
               </span>
             </div>
-            {chevron ?? (
-              <svg
-                viewBox="0 0 24 24"
-                className={`h-6 w-6 text-[#EA7D33] transition-transform ${
-                  open ? "rotate-180" : ""
-                }`}
-                fill="currentColor"
-              >
-                <path d="M7 10l5 5 5-5z" />
-              </svg>
-            )}
+            <div className="flex items-center justify-center h-9 w-9">
+              {chevron}
+            </div>
           </button>
-
           <button
             aria-hidden={!open}
             tabIndex={-1}
             onClick={() => setOpen(false)}
             className={`fixed inset-0 bg-black/20 ${open ? "block" : "hidden"}`}
           />
-
           <div
-            className={`${open ? "block" : "hidden"} absolute left-0 right-0 top-[calc(100%+4px)] z-20 overflow-hidden bg-white shadow-lg`}
+            className={`${
+              open ? "block" : "hidden"
+            } absolute left-0 right-0 top-[calc(100%+4px)] z-20 overflow-hidden bg-white shadow-lg`}
             role="listbox"
           >
             <button
@@ -167,7 +204,6 @@ export default function DeliForm({
                 Place At Given Spot
               </span>
             </button>
-
             <button
               role="option"
               aria-selected={spot === "Hand It To Me"}
@@ -184,7 +220,6 @@ export default function DeliForm({
                 Hand It To Me
               </span>
             </button>
-
             <button
               role="option"
               aria-selected={spot === "Leave It With Someone"}
