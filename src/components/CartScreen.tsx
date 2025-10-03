@@ -26,7 +26,7 @@ export default function CartScreen() {
   const removeItem = (id: string) => setItems((arr) => arr.filter((it) => it.id !== id));
 
   return (
-    <main className="min-h-screen bg-[#FFFCEF] px-4 py-6 md:px-10">
+    <main className="bg-[#FFFCEF] px-4 py-10 md:px-10">
       <div className="mx-auto w-full max-w-7xl">
         {/* Title */}
         <div className="mb-8 flex justify-center">
