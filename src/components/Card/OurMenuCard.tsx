@@ -21,9 +21,9 @@ export default function OurMenuCard(props: OurMenuCardProps) {
   };
 
   return (
-    <div className="md:bg-white rounded-lg md:shadow-md flex flex-col items-center gap-2 w-[153px] h-[243px] md:flex-row md:w-[644px] md:h-[238px] md:gap-0 md:overflow-hidden md:relative">
+    <div className="md:bg-white rounded-lg md:shadow-md flex flex-col items-center gap-2 w-[153px] h-[243px] md:flex-row md:w-full md:max-w-[644px] md:h-[238px] md:gap-0 md:overflow-hidden md:relative">
       {/* Left: Image */}
-      <div className="relative flex justify-center items-center w-[153px] h-[153px] md:w-[238px] md:h-[238px] md:rounded-tl-[8px] md:rounded-bl-[8px] overflow-hidden">
+      <div className="relative flex justify-center items-center w-[153px] h-[153px] md:w-[238px] md:h-[238px] md:rounded-tl-[8px] md:rounded-bl-[8px] overflow-hidden md:flex-shrink-0">
         <Image
           src={image}
           alt={name}
@@ -99,7 +99,7 @@ export default function OurMenuCard(props: OurMenuCardProps) {
         )}
       </div>
       {/* Right: Content (all content padded together) */}
-      <div className="flex flex-col justify-between gap-2 w-[146px] h-[70px] md:w-[406px] md:h-[238px] md:py-[26px] md:px-[24.5px]">
+      <div className="flex flex-col justify-between gap-2 w-[146px] h-[70px] md:w-full md:flex-1 md:h-[238px] md:py-[26px] md:px-[24.5px]">
         <div className="flex flex-col justify-between h-full md:gap-3">
           <div>
             <h3 className="font-schibsted font-semibold text-[14px] text-[#073027] mb-0 md:text-[24px] md:text-[#1F1D1D] md:h-[30px] md:font-semibold md:mb-[24px]">
@@ -107,7 +107,7 @@ export default function OurMenuCard(props: OurMenuCardProps) {
             </h3>
             {description && (
               <p
-                className="hidden md:block font-schibsted font-normal text-[16px] text-[#626262] md:w-[357px] md:h-[80px] md:font-normal md:leading-[1] md:tracking-[0%]"
+                className="hidden md:block font-schibsted font-normal text-[16px] text-[#626262] md:w-full md:max-w-[357px] md:h-[80px] md:font-normal md:leading-[1] md:tracking-[0%]"
                 style={{ marginBottom: 0 }}
               >
                 {description}
