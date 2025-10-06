@@ -101,7 +101,7 @@ export default function DeliForm({
   } = icons || {};
 
   const rowCls =
-    "bg-white shadow-[0_2px_0_0_rgba(7,48,39,0.16)] min-h-[56px] px-3 py-[14px]";
+    "bg-white shadow-[0_2px_0_0_rgba(7,48,39,0.16)] min-h-[56px] px-2 py-[14px]";
 
   const currentSpotIcon = React.useMemo(() => {
     switch (spot) {
@@ -118,7 +118,7 @@ export default function DeliForm({
     <section
       className={`font-['Schibsted_Grotesk'] px-4 md:px-10 w-full max-w-[560px] ${className}`}
     >
-      <h2 className="mb-4 text-[8px] md:text-[20px] font-bold text-[#073027]">
+      <h2 className="mb-4 text-[15px] md:text-[20px] font-bold text-[#073027]">
         {mode === "delivery" ? "DELIVERY INFORMATION" : "PICKUP LOCATION"}
       </h2>
       <div
