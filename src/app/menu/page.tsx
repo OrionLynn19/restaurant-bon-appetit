@@ -1,17 +1,27 @@
+"use client";
 import MenuPageSlider from "../slider-menu-page";
 import CartButton from "@/components/CartButton";
+import DiscoverOurMenu from "@/components/DiscoverOurMenu";
 
 export default function Menu(){
     return(
         <>
         <div>
-            <h1 className="block md:hidden text-center font-bebas font-semibold text-[#073027] text-xl mb-7">“EXPLORE OUR MENU”</h1>
+            <div className="mt-15"></div>
             <MenuPageSlider />
+            <div className="md:mb-15 mb-15"></div>
+            <DiscoverOurMenu />
             <CartButton />
         </div>
         </>
     );
 }
+
+
+
+
+
+
 
 
 
