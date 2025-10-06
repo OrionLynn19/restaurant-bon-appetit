@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import{useRouter} from "next/navigation";
-import ConfirmBox from "@/components/confirmBox";
+import ConfirmBox from "@/components/ConfirmBox";
 
 const BRANCHES = [
   "Pathum Thani",
@@ -316,7 +316,7 @@ export default function ReservePage() {
             )}
           </div>
 
-          {/* Time */}
+         
           <div className="relative">
             <label className="grid gap-1">
               <span className="text-[12px] font-semibold text-emerald-900">SelectTime*</span>
@@ -415,7 +415,7 @@ export default function ReservePage() {
             )}
           </div>
 
-          {/* Branch */}
+          
           <div className="relative">
             <label className="grid gap-1">
               <span className="text-[12px] font-semibold text-emerald-900">Restaurant Branch</span>
@@ -462,7 +462,7 @@ export default function ReservePage() {
             )}
           </div>
 
-          {/* Guests (same control height as others) */}
+         
           <label className="grid gap-1">
             <span className="text-[12px] font-semibold text-emerald-900">Amount Of Guest*</span>
             <div className="flex items-center gap-2">
@@ -490,7 +490,7 @@ export default function ReservePage() {
             </div>
           </label>
 
-          {/* Message */}
+          
           <label className="col-span-full grid gap-1">
             <span className="text-[12px] font-semibold text-emerald-900">Message</span>
             <textarea
@@ -547,7 +547,7 @@ export default function ReservePage() {
         </div>
       </section>
       
-      {/* Add ConfirmBox modal at the end */}
+     
       {showConfirmBox && selectedDate && (
         <ConfirmBox
           fullName={name}

@@ -9,8 +9,9 @@ export default function Menu(){
         <div>
             <div className="mt-15"></div>
             <MenuPageSlider />
-            <div className="md:mb-15 mb-15"></div>
+            <div className="md:mb-20 mb-15"></div>
             <DiscoverOurMenu />
+            <div className="md:mb-25 mb-15"></div>
             <CartButton />
         </div>
         </>
