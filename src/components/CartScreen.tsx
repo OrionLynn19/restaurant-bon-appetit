@@ -1,7 +1,9 @@
 "use client";
+import { sub } from "framer-motion/client";
 import Image from "next/image";
 
 import Link from "next/link";
+import { it } from "node:test";
 import { useState } from "react";
 
 type CartItem = {
@@ -25,6 +27,12 @@ export default function CartScreen() {
   const dec = (id: string) =>
     setItems((arr) => arr.map((it) => (it.id === id ? { ...it, qty: Math.max(0, it.qty - 1) } : it)));
   const removeItem = (id: string) => setItems((arr) => arr.filter((it) => it.id !== id));
+
+  const subtotal = items.reduce((sum, it) => sum + it.price * it.qty, 0);
+  const deliveryFee = subtotal > 0 ? 50 : 0;
+  const tax = Math.round(subtotal * 0.07);
+  const coupon = subtotal > 0 ? 50 : 0;
+  const total = subtotal + deliveryFee + tax - coupon;
 
   return (
     <>
@@ -100,26 +108,26 @@ export default function CartScreen() {
           </div>
           <div className="flex justify-between text-[14px] md:text-[20px] font-schibsted mt-4 ">
             <p>Subtotal</p>
-            <p>300B</p>
+            <p>{subtotal}B</p>
           </div>
           <div className="flex justify-between text-[14px] md:text-[20px] font-schibsted mt-4">
             <p>Delivery Fee</p>
-            <p>300B</p>
+            <p>{deliveryFee}B</p>
           </div>
           <div className="flex justify-between text-[14px] md:text-[20px] font-schibsted mt-4">
             <p>Tax(7%)</p>
-            <p>50B</p>
+            <p>{tax}B</p>
           </div>
           <div className="flex justify-between text-[14px] md:text-[20px] font-schibsted mt-4">
             <div className="flex gap-0.5"><Image src="/images/couponicon.svg" alt="Coupon" width={20} height={20} />
               <p>Coupon</p>
             </div>
-            <p>-50B</p>
+            <p>{coupon}B</p>
           </div>
           <p className=" w-full h-[2px] bg-[#073027] mt-3"></p>
           <div className="flex justify-between text-[14px] md:text-[20px] font-schibsted mt-4">
             <p>Total</p>
-            <p>300B</p>
+            <p>{total}B</p>
           </div>
           <div className="flex justify-center md:justify-end text-[20px] font-bebas mt-4">
             <button className="w-full md:w-auto bg-[#EF9748] shadow-[0_3px_0_0_#073027] rounded-[8px] border-2 border-[#073027] px-5 py-1  hover:bg-[#FAB170] hover:translate-y-[1px] hover:shadow-[0_2px_0_0_#073027] active:bg-[#d46a1f] active:translate-y-[2px] active:shadow-[0_1px_0_0_#073027]
