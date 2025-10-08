@@ -14,12 +14,11 @@ type Props = {
 };
 
 const OPTIONS: Option[] = [
-  { brand: "visa",        label: "Visa",        masked: "1585 XXXX XXXX XXXX" },
-  { brand: "mastercard",  label: "Mastercard",  masked: "5329 XXXX XXXX 2211" }, // ← added
-  { brand: "mobile",      label: "Mobile Banking", masked: "1585 XXXX XXXX XXXX" },
-  { brand: "cash",        label: "Cash On Delivery" },
+  { brand: "visa", label: "Visa", masked: "1585 XXXX XXXX XXXX" },
+  { brand: "mastercard", label: "Mastercard", masked: "5329 XXXX XXXX 2211" },
+  { brand: "mobile", label: "Mobile Banking", masked: "1585 XXXX XXXX XXXX" },
+  { brand: "cash", label: "Cash On Delivery" },
 ];
-
 
 export default function PaymentSection({
   className = "",
@@ -39,28 +38,28 @@ export default function PaymentSection({
   return (
     <section
       aria-labelledby="payment-title"
-      className={`w-full bg-[var(--page-bg,#FFFCF1)] py-10 ${className}`}
+      className={`w-full bg-[var(--page-bg,#FFFCF1)] py-14 md:py-16 ${className}`}
     >
-      <div className="mx-auto w-full max-w-7xl px-4 md:px-10">
+      <div className="mx-auto w-full max-w-7xl px-6 md:px-12">
         <div className="grid gap-10 md:grid-cols-2">
           <div className="relative">
             <h3
               id="payment-title"
-              className="mb-5 text-[16px] md:text-[18px] font-extrabold tracking-[0.08em] text-[#0F3B2F] uppercase"
+              className="mb-6 text-[20px] md:text-[22px] font-extrabold tracking-[0.08em] text-[#0F3B2F] uppercase"
             >
               PAYMENT
             </h3>
 
-            {/* Selected row */}
-            <div className="flex items-center justify-between rounded-md px-6 py-5">
-              <div className="flex items-center gap-5">
-                <BrandMark brand={selected.brand} size={32} />
+            {/* Selected row (scaled up) */}
+            <div className="flex items-center justify-between rounded-xl bg-[#FFF9F0] px-8 py-6 shadow-sm">
+              <div className="flex items-center gap-6">
+                <BrandMark brand={selected.brand} size={54} />
                 <div className="leading-tight">
-                  <div className="text-[16px] font-semibold text-[#2B2B2B]">
+                  <div className="text-[18px] md:text-[20px] font-semibold text-[#2B2B2B]">
                     {selected.label}
                   </div>
                   {selected.masked && (
-                    <div className="text-[12px] text-[#8C7B6A]">
+                    <div className="mt-1 text-[14px] md:text-[15px] text-[#8C7B6A]">
                       {selected.masked}
                     </div>
                   )}
@@ -73,14 +72,14 @@ export default function PaymentSection({
                 aria-expanded={open}
                 aria-controls="payment-popover"
                 onClick={() => setOpen((v) => !v)}
-                className="rounded-md p-1 outline-none ring-[#E09B4A] focus:ring-2"
+                className="rounded-full p-2 transition hover:bg-[#FFF4E1] focus:ring-2 focus:ring-[#E09B4A]"
               >
                 <svg
                   viewBox="0 0 24 24"
-                  className="h-6 w-6 shrink-0"
+                  className="h-7 w-7"
                   fill="none"
                   stroke="#E09B4A"
-                  strokeWidth="2.5"
+                  strokeWidth="3"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
@@ -90,7 +89,7 @@ export default function PaymentSection({
               </button>
             </div>
 
-            {/* Dropdown menu */}
+            {/* Dropdown menu (scaled up) */}
             {open && (
               <>
                 <button
@@ -102,15 +101,15 @@ export default function PaymentSection({
                 <div
                   id="payment-popover"
                   role="menu"
-                  className="absolute z-20 right-0 mt-2 w-72 rounded-md border border-[#E5D6C2] bg-[#FFFCF1] shadow-lg"
+                  className="absolute z-20 right-0 mt-3 w-80 rounded-xl border border-[#E5D6C2] bg-[#FFFCF1] shadow-xl"
                 >
-                  <div className="px-4 py-2 text-sm font-semibold text-[#0F3B2F] bg-[#F6EFE3] border-b border-[#E5D6C2]">
+                  <div className="px-5 py-3 text-base font-semibold text-[#0F3B2F] bg-[#F6EFE3] border-b border-[#E5D6C2]">
                     {selected.masked
                       ? `My ${selected.label} ending in ${selected.masked.slice(-2)}`
                       : `My ${selected.label}`}
                   </div>
 
-                  <ul className="py-1">
+                  <ul className="py-2">
                     {OPTIONS.map((opt) => {
                       const isActive = opt.brand === selected.brand;
                       return (
@@ -118,17 +117,17 @@ export default function PaymentSection({
                           <button
                             role="menuitem"
                             onClick={() => choose(opt)}
-                            className={`w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] rounded-md transition hover:bg-[#FFF8ED] ${
+                            className={`w-full flex items-center gap-4 px-5 py-3 text-left text-[16px] rounded-lg transition hover:bg-[#FFF8ED] ${
                               isActive ? "bg-[#FFF4E1]" : ""
                             }`}
                           >
-                            <BrandMark brand={opt.brand} size={24} />
+                            <BrandMark brand={opt.brand} size={36} />
                             <div className="flex-1 leading-tight">
                               <div className="font-semibold text-[#0F3B2F]">
                                 {opt.label}
                               </div>
                               {opt.masked && (
-                                <div className="text-[12px] text-[#8C7B6A]">
+                                <div className="text-[13px] text-[#8C7B6A]">
                                   {opt.masked}
                                 </div>
                               )}
@@ -145,9 +144,9 @@ export default function PaymentSection({
                           setOpen(false);
                           onAddMore?.();
                         }}
-                        className="w-full flex items-center gap-3 px-4 py-2.5 text-[14px] text-[#0F3B2F] hover:bg-[#FFF8ED]"
+                        className="w-full flex items-center gap-4 px-5 py-3 text-[16px] text-[#0F3B2F] hover:bg-[#FFF8ED]"
                       >
-                        <BrandMark brand="add" size={24} />
+                        <BrandMark brand="add" size={32} />
                         Add More
                       </button>
                     </li>
@@ -173,10 +172,10 @@ function BrandMark({
   size?: number;
 }) {
   const logos: Record<Brand, { src?: string; alt: string }> = {
-    visa: { src: "/images/Visa.png", alt: "Visa" },            
+    visa: { src: "/images/Visa.png", alt: "Visa" }, // <- ensure exact filename/case
     mastercard: { src: "/images/mastercard.png", alt: "Mastercard" },
     mobile: { src: "/images/mobilebanking.png", alt: "Mobile Banking" },
-    cash: { src: "/images/COD.png", alt: "Cash on Delivery" },  
+    cash: { src: "/images/COD.png", alt: "Cash on Delivery" },
     add: { alt: "Add More" },
   };
 
