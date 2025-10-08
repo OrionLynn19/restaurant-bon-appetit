@@ -13,28 +13,71 @@ type CartItem = {
 
 export default function CartScreen() {
   const [items, setItems] = useState<CartItem[]>([
-    { id: "1", name: "Stir  Fried Crispy pork Belly With Egg", price: 150, qty: 2, image: "/images/menu1.png" },
-    { id: "2", name: "Stir  Fried Crispy pork Belly With Egg", price: 150, qty: 0, image: "/images/menu2.png" },
-    { id: "3", name: "Stir  Fried Crispy pork Belly With Egg", price: 150, qty: 0, image: "/images/menu3.png" },
-    { id: "4", name: "Stir  Fried Crispy pork Belly With Egg", price: 150, qty: 0, image: "/images/Hungry3.jpg" },
+    {
+      id: "1",
+      name: "Stir  Fried Crispy pork Belly With Egg",
+      price: 150,
+      qty: 2,
+      image: "/images/menu1.png",
+    },
+    {
+      id: "2",
+      name: "Stir  Fried Crispy pork Belly With Egg",
+      price: 150,
+      qty: 0,
+      image: "/images/menu2.png",
+    },
+    {
+      id: "3",
+      name: "Stir  Fried Crispy pork Belly With Egg",
+      price: 150,
+      qty: 0,
+      image: "/images/menu3.png",
+    },
+    {
+      id: "4",
+      name: "Stir  Fried Crispy pork Belly With Egg",
+      price: 150,
+      qty: 0,
+      image: "/images/Hungry3.jpg",
+    },
   ]);
 
   const inc = (id: string) =>
-    setItems((arr) => arr.map((it) => (it.id === id ? { ...it, qty: it.qty + 1 } : it)));
+    setItems((arr) =>
+      arr.map((it) => (it.id === id ? { ...it, qty: it.qty + 1 } : it))
+    );
   const dec = (id: string) =>
-    setItems((arr) => arr.map((it) => (it.id === id ? { ...it, qty: Math.max(0, it.qty - 1) } : it)));
-  const removeItem = (id: string) => setItems((arr) => arr.filter((it) => it.id !== id));
+    setItems((arr) =>
+      arr.map((it) =>
+        it.id === id ? { ...it, qty: Math.max(0, it.qty - 1) } : it
+      )
+    );
+  const removeItem = (id: string) =>
+    setItems((arr) => arr.filter((it) => it.id !== id));
 
   return (
-    <main className="min-h-screen bg-[#FFFCEF] px-4 py-6 md:px-10">
+    <main className="bg-[#FFFCEF]">
       <div className="mx-auto w-full max-w-7xl">
         {/* Title */}
         <div className="mb-8 flex justify-center">
           <div className="font-['Bebas_Neue'] text-[#073027] text-[28px] md:text-[36px] tracking-wide">
             BON APPÉTIT SILOM
             <span className="ml-2 inline-block translate-y-[2px]">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path d="M6 9l6 6 6-6" stroke="#EF9748" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
+                <path
+                  d="M6 9l6 6 6-6"
+                  stroke="#EF9748"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </span>
           </div>
@@ -104,7 +147,11 @@ function OrderRow({
       {/* Image spans both rows */}
       <div className="row-span-2 h-[112px] w-[112px] md:h-[172px] md:w-[172px] overflow-hidden rounded-[12px] bg-[#F2F2F2]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+        <img
+          src={item.image}
+          alt={item.name}
+          className="h-full w-full object-cover"
+        />
       </div>
 
       {/* Row 1: Title (left) */}
@@ -116,7 +163,9 @@ function OrderRow({
 
       {/* Row 1: Edit / × (right) */}
       <div className="row-start-1 col-start-3 justify-self-end flex items-start gap-3">
-        <button className="text-[14px] md:text-[15px] text-[#073027]/85 hover:underline">Edit</button>
+        <button className="text-[14px] md:text-[15px] text-[#073027]/85 hover:underline">
+          Edit
+        </button>
         <button
           onClick={onRemove}
           className="text-[18px] leading-none text-[#FF4D55]"
@@ -128,7 +177,11 @@ function OrderRow({
 
       {/* Row 2: Stepper (left) */}
       <div className="row-start-2 col-start-2 flex items-center gap-3 md:gap-4 mt-2 md:mt-3">
-        <PeachBtn onClick={onDec} disabled={item.qty === 0} ariaLabel="Decrease" />
+        <PeachBtn
+          onClick={onDec}
+          disabled={item.qty === 0}
+          ariaLabel="Decrease"
+        />
         <div
           className="grid place-items-center rounded-[8px] border-2 border-[#073027] text-[#073027]
                      h-9 min-w-[44px] text-[16px] font-semibold
@@ -148,8 +201,6 @@ function OrderRow({
     </div>
   );
 }
-
-
 
 /* ---------- Button ---------- */
 function PeachBtn({
