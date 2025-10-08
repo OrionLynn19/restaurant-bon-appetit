@@ -16,7 +16,7 @@ type Props = {
 const OPTIONS: Option[] = [
   { brand: "visa", label: "Visa", masked: "1585 XXXX XXXX XXXX" },
   { brand: "mastercard", label: "Mastercard", masked: "5329 XXXX XXXX 2211" },
-  { brand: "mobile", label: "Mobile Banking", masked: "1585 XXXX XXXX XXXX" },
+  { brand: "mobile", label: "Mobile Banking" },
   { brand: "cash", label: "Cash On Delivery" },
 ];
 
