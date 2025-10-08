@@ -14,10 +14,12 @@ type Props = {
 };
 
 const OPTIONS: Option[] = [
-  { brand: "visa", label: "Visa", masked: "1585 XXXX XXXX XXXX" },
-  { brand: "mobile", label: "Mobile Banking", masked: "1585 XXXX XXXX XXXX" },
-  { brand: "cash", label: "Cash On Delivery" },
+  { brand: "visa",        label: "Visa",        masked: "1585 XXXX XXXX XXXX" },
+  { brand: "mastercard",  label: "Mastercard",  masked: "5329 XXXX XXXX 2211" }, // ← added
+  { brand: "mobile",      label: "Mobile Banking", masked: "1585 XXXX XXXX XXXX" },
+  { brand: "cash",        label: "Cash On Delivery" },
 ];
+
 
 export default function PaymentSection({
   className = "",
@@ -171,10 +173,10 @@ function BrandMark({
   size?: number;
 }) {
   const logos: Record<Brand, { src?: string; alt: string }> = {
-    visa: { src: "/images/payments/visa.svg", alt: "Visa" },
-    mastercard: { src: "/images/payments/mastercard.svg", alt: "Mastercard" },
-    mobile: { src: "/images/payments/mobile-banking.svg", alt: "Mobile Banking" },
-    cash: { src: "/images/payments/cash.svg", alt: "Cash on Delivery" },
+    visa: { src: "/images/Visa.png", alt: "Visa" },            
+    mastercard: { src: "/images/mastercard.png", alt: "Mastercard" },
+    mobile: { src: "/images/mobilebanking.png", alt: "Mobile Banking" },
+    cash: { src: "/images/COD.png", alt: "Cash on Delivery" },  
     add: { alt: "Add More" },
   };
 
