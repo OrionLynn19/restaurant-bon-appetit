@@ -1,9 +1,8 @@
-import DeliveryMap from "@/components/DeliveryMap";
 
-export default function DelieveryDetailPage() {
+export default function DeliveryDetailPage() {
   return (
     <>
-      <DeliveryMap />
+      
     </>
   );
 }
