@@ -1,5 +1,5 @@
 
-export default function DelieveryDetailPage() {
+export default function DeliveryDetailPage() {
   return (
     <>
       
