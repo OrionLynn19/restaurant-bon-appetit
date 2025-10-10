@@ -348,25 +348,27 @@ export async function DELETE(request: NextRequest): Promise<NextResponse<ApiResp
       );
     }
 
-    try {
-      const { data, error } = await supabase
-        .from('menu_items')
-        .delete()
-        .in('id', itemsToDelete.map(item => item.id));
+    // Delete the items
+    const { data, error } = await supabase
+      .from('menu_items')
+      .delete()
+      .in('id', ids)
+      .select();
 
-      if (error) throw error;
-
-      return NextResponse.json(
-        { success: true, deletedCount: itemsToDelete.length },
-        { status: 200 }
-      );
-    } catch (error) {
-      console.error('Error deleting menu items:', error);
+    if (error) {
+      console.error('Supabase error:', error);
       return NextResponse.json(
         { success: false, error: 'Failed to delete menu items' },
         { status: 500 }
       );
     }
+
+    return NextResponse.json({
+      success: true,
+      data: (data || []) as MenuItem[],
+      message: `${data?.length || 0} menu items deleted successfully`
+    });
+
   } catch (error) {
     console.error('Error deleting menu items:', error);
     return NextResponse.json(
