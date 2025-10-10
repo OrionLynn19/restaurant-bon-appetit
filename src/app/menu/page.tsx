@@ -1,5 +1,5 @@
 "use client";
-import MenuPageSlider from "../slider-menu-page";
+import MenuPageSlider from "@/components/slider-menu-page";
 import CartButton from "@/components/CartButton";
 import DiscoverOurMenu from "@/components/DiscoverOurMenu";
 
