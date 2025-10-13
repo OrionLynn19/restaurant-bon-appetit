@@ -2,19 +2,26 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
+import { CartProvider } from "@/context/CartContext";
 
 export const metadata: Metadata = {
   title: "Bon Appétit",
   description: "Restaurant website",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body className="min-h-dvh flex flex-col bg-[#FFF5E2] text-neutral-900">
-        <Navbar />
-        <main className="flex-1 flex flex-col min-h-0">{children}</main>
-        <Footer />
+        <CartProvider>
+          <Navbar />
+          <main className="flex-1 flex flex-col min-h-0">{children}</main>
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );

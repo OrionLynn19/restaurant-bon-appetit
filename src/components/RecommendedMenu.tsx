@@ -29,10 +29,7 @@ export default function RecommendedMenu() {
   return (
     <>
       {/* Desktop Layout */}
-      <section
-        className="p-11 hidden md:block"
-        style={{ background: "#FFFCF1" }}
-      >
+      <section className="hidden md:block" style={{ background: "#FFFCF1" }}>
         <h2
           className="text-[40px] mb-4 font-bebas text-[#073027] md:pl-2"
           style={{ fontFamily: "var(--font-bebas)" }}

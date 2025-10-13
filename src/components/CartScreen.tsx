@@ -1,97 +1,46 @@
 "use client";
-import { sub } from "framer-motion/client";
-import Image from "next/image";
-
 import Link from "next/link";
-import { it } from "node:test";
-import { useState } from "react";
-
-type CartItem = {
-  id: string;
-  name: string;
-  price: number;
-  qty: number;
-  image: string;
-};
+import { useCart, CartItem } from "../context/CartContext";
 
 export default function CartScreen() {
-  const [items, setItems] = useState<CartItem[]>([
-    {
-      id: "1",
-      name: "Stir  Fried Crispy pork Belly With Egg",
-      price: 150,
-      qty: 2,
-      image: "/images/menu1.png",
-    },
-    {
-      id: "2",
-      name: "Stir  Fried Crispy pork Belly With Egg",
-      price: 150,
-      qty: 0,
-      image: "/images/menu2.png",
-    },
-    {
-      id: "3",
-      name: "Stir  Fried Crispy pork Belly With Egg",
-      price: 150,
-      qty: 0,
-      image: "/images/menu3.png",
-    },
-    {
-      id: "4",
-      name: "Stir  Fried Crispy pork Belly With Egg",
-      price: 150,
-      qty: 0,
-      image: "/images/Hungry3.jpg",
-    },
-  ]);
-
-  const inc = (id: string) =>
-    setItems((arr) =>
-      arr.map((it) => (it.id === id ? { ...it, qty: it.qty + 1 } : it))
-    );
-  const dec = (id: string) =>
-    setItems((arr) =>
-      arr.map((it) =>
-        it.id === id ? { ...it, qty: Math.max(0, it.qty - 1) } : it
-      )
-    );
-  const removeItem = (id: string) =>
-    setItems((arr) => arr.filter((it) => it.id !== id));
-
-  const subtotal = items.reduce((sum, it) => sum + it.price * it.qty, 0);
-  const deliveryFee = subtotal > 0 ? 50 : 0;
-  const tax = Math.round(subtotal * 0.07);
-  const coupon = subtotal > 0 ? 50 : 0;
-  const total = subtotal + deliveryFee + tax - coupon;
+  const { items, inc, dec, removeItem } = useCart();
 
   return (
-
-    <>
-      <main className="min-h-screen bg-[#FFFCEF] px-4 py-6 md:px-10">
-        <div className="mx-auto w-full max-w-7xl">
-          {/* Title */}
-          <div className="mb-8 flex justify-center">
-            <div className="font-['Bebas_Neue'] text-[#073027] text-[28px] md:text-[36px] tracking-wide">
-              BON APPÉTIT SILOM
-              <span className="ml-2 inline-block translate-y-[2px]">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-                  <path d="M6 9l6 6 6-6" stroke="#EF9748" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-            </div>
-
+    <main className="bg-[#FFFCEF]">
+      <div className="mx-auto w-full max-w-7xl">
+        {/* Title */}
+        <div className="mb-8 flex justify-center">
+          <div className="font-['Bebas_Neue'] text-[#073027] text-[28px] md:text-[36px] tracking-wide">
+            BON APPÉTIT SILOM
+            <span className="ml-2 inline-block translate-y-[2px]">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
+                <path
+                  d="M6 9l6 6 6-6"
+                  stroke="#EF9748"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
           </div>
+        </div>
 
-          {/* Top row */}
-          <div className="mb-6 flex items-center justify-between">
-            <h2 className="font-['Bebas_Neue'] text-[#073027] text-[20px] md:text-[28px] tracking-wide">
-              YOUR ORDERS
-            </h2>
+        {/* Top row */}
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="font-['Bebas_Neue'] text-[#073027] text-[20px] md:text-[28px] tracking-wide">
+            YOUR ORDERS
+          </h2>
 
-            <Link
-              href="/menu"
-              className="
+          <Link
+            href="/menu"
+            className="
               inline-flex items-center justify-center
               h-[34px] px-4 md:h-[38px] md:px-6
               rounded-[8px] border-2 border-[#073027]
@@ -102,75 +51,25 @@ export default function CartScreen() {
               active:bg-[#d46a1f] active:translate-y-[2px] active:shadow-[0_1px_0_0_#073027]
               transition-transform duration-150
             "
-            >
-              ADD MENU
-            </Link>
-          </div>
-
-          {/* Orders */}
-          <div className="grid grid-cols-1 gap-x-10 gap-y-12 md:gap-x-12 md:gap-y-12 md:grid-cols-2">
-            {items.map((it) => (
-              <OrderRow
-                key={it.id}
-                item={it}
-                onInc={() => inc(it.id)}
-                onDec={() => dec(it.id)}
-                onRemove={() => removeItem(it.id)}
-              />
-            ))}
-          </div>
+          >
+            ADD MENU
+          </Link>
         </div>
-      </main>
-      <div className="bg-[#FFFCEF] md:p-8 p-4 grid grid-cols-1 md:grid-cols-2 gap-4 ">
-        <div>OrderDetails</div>
-        <div>
-          <h2 className="font-['Bebas_Neue'] font-normal text-[#073027] text-[20px] md:text-[32px]">
-            Order Summary
-          </h2>
-          <h5 className="font-normal font-schibsted text-[14px] md:text-[20px] text-[#000000] mt-3">Discount Coupon</h5>
-          <div className="flex justify-between mt-2 gap-2">
-            <input
-              type="text"
-              placeholder="Promo Code"
-              className="flex w-full md:w-auto min-w-0 rounded-sm px-2 bg-[#FFFFFF] border-white shadow-lg font-schibsted text-[14px] md:text-[20px] "
+
+        {/* Orders */}
+        <div className="grid grid-cols-1 gap-x-10 gap-y-12 md:gap-x-12 md:gap-y-12 md:grid-cols-2">
+          {items.map((it) => (
+            <OrderRow
+              key={it.id}
+              item={it}
+              onInc={() => inc(it.id)}
+              onDec={() => dec(it.id)}
+              onRemove={() => removeItem(it.id)}
             />
-            <button className="bg-[#EF9748] font-bebas text-[14px] md:text-[20px] shadow-[0_3px_0_0_#073027] rounded-[8px] border-2 border-[#073027] px-3 py-1  hover:bg-[#FAB170] hover:translate-y-[1px] hover:shadow-[0_2px_0_0_#073027] active:bg-[#d46a1f] active:translate-y-[2px] active:shadow-[0_1px_0_0_#073027]
-              transition-transform duration-150">
-              Apply
-            </button>
-          </div>
-          <div className="flex justify-between text-[14px] md:text-[20px] font-schibsted mt-4 ">
-            <p>Subtotal</p>
-            <p>{subtotal}B</p>
-          </div>
-          <div className="flex justify-between text-[14px] md:text-[20px] font-schibsted mt-4">
-            <p>Delivery Fee</p>
-            <p>{deliveryFee}B</p>
-          </div>
-          <div className="flex justify-between text-[14px] md:text-[20px] font-schibsted mt-4">
-            <p>Tax(7%)</p>
-            <p>{tax}B</p>
-          </div>
-          <div className="flex justify-between text-[14px] md:text-[20px] font-schibsted mt-4">
-            <div className="flex gap-0.5"><Image src="/images/couponicon.svg" alt="Coupon" width={20} height={20} />
-              <p>Coupon</p>
-            </div>
-            <p>{coupon}B</p>
-          </div>
-          <p className=" w-full h-[2px] bg-[#073027] mt-3"></p>
-          <div className="flex justify-between text-[14px] md:text-[20px] font-schibsted mt-4">
-            <p>Total</p>
-            <p>{total}B</p>
-          </div>
-          <div className="flex justify-center md:justify-end text-[20px] font-bebas mt-4">
-            <button className="w-full md:w-auto bg-[#EF9748] shadow-[0_3px_0_0_#073027] rounded-[8px] border-2 border-[#073027] px-5 py-1  hover:bg-[#FAB170] hover:translate-y-[1px] hover:shadow-[0_2px_0_0_#073027] active:bg-[#d46a1f] active:translate-y-[2px] active:shadow-[0_1px_0_0_#073027]
-              transition-transform duration-150">
-              CONFIRM ORDER
-            </button>
-          </div>
+          ))}
         </div>
       </div>
-    </>
+    </main>
   );
 }
 
@@ -286,5 +185,3 @@ function PeachBtn({
     </button>
   );
 }
-
-
