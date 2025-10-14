@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 "use client"
+<<<<<<< HEAD
 =======
 
 "use client"
@@ -9,6 +10,13 @@ export default function DeliveryDetailPage() {
   return (
     <>
       <DeliveryMap />
+=======
+import OrderAndDeliveryCard from "@/components/Order&DeliveryCard/OrderAndDeliveryCard";
+export default function DeliveryDetailPage() {
+  return (
+    <>
+      <OrderAndDeliveryCard />
+>>>>>>> origin/feature/deliveryDetail-orderDetail
     </>
   );
 }
