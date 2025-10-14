@@ -1,14 +1,14 @@
 "use client";
-import { useState, useEffect } from 'react';
-import { menuApi, categoriesApi } from '@/lib/api';
-import type { MenuItem, Category } from '@/types/content';
-import MenuCategoryBar from './MenuCategoryBar';
-import OurMenuCard from './Card/OurMenuCard'; // Updated import path
+import { useState, useEffect } from "react";
+import { menuApi, categoriesApi } from "@/lib/api";
+import type { MenuItem, Category } from "@/types/content";
+import MenuCategoryBar from "./MenuCategoryBar";
+import OurMenuCard from "./Card/OurMenuCard";
 
 export default function DiscoverOurMenu() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +20,7 @@ export default function DiscoverOurMenu() {
         setCategories(response.data);
         // Auto-select first category if none selected
         if (!selectedCategory) {
-          setSelectedCategory(response.data[0]?.name || '');
+          setSelectedCategory(response.data[0]?.name || "");
         }
       }
     };
@@ -31,18 +31,20 @@ export default function DiscoverOurMenu() {
   useEffect(() => {
     const fetchMenuItems = async () => {
       if (!selectedCategory) return;
-      
+
       setLoading(true);
       setError(null);
 
       try {
-        const categoryId = categories.find(cat => cat.name === selectedCategory)?.id;
-        
+        const categoryId = categories.find(
+          (cat) => cat.name === selectedCategory
+        )?.id;
+
         const filters = {
           available: true,
-          sort: 'name' as const,
-          order: 'asc' as const,
-          category_id: categoryId
+          sort: "name" as const,
+          order: "asc" as const,
+          category_id: categoryId,
         };
 
         const response = await menuApi.getAll(filters);
@@ -50,11 +52,11 @@ export default function DiscoverOurMenu() {
         if (response.success && response.data) {
           setMenuItems(response.data);
         } else {
-          setError(response.error || 'Failed to load menu items');
+          setError(response.error || "Failed to load menu items");
           setMenuItems([]);
         }
       } catch (err) {
-        setError('Failed to load menu items');
+        setError("Failed to load menu items");
         setMenuItems([]);
       }
 
@@ -87,8 +89,8 @@ export default function DiscoverOurMenu() {
             <p className="text-lg font-semibold">Oops! Something went wrong</p>
             <p className="text-sm">{error}</p>
           </div>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="px-6 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors"
           >
             Try Again
@@ -98,49 +100,36 @@ export default function DiscoverOurMenu() {
     );
   }
 
-import React from "react";
-import MenuCategoryBar from "./MenuCategoryBar";
-import OurMenuCard from "./Card/OurMenuCard";
-import { ourMenuItems } from "../data/ourMenu";
-
-interface DiscoverOurMenuProps {
-  selectedCategory: string;
-  onSelectCategory: (cat: string) => void;
-}
-
-export default function DiscoverOurMenu({
-  selectedCategory,
-  onSelectCategory,
-}: DiscoverOurMenuProps) {
-  const filteredMenu = ourMenuItems.filter(
-    (item) => item.categories && item.categories.includes(selectedCategory)
-  );
   return (
     <div
       id="discover-our-menu"
       className="w-full max-w-[375px] mx-auto flex flex-col gap-8 md:max-w-[1440px] md:mx-auto md:gap-12 md:items-center"
     >
-      {/* Section 1: Title & Category Bar */}
       <div className="w-[375px] h-[82px] flex flex-col gap-8 justify-center md:w-full md:h-auto md:gap-12 md:items-center">
         <div className="w-[375px] h-[35px] flex items-center border-b border-[#696969] md:border-b-0 md:border-none px-4 md:w-full md:max-w-[791px] md:h-[25px] md:mx-auto md:px-0 md:gap-[80px]">
           <MenuCategoryBar
             selectedCategory={selectedCategory}
-            onSelectCategory={onSelectCategory}
+            onSelectCategory={setSelectedCategory}
           />
         </div>
       </div>
 
-      
       <div className="grid grid-cols-2 gap-x-[16px] md:gap-x-[24px] gap-y-[16px] md:gap-y-[24px] justify-center px-[25.5px] md:px-4 md:w-full md:max-w-[1312px] md:mx-auto md:justify-between xl:px-0">
         {menuItems.length > 0 ? (
           menuItems.map((item) => (
             <OurMenuCard
               key={item.id}
-              image={item.image_url || '/images/placeholder-food.jpg'}
+              image={item.image_url || "/images/placeholder-food.jpg"}
               name={item.name}
-              originalPrice={item.discount_price ? `${item.price} THB` : undefined}
-              price={item.discount_price ? `${item.discount_price} THB` : `${item.price} THB`}
-              description={item.description || ''}
+              originalPrice={
+                item.discount_price ? `${item.price} THB` : undefined
+              }
+              price={
+                item.discount_price
+                  ? `${item.discount_price} THB`
+                  : `${item.price} THB`
+              }
+              description={item.description || ""}
               specialPromotion={!!item.discount_price}
             />
           ))
@@ -156,7 +145,6 @@ export default function DiscoverOurMenu({
           </div>
         )}
       </div>
-
     </div>
   );
 }

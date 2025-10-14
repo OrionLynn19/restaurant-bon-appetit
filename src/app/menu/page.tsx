@@ -51,10 +51,7 @@ export default function Menu() {
         <div className="mt-15"></div>
         <MenuPageSlider />
         <div className="md:mb-20 mb-15"></div>
-        <DiscoverOurMenu
-          selectedCategory={selectedCategory}
-          onSelectCategory={handleTabClick}
-        />
+        <DiscoverOurMenu />
         <div className="md:mb-25 mb-15"></div>
         <CartButton />
       </div>
