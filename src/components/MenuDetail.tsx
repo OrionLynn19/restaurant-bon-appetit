@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { useCart } from "@/context/CartContext";
 
 function TimePill({ label }: { label: string }) {
   return (
@@ -10,7 +11,7 @@ function TimePill({ label }: { label: string }) {
   );
 }
 
-function RadioRow({ name, label, price, checked, onChange }:{
+function RadioRow({ name, label, price, checked, onChange }: {
   name: string; label: string; price: string; checked: boolean; onChange: () => void;
 }) {
   return (
@@ -33,7 +34,7 @@ function RadioRow({ name, label, price, checked, onChange }:{
   );
 }
 
-function CheckboxRow({ label, price, checked, onChange }:{
+function CheckboxRow({ label, price, checked, onChange }: {
   label: string; price: string; checked: boolean; onChange: () => void;
 }) {
   return (
@@ -55,13 +56,19 @@ function CheckboxRow({ label, price, checked, onChange }:{
   );
 }
 
-function SectionTitle({ children, className = "" }:{ children: React.ReactNode; className?: string }) {
-  return <div className={`text-left text-lg font-['Bebas_Neue'] font-extrabold tracking-wide text-[#073027] ${className}`}>{children}</div>;
+function SectionTitle({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div className={`text-left text-lg font-['Bebas_Neue'] font-extrabold tracking-wide text-[#073027] ${className}`}>
+      {children}
+    </div>
+  );
 }
 
 export default function MenuDetail() {
   const [portion, setPortion] = useState<"regular" | "large">("regular");
   const [secondsLeft, setSecondsLeft] = useState(7 * 3600 + 36 * 60 + 57);
+  const [qty, setQty] = useState(1);
+  const [isAdded, setIsAdded] = useState(false);
 
   const addOnList = [
     { key: "cheese", name: "Cheese", price: 0 },
@@ -75,37 +82,31 @@ export default function MenuDetail() {
     cheese: false, bacon: false, sauce: false, egg: false,
   });
 
-  const [qty, setQty] = useState(1);
+  const { addItem } = useCart();
 
-  function StepBtn({ children, onClick }:{ children: React.ReactNode; onClick: () => void }) {
-    return (
-      <button
-        onClick={onClick}
-        className="flex h-7 w-7 font-['Schibsted_Grotesk'] items-center justify-center rounded-md bg-[#EA7D33] text-white text-lg font-bold leading-none border border-[#073027] shadow-[0_3px_0_#155241]"
-      >
-        {children}
-      </button>
-    );
-  }
+  const portionUpcharge = useMemo(() => (portion === "large" ? 100 : 0), [portion]);
+  const addOnsTotal = useMemo(() => addOnList.reduce((sum, a) => (addOns[a.key] ? sum + a.price : sum), 0), [addOns]);
+  const baseDiscounted = 90;
+  const linePrice = baseDiscounted + portionUpcharge + addOnsTotal;
+  const total = linePrice * qty;
+  const fmtB = (n: number) => `${n.toFixed(2)} B`;
 
   useEffect(() => {
     const id = setInterval(() => setSecondsLeft((s) => (s > 0 ? s - 1 : 0)), 1000);
     return () => clearInterval(id);
   }, []);
 
-  const hh = String(Math.floor(secondsLeft / 3600)).padStart(2, "0");
-  const mm = String(Math.floor((secondsLeft % 3600) / 60)).padStart(2, "0");
-  const ss = String(secondsLeft % 60).padStart(2, "0");
-
-  const baseDiscounted = 90;
-  const portionUpcharge = useMemo(() => (portion === "large" ? 100 : 0), [portion]);
-  const addOnsTotal = useMemo(
-    () => addOnList.reduce((sum, a) => (addOns[a.key] ? sum + a.price : sum), 0),
-    [addOns]
-  );
-  const linePrice = baseDiscounted + portionUpcharge + addOnsTotal;
-  const total = linePrice * qty;
-  const fmtB = (n: number) => `${n.toFixed(2)} B`;
+  const handleAddToCart = () => {
+    if (isAdded) return;
+    addItem({
+      id: "carbonara",
+      name: "Carbonara",
+      price: linePrice,
+      qty,
+      image: "/images/Carbonara.png",
+    });
+    setIsAdded(true);
+  };
 
   return (
     <main className="min-h-dvh bg-[#FFF5E2] text-[#073027] overflow-x-hidden">
@@ -136,11 +137,11 @@ export default function MenuDetail() {
                 <div>
                   <div className="text-sm font-extrabold uppercase tracking-wider text-[#EA7D33]">Special Discount</div>
                   <div className="mt-2 flex items-center gap-2">
-                    <TimePill label={hh} />
+                    <TimePill label={String(Math.floor(secondsLeft / 3600)).padStart(2, "0")} />
                     <span className="-mx-1 text-xl font-bold text-[#EA7D33]">:</span>
-                    <TimePill label={mm} />
+                    <TimePill label={String(Math.floor((secondsLeft % 3600) / 60)).padStart(2, "0")} />
                     <span className="-mx-1 text-xl font-bold text-[#EA7D33]">:</span>
-                    <TimePill label={ss} />
+                    <TimePill label={String(secondsLeft % 60).padStart(2, "0")} />
                   </div>
                 </div>
                 <div className="text-right">
@@ -178,12 +179,26 @@ export default function MenuDetail() {
 
               <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center gap-3 mx-auto mb-5 md:mx-0 md:mb-0">
-                  <StepBtn onClick={() => setQty((q) => Math.max(1, q - 1))}>−</StepBtn>
+                  <button
+                    onClick={() => setQty((q) => Math.max(1, q - 1))}
+                    className="flex h-7 w-7 font-['Schibsted_Grotesk'] items-center justify-center rounded-md bg-[#EA7D33] text-white text-lg font-bold leading-none border border-[#073027] shadow-[0_3px_0_#155241]"
+                  >
+                    −
+                  </button>
                   <span className="min-w-[1.5rem] text-center text-sm">{qty}</span>
-                  <StepBtn onClick={() => setQty((q) => q + 1)}>+</StepBtn>
+                  <button
+                    onClick={() => setQty((q) => q + 1)}
+                    className="flex h-7 w-7 font-['Schibsted_Grotesk'] items-center justify-center rounded-md bg-[#EA7D33] text-white text-lg font-bold leading-none border border-[#073027] shadow-[0_3px_0_#155241]"
+                  >
+                    +
+                  </button>
                 </div>
 
-                <button className="relative inline-flex items-center justify-between gap-2 font-['Schibsted_Grotesk'] rounded-lg bg-[#EA7D33] px-4 py-3 text-sm text-[#073027] ring-2 ring-[#0B3C33] shadow-[0_4px_0_#0B3C33] transition-transform hover:translate-y-[1px] hover:shadow-[0_3px_0_#0B3C33] active:translate-y-[2px] active:shadow-[0_2px_0_#0B3C33] w-full md:w-auto">
+                <button
+                  onClick={handleAddToCart}
+                  disabled={isAdded}
+                  className="relative inline-flex items-center justify-between gap-2 font-['Schibsted_Grotesk'] rounded-lg bg-[#EA7D33] px-4 py-3 text-sm text-[#073027] ring-2 ring-[#0B3C33] shadow-[0_4px_0_#0B3C33] transition-transform hover:translate-y-[1px] hover:shadow-[0_3px_0_#0B3C33] active:translate-y-[2px] active:shadow-[0_2px_0_#0B3C33] w-full md:w-auto disabled:opacity-60 disabled:cursor-not-allowed"
+                >
                   <span className="flex items-center gap-1">
                     Add <span className="font-bold text-[#D62B1F]">{qty}</span> Cart
                   </span>
