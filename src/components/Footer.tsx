@@ -8,7 +8,7 @@ const NAV = [
 ];
 export default function Footer() {
   return (
-    <footer className="mt-1 text-sm w-full">
+    <footer className="mt-1 text-sm w-full bg-white">
       {/* Desktop Footer (unchanged) */}
       <div className="hidden sm:block">
         <Image
@@ -147,42 +147,31 @@ export default function Footer() {
                 >
                   MENU
                 </h3>
-                <p
-                  className="text-md font-[500] mb-1 text-black"
-                  style={{
-                    fontFamily:
-                      "var(--font-schibsted), Arial, Helvetica, sans-serif",
-                  }}
+
+                <Link
+                  href="/menu"
+                  className="font-[500] text-black text-md  mb-1 block hover:text-[#837e7d]"
                 >
                   Special Promotions
-                </p>
-                <p
-                  className="text-md font-[500] mb-1 text-black"
-                  style={{
-                    fontFamily:
-                      "var(--font-schibsted), Arial, Helvetica, sans-serif",
-                  }}
+                </Link>
+                <Link
+                  href="/menu"
+                  className="font-[500] text-black text-md  mb-1 block hover:text-[#837e7d]"
                 >
                   European Cuisine
-                </p>
-                <p
-                  className="text-md font-[500] mb-1 text-black"
-                  style={{
-                    fontFamily:
-                      "var(--font-schibsted), Arial, Helvetica, sans-serif",
-                  }}
+                </Link>
+                <Link
+                  href="/menu"
+                  className="font-[500] text-black text-md  mb-1 block hover:text-[#837e7d]"
                 >
                   Dessert & Drink
-                </p>
-                <p
-                  className="text-md font-[500] mb-1 text-black"
-                  style={{
-                    fontFamily:
-                      "var(--font-schibsted), Arial, Helvetica, sans-serif",
-                  }}
+                </Link>
+                <Link
+                  href="/menu"
+                  className="font-[500] text-black text-md  mb-1 block hover:text-[#837e7d]"
                 >
                   Salad
-                </p>
+                </Link>
               </div>
             </section>
             {/* Our Services */}
@@ -441,18 +430,30 @@ export default function Footer() {
                 >
                   MENU
                 </h3>
-                <p className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0">
+                <Link
+                  href="/menu"
+                  className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0 hover:text-[#837e7d]"
+                >
                   Special Promotions
-                </p>
-                <p className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0">
+                </Link>
+                <Link
+                  href="/menu"
+                  className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0 hover:text-[#837e7d]"
+                >
                   European Cuisine
-                </p>
-                <p className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0">
+                </Link>
+                <Link
+                  href="/menu"
+                  className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0 hover:text-[#837e7d]"
+                >
                   Dessert & Drink
-                </p>
-                <p className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0">
+                </Link>
+                <Link
+                  href="/menu"
+                  className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0 hover:text-[#837e7d]"
+                >
                   Salad
-                </p>
+                </Link>
               </div>
               {/* Bottom: Contact section */}
               <div className="flex flex-col gap-y-1 pt-1">
