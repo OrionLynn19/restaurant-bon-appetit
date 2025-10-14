@@ -149,25 +149,25 @@ export default function Footer() {
                 </h3>
 
                 <Link
-                  href="/menu"
+                  href="/menu#special-promotions"
                   className="font-[500] text-black text-md  mb-1 block hover:text-[#837e7d]"
                 >
                   Special Promotions
                 </Link>
                 <Link
-                  href="/menu"
+                  href="/menu#european-cuisine"
                   className="font-[500] text-black text-md  mb-1 block hover:text-[#837e7d]"
                 >
                   European Cuisine
                 </Link>
                 <Link
-                  href="/menu"
+                  href="/menu#dessert-drink"
                   className="font-[500] text-black text-md  mb-1 block hover:text-[#837e7d]"
                 >
                   Dessert & Drink
                 </Link>
                 <Link
-                  href="/menu"
+                  href="/menu#salad"
                   className="font-[500] text-black text-md  mb-1 block hover:text-[#837e7d]"
                 >
                   Salad
@@ -431,25 +431,25 @@ export default function Footer() {
                   MENU
                 </h3>
                 <Link
-                  href="/menu"
+                  href="/menu#special-promotions"
                   className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0 hover:text-[#837e7d]"
                 >
                   Special Promotions
                 </Link>
                 <Link
-                  href="/menu"
+                  href="/menu#european-cuisine"
                   className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0 hover:text-[#837e7d]"
                 >
                   European Cuisine
                 </Link>
                 <Link
-                  href="/menu"
+                  href="/menu#dessert-drink"
                   className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0 hover:text-[#837e7d]"
                 >
                   Dessert & Drink
                 </Link>
                 <Link
-                  href="/menu"
+                  href="/menu#salad"
                   className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0 hover:text-[#837e7d]"
                 >
                   Salad
