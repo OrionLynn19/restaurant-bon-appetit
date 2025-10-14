@@ -17,7 +17,10 @@ export default function MenuCategoryBar({
   onSelectCategory,
 }: MenuCategoryBarProps) {
   return (
-    <nav className="w-full overflow-x-auto scrollbar-hide">
+    <nav
+      id="discover-our-menubar"
+      className="w-full overflow-x-auto scrollbar-hide"
+    >
       <ul className="flex gap-6 md:gap-[80px] whitespace-nowrap md:w-[791px] md:h-[25px] scrollbar-hide">
         {categories.map((cat) => (
           <li

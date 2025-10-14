@@ -1,11 +1,23 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-const NAV = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About Us" },
-  { href: "/menu", label: "Menu" },
-  { href: "/contact", label: "Contact Us" },
+
+function slugify(cat: string) {
+  return cat
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+const categories = [
+  "Special Promotions",
+  "European Cuisine",
+  "Dessert & Drinks",
+  "Salad",
 ];
+
 export default function Footer() {
   return (
     <footer className="mt-1 text-sm w-full bg-white">
@@ -148,30 +160,32 @@ export default function Footer() {
                   MENU
                 </h3>
 
-                <Link
-                  href="/menu#special-promotions"
-                  className="font-[500] text-black text-md  mb-1 block hover:text-[#837e7d]"
-                >
-                  Special Promotions
-                </Link>
-                <Link
-                  href="/menu#european-cuisine"
-                  className="font-[500] text-black text-md  mb-1 block hover:text-[#837e7d]"
-                >
-                  European Cuisine
-                </Link>
-                <Link
-                  href="/menu#dessert-drink"
-                  className="font-[500] text-black text-md  mb-1 block hover:text-[#837e7d]"
-                >
-                  Dessert & Drink
-                </Link>
-                <Link
-                  href="/menu#salad"
-                  className="font-[500] text-black text-md  mb-1 block hover:text-[#837e7d]"
-                >
-                  Salad
-                </Link>
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    className="font-[500] text-black text-md mb-1 block hover:text-[#837e7d] text-left w-full"
+                    onClick={() => {
+                      const hash = `#${slugify(cat)}`;
+                      const currentPath =
+                        typeof window !== "undefined"
+                          ? window.location.pathname
+                          : "";
+                      if (currentPath === "/menu") {
+                        window.location.hash = hash;
+                        const section =
+                          document.getElementById("discover-our-menu");
+                        if (section) {
+                          section.scrollIntoView({ behavior: "smooth" });
+                        }
+                      } else {
+                        window.location.assign(`/menu${hash}`);
+                      }
+                    }}
+                  >
+                    {cat}
+                  </button>
+                ))}
               </div>
             </section>
             {/* Our Services */}
@@ -430,30 +444,28 @@ export default function Footer() {
                 >
                   MENU
                 </h3>
-                <Link
-                  href="/menu#special-promotions"
-                  className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0 hover:text-[#837e7d]"
-                >
-                  Special Promotions
-                </Link>
-                <Link
-                  href="/menu#european-cuisine"
-                  className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0 hover:text-[#837e7d]"
-                >
-                  European Cuisine
-                </Link>
-                <Link
-                  href="/menu#dessert-drink"
-                  className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0 hover:text-[#837e7d]"
-                >
-                  Dessert & Drink
-                </Link>
-                <Link
-                  href="/menu#salad"
-                  className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0 hover:text-[#837e7d]"
-                >
-                  Salad
-                </Link>
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0 hover:text-[#837e7d] text-left w-full"
+                    onClick={() => {
+                      const hash = `#${slugify(cat)}`;
+                      const currentPath =
+                        typeof window !== "undefined"
+                          ? window.location.pathname
+                          : "";
+                      if (currentPath === "/menu") {
+                        window.location.hash = hash;
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      } else {
+                        window.location.assign(`/menu${hash}`);
+                      }
+                    }}
+                  >
+                    {cat}
+                  </button>
+                ))}
               </div>
               {/* Bottom: Contact section */}
               <div className="flex flex-col gap-y-1 pt-1">
