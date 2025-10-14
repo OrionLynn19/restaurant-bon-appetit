@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { useCart } from "@/context/CartContext";
 
 function TimePill({ label }: { label: string }) {
   return (
@@ -10,8 +11,18 @@ function TimePill({ label }: { label: string }) {
   );
 }
 
-function RadioRow({ name, label, price, checked, onChange }:{
-  name: string; label: string; price: string; checked: boolean; onChange: () => void;
+function RadioRow({
+  name,
+  label,
+  price,
+  checked,
+  onChange,
+}: {
+  name: string;
+  label: string;
+  price: string;
+  checked: boolean;
+  onChange: () => void;
 }) {
   return (
     <label className="flex cursor-pointer items-center justify-between px-1 font-['Schibsted_Grotesk']">
@@ -33,8 +44,16 @@ function RadioRow({ name, label, price, checked, onChange }:{
   );
 }
 
-function CheckboxRow({ label, price, checked, onChange }:{
-  label: string; price: string; checked: boolean; onChange: () => void;
+function CheckboxRow({
+  label,
+  price,
+  checked,
+  onChange,
+}: {
+  label: string;
+  price: string;
+  checked: boolean;
+  onChange: () => void;
 }) {
   return (
     <label className="flex cursor-pointer items-center justify-between px-1 font-['Schibsted_Grotesk']">
@@ -55,8 +74,20 @@ function CheckboxRow({ label, price, checked, onChange }:{
   );
 }
 
-function SectionTitle({ children, className = "" }:{ children: React.ReactNode; className?: string }) {
-  return <div className={`text-left text-lg font-['Bebas_Neue'] font-extrabold tracking-wide text-[#073027] ${className}`}>{children}</div>;
+function SectionTitle({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`text-left text-lg font-['Bebas_Neue'] font-extrabold tracking-wide text-[#073027] ${className}`}
+    >
+      {children}
+    </div>
+  );
 }
 
 export default function MenuDetail() {
@@ -72,12 +103,21 @@ export default function MenuDetail() {
 
   type AddOnKey = (typeof addOnList)[number]["key"];
   const [addOns, setAddOns] = useState<Record<AddOnKey, boolean>>({
-    cheese: false, bacon: false, sauce: false, egg: false,
+    cheese: false,
+    bacon: false,
+    sauce: false,
+    egg: false,
   });
 
   const [qty, setQty] = useState(1);
 
-  function StepBtn({ children, onClick }:{ children: React.ReactNode; onClick: () => void }) {
+  function StepBtn({
+    children,
+    onClick,
+  }: {
+    children: React.ReactNode;
+    onClick: () => void;
+  }) {
     return (
       <button
         onClick={onClick}
@@ -89,7 +129,10 @@ export default function MenuDetail() {
   }
 
   useEffect(() => {
-    const id = setInterval(() => setSecondsLeft((s) => (s > 0 ? s - 1 : 0)), 1000);
+    const id = setInterval(
+      () => setSecondsLeft((s) => (s > 0 ? s - 1 : 0)),
+      1000
+    );
     return () => clearInterval(id);
   }, []);
 
@@ -98,14 +141,33 @@ export default function MenuDetail() {
   const ss = String(secondsLeft % 60).padStart(2, "0");
 
   const baseDiscounted = 90;
-  const portionUpcharge = useMemo(() => (portion === "large" ? 100 : 0), [portion]);
+  const portionUpcharge = useMemo(
+    () => (portion === "large" ? 100 : 0),
+    [portion]
+  );
   const addOnsTotal = useMemo(
-    () => addOnList.reduce((sum, a) => (addOns[a.key] ? sum + a.price : sum), 0),
+    () =>
+      addOnList.reduce(
+        (sum, a) => (addOns[a.key] ? sum + a.price : sum),
+        0
+      ),
     [addOns]
   );
   const linePrice = baseDiscounted + portionUpcharge + addOnsTotal;
   const total = linePrice * qty;
   const fmtB = (n: number) => `${n.toFixed(2)} B`;
+
+  const { addItem } = useCart();
+
+  const handleAddToCart = () => {
+    addItem({
+      id: "carbonara",
+      name: "Carbonara",
+      price: linePrice,
+      qty,
+      image: "/images/Carbonara.png",
+    });
+  };
 
   return (
     <main className="min-h-dvh bg-[#FFF5E2] text-[#073027] overflow-x-hidden">
@@ -113,7 +175,12 @@ export default function MenuDetail() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.1fr_0.9fr]">
           <section>
             <div className="relative mx-[calc(50%-50vw)] md:mx-0 aspect-[4/3] overflow-hidden rounded-none md:rounded-lg bg-white">
-              <Image fill src="/images/Carbonara.png" alt="Carbonara" className="object-fill object-center" />
+              <Image
+                fill
+                src="/images/Carbonara.png"
+                alt="Carbonara"
+                className="object-fill object-center"
+              />
               <div className="absolute right-0 -top-1 z-10">
                 <span className="inline-block bg-[#EF9748] px-6 py-2 text-sm font-['Schibsted_Grotesk'] text-black [--notch:18px] [clip-path:polygon(0_0,100%_0,100%_100%,0_100%,var(--notch)_50%)]">
                   Best Seller
@@ -122,10 +189,14 @@ export default function MenuDetail() {
             </div>
 
             <div className="mt-6 space-y-3 text-left">
-              <h1 className="text-3xl font-['Bebas_Neue'] md:text-4xl">CARBONARA</h1>
+              <h1 className="text-3xl font-['Bebas_Neue'] md:text-4xl">
+                CARBONARA
+              </h1>
               <p className="text-sm font-['Schibsted_Grotesk'] text-[#28564D] md:text-base">
-                Lorem Ipsum Dolor Sit Amet Consectetur. Dui Et Varius Vel Est. Integer In Quam Justo Vestibulum Lectus Etiam.
-                A Sit Imperdiet Aliquam Tortor Tincidunt. Lorem Ipsum Dolor Sit Amet Consectetur. Dui Et Varius Vel Est.
+                Lorem Ipsum Dolor Sit Amet Consectetur. Dui Et Varius Vel Est.
+                Integer In Quam Justo Vestibulum Lectus Etiam. A Sit Imperdiet
+                Aliquam Tortor Tincidunt. Lorem Ipsum Dolor Sit Amet
+                Consectetur. Dui Et Varius Vel Est.
               </p>
             </div>
           </section>
@@ -134,26 +205,50 @@ export default function MenuDetail() {
             <div className="p-0 bg-transparent shadow-none ring-0 md:rounded-2xl md:bg-[#FFF3DA] md:p-5 md:shadow-sm md:ring-1 md:ring-black/5">
               <div className="mb-6 flex items-center justify-between rounded-xl bg-[#155241] px-4 py-4">
                 <div>
-                  <div className="text-sm font-extrabold uppercase tracking-wider text-[#EA7D33]">Special Discount</div>
+                  <div className="text-sm font-extrabold uppercase tracking-wider text-[#EA7D33]">
+                    Special Discount
+                  </div>
                   <div className="mt-2 flex items-center gap-2">
                     <TimePill label={hh} />
-                    <span className="-mx-1 text-xl font-bold text-[#EA7D33]">:</span>
+                    <span className="-mx-1 text-xl font-bold text-[#EA7D33]">
+                      :
+                    </span>
                     <TimePill label={mm} />
-                    <span className="-mx-1 text-xl font-bold text-[#EA7D33]">:</span>
+                    <span className="-mx-1 text-xl font-bold text-[#EA7D33]">
+                      :
+                    </span>
                     <TimePill label={ss} />
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-bold tracking-wide text-[#EA7D33]">30% OFF</div>
-                  <div className="mt-2 text-lg font-extrabold leading-none text-[#EA7D33]">90 BHT</div>
-                  <div className="text-xs line-through text-white/70 opacity-70">150 BHT</div>
+                  <div className="text-sm font-bold tracking-wide text-[#EA7D33]">
+                    30% OFF
+                  </div>
+                  <div className="mt-2 text-lg font-extrabold leading-none text-[#EA7D33]">
+                    90 BHT
+                  </div>
+                  <div className="text-xs line-through text-white/70 opacity-70">
+                    150 BHT
+                  </div>
                 </div>
               </div>
 
               <SectionTitle>Portion</SectionTitle>
               <div className="mt-3 space-y-2">
-                <RadioRow name="portion" label="Regular" price="Free" checked={portion === "regular"} onChange={() => setPortion("regular")} />
-                <RadioRow name="portion" label="Large" price="+ 100 B" checked={portion === "large"} onChange={() => setPortion("large")} />
+                <RadioRow
+                  name="portion"
+                  label="Regular"
+                  price="Free"
+                  checked={portion === "regular"}
+                  onChange={() => setPortion("regular")}
+                />
+                <RadioRow
+                  name="portion"
+                  label="Large"
+                  price="+ 100 B"
+                  checked={portion === "large"}
+                  onChange={() => setPortion("large")}
+                />
               </div>
 
               <SectionTitle className="mt-6">Add-on</SectionTitle>
@@ -164,7 +259,12 @@ export default function MenuDetail() {
                     label={a.name}
                     price={a.price === 0 ? "Free" : `${a.price} B`}
                     checked={addOns[a.key]}
-                    onChange={() => setAddOns((prev) => ({ ...prev, [a.key]: !prev[a.key] }))}
+                    onChange={() =>
+                      setAddOns((prev) => ({
+                        ...prev,
+                        [a.key]: !prev[a.key],
+                      }))
+                    }
                   />
                 ))}
               </div>
@@ -178,17 +278,27 @@ export default function MenuDetail() {
 
               <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center gap-3 mx-auto mb-5 md:mx-0 md:mb-0">
-                  <StepBtn onClick={() => setQty((q) => Math.max(1, q - 1))}>−</StepBtn>
-                  <span className="min-w-[1.5rem] text-center text-sm">{qty}</span>
+                  <StepBtn onClick={() => setQty((q) => Math.max(1, q - 1))}>
+                    −
+                  </StepBtn>
+                  <span className="min-w-[1.5rem] text-center text-sm">
+                    {qty}
+                  </span>
                   <StepBtn onClick={() => setQty((q) => q + 1)}>+</StepBtn>
                 </div>
 
-                <button className="relative inline-flex items-center justify-between gap-2 font-['Schibsted_Grotesk'] rounded-lg bg-[#EA7D33] px-4 py-3 text-sm text-[#073027] ring-2 ring-[#0B3C33] shadow-[0_4px_0_#0B3C33] transition-transform hover:translate-y-[1px] hover:shadow-[0_3px_0_#0B3C33] active:translate-y-[2px] active:shadow-[0_2px_0_#0B3C33] w-full md:w-auto">
+                <button
+                  onClick={handleAddToCart}
+                  className="relative inline-flex items-center justify-between gap-2 font-['Schibsted_Grotesk'] rounded-lg bg-[#EA7D33] px-4 py-3 text-sm text-[#073027] ring-2 ring-[#0B3C33] shadow-[0_4px_0_#0B3C33] transition-transform hover:translate-y-[1px] hover:shadow-[0_3px_0_#0B3C33] active:translate-y-[2px] active:shadow-[0_2px_0_#0B3C33] w-full md:w-auto"
+                >
                   <span className="flex items-center gap-1">
-                    Add <span className="font-bold text-[#D62B1F]">{qty}</span> Cart
+                    Add <span className="font-bold text-[#D62B1F]">{qty}</span>{" "}
+                    Cart
                   </span>
                   <span className="mx-1">&gt;</span>
-                  <span className="text-sm font-bold tracking-wide">{fmtB(total)}</span>
+                  <span className="text-sm font-bold tracking-wide">
+                    {fmtB(total)}
+                  </span>
                 </button>
               </div>
             </div>
