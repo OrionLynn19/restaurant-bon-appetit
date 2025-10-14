@@ -115,7 +115,9 @@ export default function DeliForm({
   }, [spot, optionPlace, optionHand, optionPerson]);
 
   return (
-    <section className={`font-['Schibsted_Grotesk'] w-full ${className}`}>
+    <section
+      className={`font-['Schibsted_Grotesk'] w-full max-w-[560px] ${className}`}
+    >
       <h2 className="mb-6 text-[20px] md:text-[32px] font-normal text-[#073027] font-['Bebas_Neue']">
         {mode === "delivery" ? "DELIVERY INFORMATION" : "PICKUP LOCATION"}
       </h2>

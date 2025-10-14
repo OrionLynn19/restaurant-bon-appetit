@@ -117,11 +117,11 @@ export default function OurMenuCard(props: OurMenuCardProps) {
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center gap-1 md:gap-[8px] h-[15px] md:h-[20px]">
               {originalPrice && (
-                <span className="font-schibsted font-semibold text-[12px] text-[#838383] line-through md:text-[16px] md:w-[62px] md:h-[20px] md:gap-[10px]">
+                <span className="font-schibsted font-semibold text-[12px] text-[#838383] line-through md:text-[16px] md:h-[20px] whitespace-nowrap">
                   {originalPrice}
                 </span>
               )}
-              <span className="font-schibsted font-semibold text-[12px] text-[#000] rounded md:text-[16px] md:w-[56px] md:h-[20px] md:gap-[10px]">
+              <span className="font-schibsted font-semibold text-[12px] text-[#000] rounded md:text-[16px] md:h-[20px] whitespace-nowrap">
                 {price}
               </span>
             </div>
