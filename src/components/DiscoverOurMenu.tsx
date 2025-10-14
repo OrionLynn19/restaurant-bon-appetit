@@ -100,7 +100,7 @@ export default function DiscoverOurMenu() {
 
   return (
     <div className="w-full max-w-[375px] mx-auto flex flex-col gap-8 md:max-w-[1440px] md:mx-auto md:gap-12 md:items-center">
-      {/* Category Bar */}
+      
       <div className="w-[375px] h-[82px] flex flex-col gap-8 justify-center md:w-full md:h-auto md:gap-12 md:items-center">
         <div className="w-[375px] h-[35px] flex items-center border-b border-[#696969] md:border-b-0 md:border-none px-4 md:w-full md:max-w-[791px] md:h-[25px] md:mx-auto md:px-0 md:gap-[80px]">
           <MenuCategoryBar
@@ -110,7 +110,7 @@ export default function DiscoverOurMenu() {
         </div>
       </div>
 
-      {/* Menu Cards */}
+      
       <div className="grid grid-cols-2 gap-x-[16px] md:gap-x-[24px] gap-y-[16px] md:gap-y-[24px] justify-center px-[25.5px] md:px-4 md:w-full md:max-w-[1312px] md:mx-auto md:justify-between xl:px-0">
         {menuItems.length > 0 ? (
           menuItems.map((item) => (
@@ -129,7 +129,7 @@ export default function DiscoverOurMenu() {
             <div className="flex flex-col items-center gap-4">
               <div className="text-6xl">🍽️</div>
               <div>
-                <p className="text-lg font-semibold">No items in this category</p>
+                <p className="text-lg font-semibold">No items Kha</p>
                 <p className="text-sm">Check back later for new menu items</p>
               </div>
             </div>
