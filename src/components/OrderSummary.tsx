@@ -30,6 +30,9 @@ export default function OrderSummary({
 
   return (
     <div className={className}>
+      {/* <h2 className="font-['Bebas_Neue'] font-normal text-[#073027] text-[20px] md:text-[32px]">
+        Order Summary
+      </h2> */}
       <h5 className="font-normal font-schibsted text-[14px] md:text-[20px] text-[#000000] mt-3">
         Discount Coupon
       </h5>

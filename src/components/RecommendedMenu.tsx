@@ -1,7 +1,5 @@
-"use client";
 import Image from "next/image";
 import React from "react";
-import { useRouter } from "next/navigation";
 
 // Desktop data (unchanged)
 const menuItems = [
@@ -28,12 +26,6 @@ const menuItems = [
 ];
 
 export default function RecommendedMenu() {
-  const router = useRouter();
-
-  // Helper to create slug from name
-  const getSlug = (name: string) =>
-    encodeURIComponent(name.replace(/\s+/g, "-").toLowerCase());
-
   return (
     <>
       {/* Desktop Layout */}
@@ -88,9 +80,6 @@ export default function RecommendedMenu() {
                   fontSize: "2rem",
                   boxShadow: "0 4px 12px rgba(0,0,0,0.10)",
                 }}
-                onClick={() =>
-                  router.push(`/menu/detail/${getSlug(item.name)}`)
-                }
               >
                 +
               </button>
@@ -125,24 +114,6 @@ export default function RecommendedMenu() {
                   height={113}
                   className="object-cover w-full h-full rounded-[8px]"
                 />
-                <button
-                  className="absolute bottom-2 right-2 text-black flex items-center justify-center"
-                  style={{
-                    backgroundColor: "#EF9748",
-                    width: "33.6px",
-                    height: "33.6px",
-                    borderRadius: "60px",
-                    padding: "9.6px",
-                    gap: "12px",
-                    fontSize: "1.2rem",
-                    boxShadow: "0 2px 6px rgba(0,0,0,0.10)",
-                  }}
-                  onClick={() =>
-                    router.push(`/menu/detail/${getSlug(item.name)}`)
-                  }
-                >
-                  +
-                </button>
               </div>
               <h3
                 className="text-[14px] text-black font-normal mt-3"
@@ -159,6 +130,21 @@ export default function RecommendedMenu() {
               >
                 {item.price}
               </p>
+              <button
+                className="absolute bottom-14 right-2 text-black flex items-center justify-center"
+                style={{
+                  backgroundColor: "#EF9748",
+                  width: "33.6px",
+                  height: "33.6px",
+                  borderRadius: "60px",
+                  padding: "9.6px",
+                  gap: "12px",
+                  fontSize: "1.2rem",
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.10)",
+                }}
+              >
+                +
+              </button>
             </div>
           ))}
         </div>
