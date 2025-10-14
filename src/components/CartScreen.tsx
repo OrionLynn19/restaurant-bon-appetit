@@ -1,60 +1,9 @@
 "use client";
-
 import Link from "next/link";
-import { useState } from "react";
-
-type CartItem = {
-  id: string;
-  name: string;
-  price: number;
-  qty: number;
-  image: string;
-};
+import { useCart, CartItem } from "../context/CartContext";
 
 export default function CartScreen() {
-  const [items, setItems] = useState<CartItem[]>([
-    {
-      id: "1",
-      name: "Stir  Fried Crispy pork Belly With Egg",
-      price: 150,
-      qty: 2,
-      image: "/images/menu1.png",
-    },
-    {
-      id: "2",
-      name: "Stir  Fried Crispy pork Belly With Egg",
-      price: 150,
-      qty: 0,
-      image: "/images/menu2.png",
-    },
-    {
-      id: "3",
-      name: "Stir  Fried Crispy pork Belly With Egg",
-      price: 150,
-      qty: 0,
-      image: "/images/menu3.png",
-    },
-    {
-      id: "4",
-      name: "Stir  Fried Crispy pork Belly With Egg",
-      price: 150,
-      qty: 0,
-      image: "/images/Hungry3.jpg",
-    },
-  ]);
-
-  const inc = (id: string) =>
-    setItems((arr) =>
-      arr.map((it) => (it.id === id ? { ...it, qty: it.qty + 1 } : it))
-    );
-  const dec = (id: string) =>
-    setItems((arr) =>
-      arr.map((it) =>
-        it.id === id ? { ...it, qty: Math.max(0, it.qty - 1) } : it
-      )
-    );
-  const removeItem = (id: string) =>
-    setItems((arr) => arr.filter((it) => it.id !== id));
+  const { items, inc, dec, removeItem } = useCart();
 
   return (
     <main className="bg-[#FFFCEF]">
