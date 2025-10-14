@@ -64,12 +64,23 @@ export default function HomeWelcomeSection() {
                     </p>
                     <div className="flex gap-5">
                         <Link href="/menu" passHref>
-                            <button className="bg-gradient-to-r from-[#EF9748] via-[#EEB685] to-[#EF9748] text-[#073027] font-semibold md:text-base text-xs md:px-4 md:py-2 px-3 py-2 rounded-lg md:border-2 border-1 border-[#073027] hover:from-[#f1aa6a] hover:via-[#efbd91] hover:to-[#f1aa6a]  active:from-[#f1aa6a] active:via-[#efbd91] active:to-[#f1aa6a] transition font-[bebas]" >
+                            <button
+                                className="bg-gradient-to-r from-[#EF9748] via-[#EEB685] to-[#EF9748]
+                          text-[#073027] font-semibold md:text-base text-xs
+                            md:px-4 md:py-2 px-3 py-2 rounded-lg md:border-2 border border-[#073027]
+                          hover:from-[#f1aa6a] hover:via-[#efbd91] hover:to-[#f1aa6a]
+                            active:scale-95 active:shadow-inner
+                            transition duration-200 ease-in-out font-[bebas]"
+                            >
                                 SEE OUR MENU
                             </button>
                         </Link>
                         <Link href="/contact" passHref>
-                            <button className="bg-gradient-to-r from-[#EF9748] via-[#EEB685] to-[#EF9748] text-[#073027] font-semibold md:text-base  text-xs md:px-4 md:py-2 px-3 py-2 rounded-lg md:border-2 border-1 border-[#073027] hover:from-[#f1aa6a] hover:via-[#efbd91] hover:to-[#f1aa6a]  active:from-[#f1aa6a] active:via-[#efbd91] active:to-[#f1aa6a] transition font-[bebas]">
+                            <button
+                                className="bg-gradient-to-r from-[#EF9748] via-[#EEB685] to-[#EF9748] text-[#073027] font-semibold md:text-base  text-xs md:px-4 md:py-2 px-3 py-2 rounded-lg md:border-2 border-1 border-[#073027] 
+                                hover:from-[#f1aa6a] hover:via-[#efbd91] hover:to-[#f1aa6a]  
+                                active:from-[#f1aa6a] active:via-[#efbd91] active:to-[#f1aa6a]  active:scale-95 active:shadow-inner
+                                transition duration-200 ease-in-out font-[bebas]">
                                 VIEW LOCATIONS
                             </button>
                         </Link>
