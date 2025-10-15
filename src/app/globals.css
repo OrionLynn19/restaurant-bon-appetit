@@ -147,3 +147,13 @@
     opacity: 1
   }
 }
+/* neutralize bullets inside DeliveryDetails only */
+section[aria-labelledby="delivery-title"], 
+section[aria-labelledby="delivery-title"] * {
+  list-style: none !important;
+}
+section[aria-labelledby="delivery-title"] *::marker {
+  content: "" !important;
+}
+
+
