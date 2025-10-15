@@ -1,10 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
-import { menuApi, categoriesApi } from "@/lib/api";
-import type { MenuItem, Category } from "@/types/content";
-import MenuCategoryBar from "./MenuCategoryBar";
-import OurMenuCard from "./Card/OurMenuCard";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { menuApi, categoriesApi } from "@/lib/api";
 import type { MenuItem, Category } from "@/types/content";
 import MenuCategoryBar from "./MenuCategoryBar";
@@ -21,19 +16,22 @@ export default function DiscoverOurMenu({
 }: Props) {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const hasAutoSelected = useRef(false);
+
+  // Add safety check for onSelectCategory
+  const safeSelectCategory = useCallback((category: string) => {
+    if (typeof onSelectCategory === 'function') {
+      onSelectCategory(category);
+    } else {
+      console.error('onSelectCategory is not a function:', onSelectCategory);
+    }
+  }, [onSelectCategory]);
 
   // 1) Fetch categories once
   useEffect(() => {
     const fetchCategories = async () => {
-      const response = await categoriesApi.getAll();
-      if (response.success && response.data) {
-        setCategories(response.data);
-        // Auto-select first category if none selected
-        if (!selectedCategory) {
-          setSelectedCategory(response.data[0]?.name || "");
       try {
         const response = await categoriesApi.getAll();
         if (response.success && response.data) {
@@ -48,18 +46,18 @@ export default function DiscoverOurMenu({
     fetchCategories();
   }, []);
 
-  // 2) If no category selected (from parent), auto-select the first after load
+  // 2) Auto-select first category only once (with safety check)
   useEffect(() => {
-    if (!selectedCategory && categories.length > 0) {
-      onSelectCategory(categories[0].name || "");
+    if (!selectedCategory && categories.length > 0 && !hasAutoSelected.current) {
+      hasAutoSelected.current = true;
+      safeSelectCategory(categories[0].name || "");
     }
-  }, [categories, selectedCategory, onSelectCategory]);
+  }, [categories, selectedCategory, safeSelectCategory]);
 
   // 3) Fetch menu items whenever selectedCategory changes
   useEffect(() => {
     const fetchMenuItems = async () => {
       if (!selectedCategory) return;
-
 
       setLoading(true);
       setError(null);
@@ -69,15 +67,8 @@ export default function DiscoverOurMenu({
           (cat) => cat.name === selectedCategory
         )?.id;
 
-        const categoryId = categories.find(
-          (cat) => cat.name === selectedCategory
-        )?.id;
-
         const filters = {
           available: true,
-          sort: "name" as const,
-          order: "asc" as const,
-          category_id: categoryId,
           sort: "name" as const,
           order: "asc" as const,
           category_id: categoryId,
@@ -89,11 +80,8 @@ export default function DiscoverOurMenu({
           setMenuItems(response.data);
         } else {
           setError(response.error || "Failed to load menu items");
-          setError(response.error || "Failed to load menu items");
           setMenuItems([]);
         }
-      } catch (err) {
-        setError("Failed to load menu items");
       } catch {
         setError("Failed to load menu items");
         setMenuItems([]);
@@ -130,8 +118,6 @@ export default function DiscoverOurMenu({
           </div>
           <button
             onClick={() => window.location.reload()}
-          <button
-            onClick={() => window.location.reload()}
             className="px-6 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors"
           >
             Try Again
@@ -142,21 +128,16 @@ export default function DiscoverOurMenu({
   }
 
   return (
-    <div
-      id="discover-our-menu"
-      className="w-full max-w-[375px] mx-auto flex flex-col gap-8 md:max-w-[1440px] md:mx-auto md:gap-12 md:items-center"
-    >
     <div className="w-full max-w-[375px] mx-auto flex flex-col gap-8 md:max-w-[1440px] md:mx-auto md:gap-12 md:items-center">
       {/* Category Bar */}
       <div className="w-[375px] h-[82px] flex flex-col gap-8 justify-center md:w-full md:h-auto md:gap-12 md:items-center">
-        <div className="w-[375px] h-[35px] flex items-center border-b border-[#696969] md:border-b-0 md:border-none px-4 md:w-full md:max-w-[791px] md:h-[25px] md:mx-auto md:px-0 md:gap-[80px]">
+        <div className="w-[375px] h-[35px] flex items-center px-4 md:border-none md:w-full md:max-w-[791px] md:h-[25px] md:mx-auto md:px-0 md:gap-[0]">
           <MenuCategoryBar
             selectedCategory={selectedCategory}
-            onSelectCategory={setSelectedCategory}
+            onSelectCategory={safeSelectCategory} // Use the safe version
           />
         </div>
       </div>
-
 
       {/* Menu Cards */}
       <div className="grid grid-cols-2 gap-x-[16px] md:gap-x-[24px] gap-y-[16px] md:gap-y-[24px] justify-center px-[25.5px] md:px-4 md:w-full md:max-w-[1312px] md:mx-auto md:justify-between xl:px-0">
@@ -164,19 +145,12 @@ export default function DiscoverOurMenu({
           menuItems.map((item) => (
             <OurMenuCard
               key={item.id}
-              image={item.image_url || "/images/placeholder-food.jpg"}
+              id={item.id}
               image={item.image_url || "/images/placeholder-food.jpg"}
               name={item.name}
               originalPrice={
                 item.discount_price ? `${item.price} THB` : undefined
               }
-              price={
-                item.discount_price
-                  ? `${item.discount_price} THB`
-                  : `${item.price} THB`
-              }
-              description={item.description || ""}
-              originalPrice={item.discount_price ? `${item.price} THB` : undefined}
               price={
                 item.discount_price
                   ? `${item.discount_price} THB`

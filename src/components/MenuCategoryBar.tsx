@@ -69,15 +69,15 @@ const MenuCategoryBar: React.FC<MenuCategoryBarProps> = ({
   }
 
   return (
-    <nav className="w-full overflow-x-auto scrollbar-hide">
-      <ul className="flex gap-6 md:gap-[80px] whitespace-nowrap md:w-[791px] md:h-[25px] scrollbar-hide">
+    <nav className="w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <ul className="flex gap-6 md:gap-[80px] whitespace-nowrap md:w-[791px] md:h-[25px]">
         {categories.map((category) => (
           <li
             key={category.id}
-            className={`h-[35px] flex items-center justify-center font-schibsted font-semibold text-[12px] leading-[1] tracking-[0] border-b-0 md:h-[25px] md:text-[20px] md:font-normal md:tracking-[0] transition-colors px-[5px] py-[10px] md:px-0 cursor-pointer ${
+            className={`h-[35px] flex items-center justify-center font-schibsted font-semibold text-[12px] leading-[1] tracking-[0] md:h-[25px] md:text-[20px] md:font-normal md:tracking-[0] transition-colors px-[5px] py-[10px] md:px-0 cursor-pointer ${
               selectedCategory === category.name
-                ? "text-[#073027] border-b-[1.5px] border-[#0a5c4a]"
-                : "text-[#073027] hover:text-[#000] border-b-0"
+                ? "text-[#073027] border-b-2 border-[#073027]" // Underline instead of background
+                : "text-[#073027] hover:text-[#000]"
             }`}
             onClick={() => onSelectCategory(category.name)}
           >

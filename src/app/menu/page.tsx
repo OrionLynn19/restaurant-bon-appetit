@@ -2,7 +2,7 @@
 import MenuPageSlider from "@/components/slider-menu-page";
 import CartButton from "@/components/CartButton";
 import DiscoverOurMenu from "@/components/DiscoverOurMenu";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 
 export default function Menu() {
   const categories = useMemo(
@@ -40,10 +40,10 @@ export default function Menu() {
   }, [categories]);
 
   // When tab is clicked, update hash
-  function handleTabClick(cat: string) {
+  const handleTabClick = useCallback((cat: string) => {
     setSelectedCategory(cat);
     window.location.hash = slugify(cat);
-  }
+  }, []);
 
   return (
     <>
@@ -51,7 +51,12 @@ export default function Menu() {
         <div className="mt-15"></div>
         <MenuPageSlider />
         <div className="md:mb-20 mb-15"></div>
-        <DiscoverOurMenu />
+        
+        <DiscoverOurMenu 
+          selectedCategory={selectedCategory}
+          onSelectCategory={handleTabClick}
+        />
+        
         <div className="md:mb-25 mb-15"></div>
         <CartButton />
       </div>
