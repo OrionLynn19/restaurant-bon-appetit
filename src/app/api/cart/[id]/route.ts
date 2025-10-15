@@ -3,78 +3,51 @@ import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { getOrCreateCartId, toNumber } from "@/app/api/cart/_utils";
 
-type CartItemRow = {
-  id: string;
-  name: string | null;
-  price: number | string | null;
-  qty: number | string | null;
-  image: string | null;
-};
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
 
-function calc(items: CartItemRow[]) {
-  const subtotal = (items ?? []).reduce((s, it) => s + toNumber(it.price) * toNumber(it.qty), 0);
-  const count = (items ?? []).reduce((s, it) => s + toNumber(it.qty), 0);
-  return { subtotal, count };
-}
+export async function DELETE(
+  _req: Request,
+  { params }: { params: Promise<{ id: string }> } // 👈 params is a Promise here
+) {
+  try {
+    const { id: itemId } = await params;            // 👈 await it
+    const cartId = await getOrCreateCartId();
 
-async function readCart(cartId: string) {
-  const { data, error } = await supabaseAdmin
-    .from("cart_items")
-    .select("id,name,price,qty,image")
-    .eq("cart_id", cartId);
-
-  if (error) throw new Error(error.message);
-  const items = (data ?? []) as CartItemRow[];
-  const { subtotal, count } = calc(items);
-  return { items, subtotal, count };
-}
-
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
-  const cartId = await getOrCreateCartId();
-  const body: unknown = await req.json().catch(() => ({}));
-  const qty = typeof body === "object" && body !== null ? (body as { qty?: number | string }).qty : undefined;
-  const q = toNumber(qty);
-
-  if (q <= 0) {
-    await supabaseAdmin.from("cart_items").delete().eq("id", params.id).eq("cart_id", cartId);
-  } else {
-    const { error } = await supabaseAdmin
+    // 1) Delete the line
+    const { error: delErr } = await supabaseAdmin
       .from("cart_items")
-      .update({ qty: q })
-      .eq("id", params.id)
+      .delete()
+      .eq("id", itemId)
       .eq("cart_id", cartId);
 
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+    if (delErr) {
+      return NextResponse.json({ error: delErr.message }, { status: 500 });
     }
-  }
 
-  try {
-    const snapshot = await readCart(cartId);
-    return NextResponse.json(snapshot);
+    // 2) Return the updated cart snapshot
+    const { data, error: getErr } = await supabaseAdmin
+      .from("cart_items")
+      .select("id,name,price,qty,image")
+      .eq("cart_id", cartId)
+      .order("id", { ascending: true });
+
+    if (getErr) {
+      return NextResponse.json({ error: getErr.message }, { status: 500 });
+    }
+
+    const items = (data ?? []).map((r) => ({
+      id: String(r.id),
+      name: String(r.name ?? ""),
+      price: toNumber(r.price),
+      qty: toNumber(r.qty),
+      image: r.image ? String(r.image) : null,
+    }));
+    const subtotal = items.reduce((s, it) => s + it.price * it.qty, 0);
+
+    return NextResponse.json({ items, subtotal }, { status: 200 });
   } catch (e) {
-    const msg = e instanceof Error ? e.message : "Unknown error";
-    return NextResponse.json({ error: msg }, { status: 500 });
-  }
-}
-
-export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
-  const cartId = await getOrCreateCartId();
-  const { error } = await supabaseAdmin
-    .from("cart_items")
-    .delete()
-    .eq("id", params.id)
-    .eq("cart_id", cartId);
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-
-  try {
-    const snapshot = await readCart(cartId);
-    return NextResponse.json(snapshot);
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : "Unknown error";
+    const msg = e instanceof Error ? e.message : "Failed to delete item";
     return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

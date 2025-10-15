@@ -2,14 +2,14 @@
 
 import Image from "next/image";
 import React from "react";
-import Link from "next/link"; 
+import { useRouter } from "next/navigation";
 
 type Props = {
   subtotal: number;
   deliveryFee: number;
   tax: number;
-  coupon: number; 
-  total: number; 
+  coupon: number;
+  total: number;
   onApply?: (code: string) => void;
   onConfirm?: () => void;
   className?: string;
@@ -34,6 +34,9 @@ export default function OrderSummary({
   const [applied, setApplied] = React.useState(false);
   const [appliedDiscount, setAppliedDiscount] = React.useState<number>(0);
   const [computedTotal, setComputedTotal] = React.useState<number>(total);
+
+  const router = useRouter();
+  const [confirming, setConfirming] = React.useState(false);
 
   React.useEffect(() => {
     if (!applied) setComputedTotal(total);
@@ -67,7 +70,7 @@ export default function OrderSummary({
       const res = await fetch("/api/coupon/validate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", 
+        credentials: "include",
         body: JSON.stringify({ code: trimmed }),
       });
 
@@ -89,7 +92,6 @@ export default function OrderSummary({
       }
 
       const newDiscount = Math.max(0, Math.floor(data.discount ?? 0));
-
       const cappedDiscount = Math.min(newDiscount, Math.max(0, Math.floor(subtotal)));
       const newTotal = Math.max(
         0,
@@ -106,11 +108,50 @@ export default function OrderSummary({
     }
   };
 
+  const handleConfirm = async () => {
+    try {
+      setConfirming(true);
+      onConfirm?.();
+
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          subtotal,
+          delivery_fee: deliveryFee,
+           coupon_code: code.trim().toUpperCase() || undefined,
+          tax,
+          coupon: applied ? appliedDiscount : coupon,
+          total: computedTotal,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to create order");
+        return;
+      }
+
+      const orderId = data.order?.id;
+      if (orderId) {
+        router.push(`/deliverydetail?orderId=${orderId}`);
+      } else {
+        alert("Order created, but ID not found.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error confirming order.");
+    } finally {
+      setConfirming(false);
+    }
+  };
+
   const displayCoupon = applied
     ? Math.min(
-      Math.max(0, Math.floor(appliedDiscount)),
-      Math.max(0, Math.floor(subtotal))
-    )
+        Math.max(0, Math.floor(appliedDiscount)),
+        Math.max(0, Math.floor(subtotal))
+      )
     : coupon;
 
   const displayTotal = applied ? computedTotal : total;
@@ -170,7 +211,7 @@ export default function OrderSummary({
         <p>-{displayCoupon}B</p>
       </div>
 
-      <p className=" w-full h-[2px] bg-[#073027] mt-3"></p>
+      <p className="w-full h-[2px] bg-[#073027] mt-3"></p>
 
       <div className="flex justify-between text-[14px] md:text-[20px] font-schibsted mt-4">
         <p>Total</p>
@@ -178,19 +219,20 @@ export default function OrderSummary({
       </div>
 
       <div
-        className={`${hideConfirmOnMobile ? "hidden md:flex" : "flex"
-          } justify-center md:justify-end text-[20px] font-bebas mt-4`}
+        className={`${
+          hideConfirmOnMobile ? "hidden md:flex" : "flex"
+        } justify-center md:justify-end text-[20px] font-bebas mt-4`}
       >
-        <Link href="/deliverydetail">
-
-          <button
-            onClick={() => onConfirm?.()}
-            className="w-full md:w-auto bg-[#EF9748] shadow-[0_3px_0_0_#073027] rounded-[8px] border-2 border-[#073027] px-5 py-1  hover:bg-[#FAB170] hover:translate-y-[1px] hover:shadow-[0_2px_0_0_#073027] active:bg-[#d46a1f] active:translate-y-[2px] active:shadow-[0_1px_0_0_#073027]
-                  transition-transform duration-150"
-          >
-            CONFIRM ORDER
-          </button>
-          </Link>
+        <button
+          onClick={handleConfirm}
+          disabled={confirming}
+          className="w-full md:w-auto bg-[#EF9748] shadow-[0_3px_0_0_#073027] rounded-[8px] border-2 border-[#073027] px-5 py-1  
+            hover:bg-[#FAB170] hover:translate-y-[1px] hover:shadow-[0_2px_0_0_#073027] 
+            active:bg-[#d46a1f] active:translate-y-[2px] active:shadow-[0_1px_0_0_#073027]
+            transition-transform duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {confirming ? "PROCESSING..." : "CONFIRM ORDER"}
+        </button>
       </div>
     </div>
   );
