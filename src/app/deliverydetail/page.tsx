@@ -6,6 +6,9 @@ export default function DeliveryDetailPage() {
     <>
       <DeliveryMap />
       <OrderAndDeliveryCard />
+
+
+      
     </>
   );
 }
