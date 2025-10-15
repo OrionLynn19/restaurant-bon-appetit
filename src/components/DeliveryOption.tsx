@@ -4,6 +4,7 @@ import DeliForm, { DeliverySpot, Mode } from "./DeliForm";
 import PaymentSection from "@/components/PaymentSection";
 import OrderSummary from "@/components/OrderSummary";
 import { useCart } from "../context/CartContext";
+import Link from "next/link";
 
 export default function DeliveryOption({
   className = "",
@@ -102,6 +103,7 @@ export default function DeliveryOption({
           {/* Mobile confirm button under Payment */}
           <div className="block md:hidden mt-4">
             <div className="px-0">
+              <Link href="/deliverydetail">
               <button
                 onClick={() => console.log("Confirm order")}
                 className="w-full md:w-auto bg-[#EF9748] shadow-[0_3px_0_0_#073027] rounded-[8px] border-2 border-[#073027] px-5 py-1  hover:bg-[#FAB170] hover:translate-y-[1px] hover:shadow-[0_2px_0_0_#073027] active:bg-[#d46a1f] active:translate-y-[2px] active:shadow-[0_1px_0_0_#073027]
@@ -109,6 +111,7 @@ export default function DeliveryOption({
               >
                 CONFIRM ORDER
               </button>
+              </Link>
             </div>
           </div>
         </div>

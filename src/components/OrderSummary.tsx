@@ -1,15 +1,15 @@
-// src/components/OrderSummary.tsx
 "use client";
 
 import Image from "next/image";
 import React from "react";
+import Link from "next/link"; 
 
 type Props = {
   subtotal: number;
   deliveryFee: number;
   tax: number;
-  coupon: number; // initial discount from parent (can be 0)
-  total: number;  // initial total from parent
+  coupon: number; 
+  total: number; 
   onApply?: (code: string) => void;
   onConfirm?: () => void;
   className?: string;
@@ -31,17 +31,14 @@ export default function OrderSummary({
   const [applying, setApplying] = React.useState(false);
   const [applyError, setApplyError] = React.useState<string | null>(null);
 
-  // Local coupon application (keeps Subtotal unchanged)
   const [applied, setApplied] = React.useState(false);
   const [appliedDiscount, setAppliedDiscount] = React.useState<number>(0);
   const [computedTotal, setComputedTotal] = React.useState<number>(total);
 
-  // Keep initial total in sync until a coupon is applied locally
   React.useEffect(() => {
     if (!applied) setComputedTotal(total);
   }, [total, applied]);
 
-  // ✅ Recompute total whenever cart numbers change while coupon is applied
   React.useEffect(() => {
     if (!applied) return;
     const cappedDiscount = Math.min(
@@ -70,7 +67,7 @@ export default function OrderSummary({
       const res = await fetch("/api/coupon/validate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // send cart cookie
+        credentials: "include", 
         body: JSON.stringify({ code: trimmed }),
       });
 
@@ -93,7 +90,6 @@ export default function OrderSummary({
 
       const newDiscount = Math.max(0, Math.floor(data.discount ?? 0));
 
-      // Do NOT change Subtotal. Only recompute Total locally.
       const cappedDiscount = Math.min(newDiscount, Math.max(0, Math.floor(subtotal)));
       const newTotal = Math.max(
         0,
@@ -110,12 +106,11 @@ export default function OrderSummary({
     }
   };
 
-  // Display values: keep Subtotal from props; override Coupon/Total if applied locally
   const displayCoupon = applied
     ? Math.min(
-        Math.max(0, Math.floor(appliedDiscount)),
-        Math.max(0, Math.floor(subtotal))
-      )
+      Math.max(0, Math.floor(appliedDiscount)),
+      Math.max(0, Math.floor(subtotal))
+    )
     : coupon;
 
   const displayTotal = applied ? computedTotal : total;
@@ -183,17 +178,19 @@ export default function OrderSummary({
       </div>
 
       <div
-        className={`${
-          hideConfirmOnMobile ? "hidden md:flex" : "flex"
-        } justify-center md:justify-end text-[20px] font-bebas mt-4`}
+        className={`${hideConfirmOnMobile ? "hidden md:flex" : "flex"
+          } justify-center md:justify-end text-[20px] font-bebas mt-4`}
       >
-        <button
-          onClick={() => onConfirm?.()}
-          className="w-full md:w-auto bg-[#EF9748] shadow-[0_3px_0_0_#073027] rounded-[8px] border-2 border-[#073027] px-5 py-1  hover:bg-[#FAB170] hover:translate-y-[1px] hover:shadow-[0_2px_0_0_#073027] active:bg-[#d46a1f] active:translate-y-[2px] active:shadow-[0_1px_0_0_#073027]
+        <Link href="/deliverydetail">
+
+          <button
+            onClick={() => onConfirm?.()}
+            className="w-full md:w-auto bg-[#EF9748] shadow-[0_3px_0_0_#073027] rounded-[8px] border-2 border-[#073027] px-5 py-1  hover:bg-[#FAB170] hover:translate-y-[1px] hover:shadow-[0_2px_0_0_#073027] active:bg-[#d46a1f] active:translate-y-[2px] active:shadow-[0_1px_0_0_#073027]
                   transition-transform duration-150"
-        >
-          CONFIRM ORDER
-        </button>
+          >
+            CONFIRM ORDER
+          </button>
+          </Link>
       </div>
     </div>
   );
