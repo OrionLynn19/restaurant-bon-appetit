@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import{useRouter} from "next/navigation";
 import ConfirmBox from "@/components/ConfirmBox";
 
 const BRANCHES = [
@@ -88,7 +87,6 @@ function isValidPhoneTH(input: string) {
 
 /* ---------- page ---------- */
 export default function ReservePage() {
-  const router= useRouter();
   // form
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -131,23 +129,45 @@ export default function ReservePage() {
   // Update onSubmit function
   function onSubmit() {
     if (!canProceed || !selectedDate) return;
-    
-    // Show confirmation modal instead of navigating immediately
     setShowConfirmBox(true);
   }
 
   // Handle confirmation
-  function handleConfirm() {
+  async function handleConfirm() {
     if (!selectedDate) return;
-    
-    // Close the confirmation modal and show booking confirmed
+
     setShowConfirmBox(false);
-    setShowBookingConfirmed(true);
-    
-    // Optional: Auto-close the success modal after 3 seconds
-    setTimeout(() => {
-      setShowBookingConfirmed(false);
-    }, 6000);
+
+    try {
+      const res = await fetch("/api/reserve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          phone,
+          party_size: guests,
+          date: (() => {
+            const y = selectedDate.getFullYear();
+            const m = String(selectedDate.getMonth() + 1).padStart(2, "0");
+            const d = String(selectedDate.getDate()).padStart(2, "0");
+            return `${y}-${m}-${d}`;
+          })(),
+          time,
+          status: "pending",
+          special_requests: message,
+             branch: branch
+        }),
+      });
+
+      const json = await res.json();
+      if (!res.ok) throw new Error(json?.error || "Reservation failed");
+
+      setShowBookingConfirmed(true);
+      setTimeout(() => setShowBookingConfirmed(false), 6000);
+    } catch (err) {
+      console.error("Reservation error:", err);
+      alert((err as Error).message || "Failed to create reservation");
+    }
   }
 
   // Handle cancellation
@@ -159,7 +179,7 @@ export default function ReservePage() {
 
   /* ---- UI ---- */
   const fieldBase =
-    "rounded-md border border-stone-300 bg-white/90 px-3 h-10 outline-none focus:border-emerald-600"; // ← unified height
+    "rounded-md border border-stone-300 bg-white/90 px-3 h-10 outline-none focus:border-emerald-600";
 
   return (
     <div className="bg-[#fff9ef] text-stone-800">
@@ -316,7 +336,6 @@ export default function ReservePage() {
             )}
           </div>
 
-         
           <div className="relative">
             <label className="grid gap-1">
               <span className="text-[12px] font-semibold text-emerald-900">SelectTime*</span>
@@ -415,7 +434,6 @@ export default function ReservePage() {
             )}
           </div>
 
-          
           <div className="relative">
             <label className="grid gap-1">
               <span className="text-[12px] font-semibold text-emerald-900">Restaurant Branch</span>
@@ -462,7 +480,6 @@ export default function ReservePage() {
             )}
           </div>
 
-         
           <label className="grid gap-1">
             <span className="text-[12px] font-semibold text-emerald-900">Amount Of Guest*</span>
             <div className="flex items-center gap-2">
@@ -490,7 +507,6 @@ export default function ReservePage() {
             </div>
           </label>
 
-          
           <label className="col-span-full grid gap-1">
             <span className="text-[12px] font-semibold text-emerald-900">Message</span>
             <textarea
@@ -501,34 +517,30 @@ export default function ReservePage() {
               className="w-full rounded-md border border-stone-300 bg-white/90 px-3 py-2 outline-none focus:border-emerald-600"
             />
           </label>
-<div className="col-span-full flex justify-end">
-  <div className="relative inline-block"> 
-    <div
-      aria-hidden="true"
-      className="absolute inset-0 translate-y-[2px] rounded-[12px] bg-black"
-    />
-    <button
-      type="submit"
-      disabled={!canProceed}
-      className="
-        relative z-10
-        rounded-[12px] border-2 border-[#0E4B3B] bg-[#EA954E]
-        px-6 py-2 text-[15px] font-extrabold uppercase tracking-wide text-[#0E4B3B]
-        hover:translate-y-[1px] hover:[&+div]:translate-y-[7px]
-        active:translate-y-[2px]
-        disabled:opacity-150 disabled:cursor-not-allowed
-      "
-    >
-      NEXT
-    </button>
-  </div>
-</div>
-
-
-
+          <div className="col-span-full flex justify-end">
+            <div className="relative inline-block">
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 translate-y-[2px] rounded-[12px] bg-black"
+              />
+              <button
+                type="submit"
+                disabled={!canProceed}
+                className="
+                  relative z-10
+                  rounded-[12px] border-2 border-[#0E4B3B] bg-[#EA954E]
+                  px-6 py-2 text-[15px] font-extrabold uppercase tracking-wide text-[#0E4B3B]
+                  hover:translate-y-[1px] hover:[&+div]:translate-y-[7px]
+                  active:translate-y-[2px]
+                  disabled:opacity-150 disabled:cursor-not-allowed
+                "
+              >
+                NEXT
+              </button>
+            </div>
+          </div>
         </form>
 
-        
         <div className="hidden md:block self-start -mt-4 mb-2">
           <div className="h-[60vh] w-full overflow-hidden rounded-xl border border-stone-200 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
             <div className="relative h-full w-full overflow-hidden rounded-[inherit]">
@@ -537,7 +549,7 @@ export default function ReservePage() {
                 alt=""
                 fill
                 className="object-cover [backface-visibility:hidden]"
-                style={{ inset: "-1px" }} 
+                style={{ inset: "-1px" }}
                 loading="lazy"
                 fetchPriority="auto"
                 sizes="(min-width:768px) 520px, 0px"
@@ -546,8 +558,7 @@ export default function ReservePage() {
           </div>
         </div>
       </section>
-      
-     
+
       {showConfirmBox && selectedDate && (
         <ConfirmBox
           fullName={name}
@@ -562,22 +573,21 @@ export default function ReservePage() {
         />
       )}
 
-      
       {showBookingConfirmed && (
         <div className="fixed inset-0 flex items-center justify-center  z-50">
           <div className="bg-white rounded-lg shadow-xl p-8 max-w-md  mx-4 text-center">
             <div className="mb-4">
-              <svg 
-                className="mx-auto h-16 w-16 text-rgba(7, 48, 39, 1)" 
-                fill="none" 
-                stroke="currentColor" 
+              <svg
+                className="mx-auto h-16 w-16 text-rgba(7, 48, 39, 1)"
+                fill="none"
+                stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={3} 
-                  d="M5 13l4 4L19 7" 
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={3}
+                  d="M5 13l4 4L19 7"
                 />
               </svg>
             </div>

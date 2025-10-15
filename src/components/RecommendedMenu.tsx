@@ -1,13 +1,34 @@
+
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import { menuApi } from '@/lib/api';
-import type { MenuItem } from '@/types/content';
+import { menuApi } from "@/lib/api";
+import type { MenuItem } from "@/types/content";
+import { useCart } from "@/context/CartContext";
 
 export default function RecommendedMenu() {
+  const { addItem } = useCart(); // <-- use cart
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Add-to-cart from recommended list
+  const handleAdd = (item: MenuItem) => {
+    const unitPrice = item.discount_price ?? item.price ?? 0;
+    const name = item.name || "Menu Item";
+    const baseId = name.toLowerCase().replace(/\s+/g, "-"); // slug
+    const image = item.image_url || "/images/placeholder-food.jpg";
+
+    // No promo suffix here, so it stays separate from promo lines (which use __promo__)
+    // If an identical recommended item is added again, qty will increase thanks to addItem merge logic
+    addItem({
+      id: baseId,
+      name,
+      price: unitPrice,
+      qty: 1,
+      image,
+    });
+  };
 
   // Fetch recommended menu items
   useEffect(() => {
@@ -16,24 +37,21 @@ export default function RecommendedMenu() {
       setError(null);
 
       try {
-        // Fetch all available items and randomly select 4
         const response = await menuApi.getAll({
           available: true,
-          sort: 'name',
-          order: 'asc'
+          sort: "name",
+          order: "asc",
         });
 
         if (response.success && response.data) {
-          // Randomly shuffle and take first 4 items
-          const shuffled = response.data.sort(() => 0.5 - Math.random());
+          const shuffled = [...response.data].sort(() => 0.5 - Math.random());
           setMenuItems(shuffled.slice(0, 4));
         } else {
-          setError(response.error || 'Failed to load recommended items');
-          // Fallback to empty array
+          setError(response.error || "Failed to load recommended items");
           setMenuItems([]);
         }
-      } catch (err) {
-        setError('Failed to load recommended items');
+      } catch {
+        setError("Failed to load recommended items");
         setMenuItems([]);
       }
 
@@ -49,10 +67,7 @@ export default function RecommendedMenu() {
       <>
         {/* Desktop Loading */}
         <section className="hidden md:block" style={{ background: "#FFFCF1" }}>
-          <h2
-            className="text-[40px] mb-4 font-bebas text-[#073027] md:pl-2"
-            style={{ fontFamily: "var(--font-bebas)" }}
-          >
+          <h2 className="text-[40px] mb-4 font-bebas text-[#073027] md:pl-2">
             RECOMMEND MENU
           </h2>
           <div className="flex gap-8">
@@ -62,23 +77,17 @@ export default function RecommendedMenu() {
                 className="flex flex-col items-start p-4 w-full rounded-xl animate-pulse"
                 style={{ background: "#FFFCF1" }}
               >
-                <div className="w-full h-[229px] bg-gray-300 rounded-lg"></div>
-                <div className="h-6 bg-gray-300 rounded mt-5 w-3/4"></div>
-                <div className="h-4 bg-gray-300 rounded mt-1 w-1/2"></div>
+                <div className="w-full h-[229px] bg-gray-300 rounded-lg" />
+                <div className="h-6 bg-gray-300 rounded mt-5 w-3/4" />
+                <div className="h-4 bg-gray-300 rounded mt-1 w-1/2" />
               </div>
             ))}
           </div>
         </section>
 
         {/* Mobile Loading */}
-        <section
-          className="block md:hidden w-full h-[243px]"
-          style={{ background: "#FFFCF1" }}
-        >
-          <h2
-            className="text-[20px] mb-2 font-bebas text-[#073027] pl-4"
-            style={{ fontFamily: "var(--font-bebas)" }}
-          >
+        <section className="block md:hidden w-full h-[243px]" style={{ background: "#FFFCF1" }}>
+          <h2 className="text-[20px] mb-2 font-bebas text-[#073027] pl-4">
             RECOMMEND PAIRING
           </h2>
           <div className="flex gap-2 overflow-x-auto pb-2 pl-3">
@@ -88,9 +97,9 @@ export default function RecommendedMenu() {
                 className="flex-shrink-0 flex flex-col items-start p-2 w-[160px] rounded-xl animate-pulse"
                 style={{ background: "#FFFCF1" }}
               >
-                <div className="w-[133.65px] h-[112.5px] bg-gray-300 rounded-[8px]"></div>
-                <div className="h-4 bg-gray-300 rounded mt-3 w-3/4"></div>
-                <div className="h-3 bg-gray-300 rounded mt-1 w-1/2"></div>
+                <div className="w-[133.65px] h-[112.5px] bg-gray-300 rounded-[8px]" />
+                <div className="h-4 bg-gray-300 rounded mt-3 w-3/4" />
+                <div className="h-3 bg-gray-300 rounded mt-1 w-1/2" />
               </div>
             ))}
           </div>
@@ -105,15 +114,12 @@ export default function RecommendedMenu() {
       <>
         {/* Desktop Error */}
         <section className="hidden md:block" style={{ background: "#FFFCF1" }}>
-          <h2
-            className="text-[40px] mb-4 font-bebas text-[#073027] md:pl-2"
-            style={{ fontFamily: "var(--font-bebas)" }}
-          >
+          <h2 className="text-[40px] mb-4 font-bebas text-[#073027] md:pl-2">
             RECOMMEND MENU
           </h2>
           <div className="text-center py-8">
             <p className="text-red-500 mb-4">{error}</p>
-            <button 
+            <button
               onClick={() => window.location.reload()}
               className="px-4 py-2 bg-[#EF9748] text-[#073027] rounded-lg hover:bg-opacity-90"
             >
@@ -123,19 +129,13 @@ export default function RecommendedMenu() {
         </section>
 
         {/* Mobile Error */}
-        <section
-          className="block md:hidden w-full h-[243px]"
-          style={{ background: "#FFFCF1" }}
-        >
-          <h2
-            className="text-[20px] mb-2 font-bebas text-[#073027] pl-4"
-            style={{ fontFamily: "var(--font-bebas)" }}
-          >
+        <section className="block md:hidden w-full h-[243px]" style={{ background: "#FFFCF1" }}>
+          <h2 className="text-[20px] mb-2 font-bebas text-[#073027] pl-4">
             RECOMMEND PAIRING
           </h2>
           <div className="text-center py-8">
             <p className="text-red-500 text-sm mb-4">{error}</p>
-            <button 
+            <button
               onClick={() => window.location.reload()}
               className="px-4 py-2 bg-[#EF9748] text-[#073027] rounded-lg hover:bg-opacity-90 text-sm"
             >
@@ -147,16 +147,12 @@ export default function RecommendedMenu() {
     );
   }
 
-  // Show message if no items found
+  // No items
   if (menuItems.length === 0) {
     return (
       <>
-        {/* Desktop No Items */}
         <section className="hidden md:block" style={{ background: "#FFFCF1" }}>
-          <h2
-            className="text-[40px] mb-4 font-bebas text-[#073027] md:pl-2"
-            style={{ fontFamily: "var(--font-bebas)" }}
-          >
+          <h2 className="text-[40px] mb-4 font-bebas text-[#073027] md:pl-2">
             RECOMMEND MENU
           </h2>
           <div className="text-center py-8">
@@ -164,15 +160,8 @@ export default function RecommendedMenu() {
           </div>
         </section>
 
-        {/* Mobile No Items */}
-        <section
-          className="block md:hidden w-full h-[243px]"
-          style={{ background: "#FFFCF1" }}
-        >
-          <h2
-            className="text-[20px] mb-2 font-bebas text-[#073027] pl-4"
-            style={{ fontFamily: "var(--font-bebas)" }}
-          >
+        <section className="block md:hidden w-full h-[243px]" style={{ background: "#FFFCF1" }}>
+          <h2 className="text-[20px] mb-2 font-bebas text-[#073027] pl-4">
             RECOMMEND PAIRING
           </h2>
           <div className="text-center py-8">
@@ -185,12 +174,9 @@ export default function RecommendedMenu() {
 
   return (
     <>
-      {/* Desktop Layout */}
+      {/* Desktop */}
       <section className="hidden md:block" style={{ background: "#FFFCF1" }}>
-        <h2
-          className="text-[40px] mb-4 font-bebas text-[#073027] md:pl-2"
-          style={{ fontFamily: "var(--font-bebas)" }}
-        >
+        <h2 className="text-[40px] mb-4 font-bebas text-[#073027] md:pl-2">
           RECOMMEND MENU
         </h2>
         <div className="flex gap-8">
@@ -210,32 +196,18 @@ export default function RecommendedMenu() {
                   style={{ borderRadius: "12px" }}
                 />
               </div>
-              <h3
-                className="text-[24px] text-black font-semibold mt-5"
-                style={{ fontFamily: "var(--font-schibsted)" }}
-              >
+              <h3 className="text-[24px] text-black font-semibold mt-5">
                 {item.name}
               </h3>
-              <p
-                className="text-[14px] mt-1"
-                style={{
-                  fontFamily: "var(--font-schibsted)",
-                  color: "#073027",
-                }}
-              >
-                {item.discount_price 
-                  ? `${item.discount_price} ${item.currency}` 
-                  : `${item.price} ${item.currency}`
-                }
+              <p className="text-[14px] mt-1" style={{ color: "#073027" }}>
+                {item.discount_price ? `${item.discount_price} ${item.currency}` : `${item.price} ${item.currency}`}
               </p>
               {item.discount_price && (
-                <p
-                  className="text-[12px] line-through text-gray-500"
-                  style={{ fontFamily: "var(--font-schibsted)" }}
-                >
+                <p className="text-[12px] line-through text-gray-500">
                   {item.price} {item.currency}
                 </p>
               )}
+
               <button
                 className="absolute bottom-17 right-0 text-black flex items-center justify-center hover:scale-110 transition-transform"
                 style={{
@@ -248,10 +220,8 @@ export default function RecommendedMenu() {
                   fontSize: "2rem",
                   boxShadow: "0 4px 12px rgba(0,0,0,0.10)",
                 }}
-                onClick={() => {
-                  // Add to cart functionality here
-                  console.log('Add to cart:', item.name);
-                }}
+                onClick={() => handleAdd(item)}
+                aria-label={`Add ${item.name} to cart`}
               >
                 +
               </button>
@@ -260,15 +230,9 @@ export default function RecommendedMenu() {
         </div>
       </section>
 
-      {/* Mobile Layout */}
-      <section
-        className="block md:hidden w-full h-[243px]"
-        style={{ background: "#FFFCF1" }}
-      >
-        <h2
-          className="text-[20px] mb-2 font-bebas text-[#073027] pl-4"
-          style={{ fontFamily: "var(--font-bebas)" }}
-        >
+      {/* Mobile */}
+      <section className="block md:hidden w-full h-[243px]" style={{ background: "#FFFCF1" }}>
+        <h2 className="text-[20px] mb-2 font-bebas text-[#073027] pl-4">
           RECOMMEND PAIRING
         </h2>
         <div className="flex gap-2 overflow-x-auto pb-2 pl-3">
@@ -287,32 +251,18 @@ export default function RecommendedMenu() {
                   className="object-cover w-full h-full rounded-[8px]"
                 />
               </div>
-              <h3
-                className="text-[14px] text-black font-normal mt-3"
-                style={{ fontFamily: "var(--font-schibsted)" }}
-              >
+              <h3 className="text-[14px] text-black font-normal mt-3">
                 {item.name}
               </h3>
-              <p
-                className="text-[13px] mt-1"
-                style={{
-                  fontFamily: "var(--font-schibsted)",
-                  color: "#073027",
-                }}
-              >
-                {item.discount_price 
-                  ? `${item.discount_price} ${item.currency}` 
-                  : `${item.price} ${item.currency}`
-                }
+              <p className="text-[13px] mt-1" style={{ color: "#073027" }}>
+                {item.discount_price ? `${item.discount_price} ${item.currency}` : `${item.price} ${item.currency}`}
               </p>
               {item.discount_price && (
-                <p
-                  className="text-[11px] line-through text-gray-500"
-                  style={{ fontFamily: "var(--font-schibsted)" }}
-                >
+                <p className="text-[11px] line-through text-gray-500">
                   {item.price} {item.currency}
                 </p>
               )}
+
               <button
                 className="absolute bottom-14 right-2 text-black flex items-center justify-center hover:scale-110 transition-transform"
                 style={{
@@ -325,10 +275,8 @@ export default function RecommendedMenu() {
                   fontSize: "1.2rem",
                   boxShadow: "0 2px 6px rgba(0,0,0,0.10)",
                 }}
-                onClick={() => {
-                  // Add to cart functionality here
-                  console.log('Add to cart:', item.name);
-                }}
+                onClick={() => handleAdd(item)}
+                aria-label={`Add ${item.name} to cart`}
               >
                 +
               </button>

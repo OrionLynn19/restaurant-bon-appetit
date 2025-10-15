@@ -6,6 +6,21 @@ import type {
   UpdateMenuItemRequest 
 } from '@/types/content';
 
+// Local helper types (just to avoid `any`)
+type UpdatableFields = {
+  name?: string;
+  description?: string | null;
+  price?: number;
+  discount_price?: number | null;
+  currency?: string;
+  image_url?: string | null;
+  available?: boolean;
+  prep_time_minutes?: number | null;
+  category_id?: string;
+};
+
+type PatchFields = Pick<UpdatableFields, 'available' | 'discount_price' | 'prep_time_minutes'>;
+
 // READ - GET /api/menu/[id] - Get single menu item
 export async function GET(
   request: NextRequest,
@@ -73,7 +88,7 @@ export async function PUT(
     } = body;
 
     // Build update object with only provided fields
-    const updateData: any = {
+    const updateData: UpdatableFields & { updated_at: string } = {
       updated_at: new Date().toISOString()
     };
 
@@ -204,14 +219,15 @@ export async function PATCH(
     const body = await request.json();
     
     // Only allow specific fields for PATCH operations
-    const allowedFields = ['available', 'discount_price', 'prep_time_minutes'];
-    const updateData: any = {
+    const allowedFields = ['available', 'discount_price', 'prep_time_minutes'] as const;
+    const updateData: PatchFields & { updated_at: string } = {
       updated_at: new Date().toISOString()
     };
 
     // Only include allowed fields that are provided
     Object.keys(body).forEach(key => {
-      if (allowedFields.includes(key)) {
+      if (allowedFields.includes(key as (typeof allowedFields)[number])) {
+        // @ts-expect-error index is narrowed by includes check
         updateData[key] = body[key];
       }
     });

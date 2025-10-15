@@ -1,0 +1,900 @@
+[1mdiff --git a/src/app/api/categories/route.ts b/src/app/api/categories/route.ts[m
+[1mindex 90ce1c5..06fc24b 100644[m
+[1m--- a/src/app/api/categories/route.ts[m
+[1m+++ b/src/app/api/categories/route.ts[m
+[36m@@ -3,12 +3,13 @@[m [mimport { supabase } from '@/lib/supabase';[m
+ import type { Category, ApiResponse } from '@/types/content';[m
+ [m
+ // GET /api/categories - Get all categories[m
+[31m-export async function GET(request: NextRequest): Promise<NextResponse<ApiResponse<Category[]>>> {[m
+[32m+[m[32m// eslint-disable-next-line @typescript-eslint/no-unused-vars[m
+[32m+[m[32mexport async function GET(_request: NextRequest): Promise<NextResponse<ApiResponse<Category[]>>> {[m
+   try {[m
+     const { data, error } = await supabase[m
+       .from('categories')[m
+       .select('*')[m
+[31m-      .order('sort_order', { ascending: true, nullsLast: true })[m
+[32m+[m[32m      .order('sort_order', { ascending: true, nullsFirst: false })[m
+       .order('name', { ascending: true });[m
+ [m
+     if (error) {[m
+[1mdiff --git a/src/components/Button.tsx b/src/components/Button.tsx[m
+[1mindex 3e8c5bb..da593d0 100644[m
+[1m--- a/src/components/Button.tsx[m
+[1m+++ b/src/components/Button.tsx[m
+[36m@@ -8,19 +8,22 @@[m [mtype ButtonProps = {[m
+   children?: ReactNode;[m
+ };[m
+ [m
+[31m-export default function Button({ href, children }: ButtonProps) {[m
+[32m+[m[32mexport default function Button({[m
+[32m+[m[32m  href,[m
+[32m+[m[32m  children = "RESERVE A TABLE",[m
+[32m+[m[32m}: ButtonProps) {[m
+   return ([m
+     <Link[m
+[31m-        href="/reserve"[m
+[31m-        className="flex items-center justify-center[m
+[32m+[m[32m      href={href}[m
+[32m+[m[32m      className="flex items-center justify-center[m
+         min-w-[140px] h-[44px] px-4 text-[13px][m
+         md:min-w-[180px] md:h-[56px] md:px-5 md:text-[15px][m
+         rounded-[12px] bg-[#EF9748] border-2 border-[#073027] text-[#073027] font-['Bebas_Neue'] font-extrabold[m
+         shadow-[0_4px_0_0_#073027] md:shadow-[0_5px_0_0_#073027][m
+         hover:translate-y-[1px] hover:shadow-[0_4px_0_0_#073027] hover:bg-[#FAB170] transition-transform duration-150[m
+         active:translate-y-[3px] active:shadow-[0_3px_0_0_#073027]"[m
+[31m-            >[m
+[31m-           RESERVE A TABLE[m
+[31m-      </Link>[m
+[32m+[m[32m    >[m
+[32m+[m[32m      {children}[m
+[32m+[m[32m    </Link>[m
+   );[m
+ }[m
+[1mdiff --git a/src/components/Card/OurMenuCard.tsx b/src/components/Card/OurMenuCard.tsx[m
+[1mindex f862109..bb5e088 100644[m
+[1m--- a/src/components/Card/OurMenuCard.tsx[m
+[1m+++ b/src/components/Card/OurMenuCard.tsx[m
+[36m@@ -1,12 +1,14 @@[m
+[32m+[m[32m"use client";[m
+ import React from "react";[m
+ import Image from "next/image";[m
+ import { useRouter } from "next/navigation";[m
+[32m+[m[32mimport { useCart } from "@/context/CartContext";[m
+ [m
+ interface OurMenuCardProps {[m
+   image: string;[m
+   name: string;[m
+[31m-  price: string;[m
+[31m-  originalPrice?: string;[m
+[32m+[m[32m  price: string;           // e.g. "200 THB" or "90 BHT"[m
+[32m+[m[32m  originalPrice?: string;  // e.g. "150 THB"[m
+   description?: string;[m
+   specialPromotion?: boolean;[m
+ }[m
+[36m@@ -15,15 +17,42 @@[m [mexport default function OurMenuCard(props: OurMenuCardProps) {[m
+   const { image, name, price, originalPrice, description, specialPromotion } =[m
+     props;[m
+   const router = useRouter();[m
+[32m+[m[32m  const { addItem } = useCart();[m
+ [m
+[32m+[m[32m  // Keep detail navigation (now triggered by clicking the image)[m
+   const handleDetail = () => {[m
+     router.push(`/menu/detail/${encodeURIComponent(name)}`);[m
+   };[m
+ [m
+[32m+[m[32m  // Parse a numeric price from the string prop (e.g. "200 THB" -> 200)[m
+[32m+[m[32m  const parsePrice = (s: string) => {[m
+[32m+[m[32m    const n = Number(String(s).replace(/[^\d.]/g, ""));[m
+[32m+[m[32m    return Number.isFinite(n) ? n : 0;[m
+[32m+[m[32m  };[m
+[32m+[m
+[32m+[m[32m  // Add to cart when pressing +[m
+[32m+[m[32m  const handleAdd = (e: React.MouseEvent) => {[m
+[32m+[m[32m    e.preventDefault();[m
+[32m+[m[32m    e.stopPropagation();[m
+[32m+[m[32m    const unitPrice = parsePrice(price);[m
+[32m+[m[32m    addItem({[m
+[32m+[m[32m      id: name,         // using name as id (stable enough for now)[m
+[32m+[m[32m      name,[m
+[32m+[m[32m      price: unitPrice, // number required by CartContext[m
+[32m+[m[32m      qty: 1,[m
+[32m+[m[32m      image,[m
+[32m+[m[32m    });[m
+[32m+[m[32m  };[m
+[32m+[m
+   return ([m
+     <div className="md:bg-white rounded-lg md:shadow-md flex flex-col items-center gap-2 w-[153px] h-[243px] md:flex-row md:w-full md:max-w-[644px] md:h-[238px] md:gap-0 md:overflow-hidden md:relative">[m
+[31m-      {/* Left: Image */}[m
+[31m-      <div className="relative flex justify-center items-center w-[153px] h-[153px] md:w-[238px] md:h-[238px] md:rounded-tl-[8px] md:rounded-bl-[8px] overflow-hidden md:flex-shrink-0">[m
+[32m+[m[32m      {/* Left: Image (click -> detail) */}[m
+[32m+[m[32m      <button[m
+[32m+[m[32m        type="button"[m
+[32m+[m[32m        onClick={handleDetail}[m
+[32m+[m[32m        className="relative flex justify-center items-center w-[153px] h-[153px] md:w-[238px] md:h-[238px] md:rounded-tl-[8px] md:rounded-bl-[8px] overflow-hidden md:flex-shrink-0"[m
+[32m+[m[32m        aria-label={`Open ${name} detail`}[m
+[32m+[m[32m      >[m
+         <Image[m
+           src={image}[m
+           alt={name}[m
+[36m@@ -97,9 +126,10 @@[m [mexport default function OurMenuCard(props: OurMenuCardProps) {[m
+             </span>[m
+           </>[m
+         )}[m
+[31m-      </div>[m
+[31m-      {/* Right: Content (all content padded together) */}[m
+[31m-      <div className="flex flex-col justify-between gap-2 w-[146px] h-[70px] md:w-full md:flex-1 md:h-[238px] md:py-[26px] md:px-[24.5px]">[m
+[32m+[m[32m      </button>[m
+[32m+[m
+[32m+[m[32m      {/* Right: Content */}[m
+[32m+[m[32m      <div className="flex flex-col justify-between gap-2 w-[146px] h-[70px] md:w/full md:flex-1 md:h-[238px] md:py-[26px] md:px-[24.5px]">[m
+         <div className="flex flex-col justify-between h-full md:gap-3">[m
+           <div>[m
+             <h3 className="font-schibsted font-semibold text-[14px] text-[#073027] mb-0 md:text-[24px] md:text-[#1F1D1D] md:h-[30px] md:font-semibold md:mb-[24px]">[m
+[36m@@ -114,10 +144,11 @@[m [mexport default function OurMenuCard(props: OurMenuCardProps) {[m
+               </p>[m
+             )}[m
+           </div>[m
+[32m+[m
+           <div className="flex items-center justify-between w-full">[m
+             <div className="flex items-center gap-1 md:gap-[8px] h-[15px] md:h-[20px]">[m
+               {originalPrice && ([m
+[31m-                <span className="font-schibsted font-semibold text-[12px] text-[#838383] line-through md:text-[16px] md:h-[20px] whitespace-nowrap">[m
+[32m+[m[32m                <span className="font-schibsted font-semibold text-[12px] text-[#838383] line-through md:text-[16px] md:h/[20px] whitespace-nowrap">[m
+                   {originalPrice}[m
+                 </span>[m
+               )}[m
+[36m@@ -125,10 +156,12 @@[m [mexport default function OurMenuCard(props: OurMenuCardProps) {[m
+                 {price}[m
+               </span>[m
+             </div>[m
+[32m+[m
+[32m+[m[32m            {/* "+" adds to cart now */}[m
+             <button[m
+               className="w-7 h-7 rounded-full bg-[#EF9748] flex items-center justify-center text-[18px] border-black border-[1.5px] p-2 md:w-[40px] md:h-[40px] md:rounded-[25px] md:border-[1.5px] md:p-0 cursor-pointer"[m
+               aria-label="Add to cart"[m
+[31m-              onClick={handleDetail}[m
+[32m+[m[32m              onClick={handleAdd}[m
+             >[m
+               <span className="text-black">+</span>[m
+             </button>[m
+[1mdiff --git a/src/components/CartButton.tsx b/src/components/CartButton.tsx[m
+[1mindex c0e2e48..adf396f 100644[m
+[1m--- a/src/components/CartButton.tsx[m
+[1m+++ b/src/components/CartButton.tsx[m
+[36m@@ -6,48 +6,88 @@[m [mimport { useCart } from "@/context/CartContext";[m
+ [m
+ export default function CartButton() {[m
+   const [visible, setVisible] = useState(false);[m
+[31m-  const { count } = useCart();[m
+[32m+[m[32m  const { count } = useCart(); // total qty in cart[m
+[32m+[m[32m  const disabled = count === 0;[m
+ [m
+   useEffect(() => {[m
+     const t = setTimeout(() => setVisible(true), 100);[m
+     return () => clearTimeout(t);[m
+   }, []);[m
+ [m
+[32m+[m[32m  const commonClass =[m
+[32m+[m[32m    `fixed bottom-6 md:bottom-32 right-2 md:right-6 z-50[m
+[32m+[m[32m     flex items-center justify-center gap-2[m
+[32m+[m[32m     h-12 w-12 rounded-md[m[41m [m
+[32m+[m[32m     md:h-[48px] md:w-auto md:min-w-[150px] md:px-5 md:rounded-md[m
+[32m+[m[32m     border border-[#8b3d00][m
+[32m+[m[32m     bg-[#e86c1a] text-[#073027][m
+[32m+[m[32m     shadow-md[m
+[32m+[m[32m     transition-all duration-300 ease-out[m
+[32m+[m[32m     ${visible ? "scale-100" : "scale-75 opacity-0"}[m
+[32m+[m[32m    `;[m
+[32m+[m
+[32m+[m[32m  // When disabled, render a <button> with pointer-events disabled; no nav.[m
+[32m+[m[32m  if (disabled) {[m
+[32m+[m[32m    return ([m
+[32m+[m[32m      <button[m
+[32m+[m[32m        aria-label="Go to Cart (empty)"[m
+[32m+[m[32m        disabled[m
+[32m+[m[32m        className={`${commonClass} opacity-40 cursor-not-allowed`}[m
+[32m+[m[32m      >[m
+[32m+[m[32m        <span className="hidden md:inline font-['Bebas_Neue'] font-extrabold uppercase tracking-wide">[m
+[32m+[m[32m          Go to Cart[m
+[32m+[m[32m        </span>[m
+[32m+[m[32m        <Badge count={0} />[m
+[32m+[m[32m        <CartIcon />[m
+[32m+[m[32m      </button>[m
+[32m+[m[32m    );[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  // When enabled, render a Link to /cart.[m
+   return ([m
+[31m-    <Link[m
+[31m-      href="/cart"[m
+[31m-      aria-label="Go to Cart"[m
+[31m-      className={`[m
+[31m-        fixed bottom-6 md:bottom-32 right-2 md:right-6 z-50[m
+[31m-        flex items-center justify-center[m
+[31m-        h-12 w-12 rounded-md[m
+[31m-        md:h-[48px] md:w-auto md:min-w-[150px] md:px-5 md:rounded-md[m
+[31m-        border border-[#8b3d00][m
+[31m-        bg-[#e86c1a] text-[#073027][m
+[31m-        shadow-md[m
+[31m-        opacity-40 hover:opacity-80[m
+[31m-        active:opacity-100 active:bg-[#b84a00] active:text-white[m
+[31m-        transition-all duration-300 ease-out[m
+[31m-        ${visible ? "scale-100" : "scale-75 opacity-0"}[m
+[31m-      `}[m
+[31m-    >[m
+[32m+[m[32m    <Link href="/cart" aria-label="Go to Cart" className={`${commonClass} opacity-90 hover:opacity-100`}>[m
+       <span className="hidden md:inline font-['Bebas_Neue'] font-extrabold uppercase tracking-wide">[m
+         Go to Cart[m
+       </span>[m
+[31m-[m
+[31m-      <span className="relative flex items-center md:ml-1">[m
+[31m-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">[m
+[31m-          <circle cx="9" cy="21" r="1" />[m
+[31m-          <circle cx="20" cy="21" r="1" />[m
+[31m-          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />[m
+[31m-        </svg>[m
+[31m-[m
+[31m-        {count > 0 && ([m
+[31m-          <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full bg-[#073027] text-white text-[11px] font-bold grid place-items-center">[m
+[31m-            {count}[m
+[31m-          </span>[m
+[31m-        )}[m
+[31m-      </span>[m
+[32m+[m[32m      <Badge count={count} />[m
+[32m+[m[32m      <CartIcon />[m
+     </Link>[m
+   );[m
+ }[m
+[32m+[m
+[32m+[m[32mfunction Badge({ count }: { count: number }) {[m
+[32m+[m[32m  return ([m
+[32m+[m[32m    <span[m
+[32m+[m[32m      className="[m
+[32m+[m[32m        grid place-items-center rounded-full[m
+[32m+[m[32m        min-w-5 h-5 px-1 text-xs font-bold[m
+[32m+[m[32m        bg-[#073027] text-white[m
+[32m+[m[32m      "[m
+[32m+[m[32m      aria-label={`Items in cart: ${count}`}[m
+[32m+[m[32m    >[m
+[32m+[m[32m      {count}[m
+[32m+[m[32m    </span>[m
+[32m+[m[32m  );[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction CartIcon() {[m
+[32m+[m[32m  return ([m
+[32m+[m[32m    <span className="relative flex items-center md:ml-1">[m
+[32m+[m[32m      <svg[m
+[32m+[m[32m        width="22"[m
+[32m+[m[32m        height="22"[m
+[32m+[m[32m        viewBox="0 0 24 24"[m
+[32m+[m[32m        fill="none"[m
+[32m+[m[32m        stroke="currentColor"[m
+[32m+[m[32m        strokeWidth="2"[m
+[32m+[m[32m        strokeLinecap="round"[m
+[32m+[m[32m        strokeLinejoin="round"[m
+[32m+[m[32m        aria-hidden="true"[m
+[32m+[m[32m      >[m
+[32m+[m[32m        <circle cx="9" cy="21" r="1" />[m
+[32m+[m[32m        <circle cx="20" cy="21" r="1" />[m
+[32m+[m[32m        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />[m
+[32m+[m[32m      </svg>[m
+[32m+[m[32m    </span>[m
+[32m+[m[32m  );[m
+[32m+[m[32m}[m
+[1mdiff --git a/src/components/ConfirmBox.tsx b/src/components/ConfirmBox.tsx[m
+[1mindex 87b34d0..c7169cd 100644[m
+[1m--- a/src/components/ConfirmBox.tsx[m
+[1m+++ b/src/components/ConfirmBox.tsx[m
+[36m@@ -25,7 +25,9 @@[m [mexport default function confirmBox({[m
+   onConfirm,[m
+   onCancel,[m
+ }: ConfirmBoxProps) {[m
+[32m+[m[32m  // eslint-disable-next-line react-hooks/rules-of-hooks[m
+   const [isMessageExpanded, setIsMessageExpanded] = useState(false);[m
+[32m+[m[32m  // eslint-disable-next-line react-hooks/rules-of-hooks[m
+   const [isNameExpanded, setIsNameExpanded] = useState(false);[m
+ [m
+   return ([m
+[1mdiff --git a/src/components/De b/src/components/De[m
+[1mdeleted file mode 100644[m
+[1mindex e69de29..0000000[m
+[1mdiff --git a/src/components/DeliForm.tsx b/src/components/DeliForm.tsx[m
+[1mindex 047b2d9..1068c5f 100644[m
+[1m--- a/src/components/DeliForm.tsx[m
+[1m+++ b/src/components/DeliForm.tsx[m
+[36m@@ -61,7 +61,8 @@[m [mexport default function DeliForm({[m
+         aria-hidden="true"[m
+       />[m
+     ),[m
+[31m-    spotLeft,[m
+[32m+[m[32m    // eslint-disable-next-line @typescript-eslint/no-unused-vars[m
+[32m+[m[32m    spotLeft: _spotLeft,[m
+     chevron = ([m
+       <Image[m
+         src="/images/chevronIcon.png"[m
+[1mdiff --git a/src/components/DiscoverOurMenu.tsx b/src/components/DiscoverOurMenu.tsx[m
+[1mindex fda50e7..9b4e8c7 100644[m
+[1m--- a/src/components/DiscoverOurMenu.tsx[m
+[1m+++ b/src/components/DiscoverOurMenu.tsx[m
+[36m@@ -1,48 +1,59 @@[m
+ "use client";[m
+[31m-import { useState, useEffect } from 'react';[m
+[31m-import { menuApi, categoriesApi } from '@/lib/api';[m
+[31m-import type { MenuItem, Category } from '@/types/content';[m
+[31m-import MenuCategoryBar from './MenuCategoryBar';[m
+[31m-import OurMenuCard from './Card/OurMenuCard'; // Updated import path[m
+[32m+[m[32mimport { useState, useEffect } from "react";[m
+[32m+[m[32mimport { menuApi, categoriesApi } from "@/lib/api";[m
+[32m+[m[32mimport type { MenuItem, Category } from "@/types/content";[m
+[32m+[m[32mimport MenuCategoryBar from "./MenuCategoryBar";[m
+[32m+[m[32mimport OurMenuCard from "./Card/OurMenuCard";[m
+ [m
+ export default function DiscoverOurMenu() {[m
+   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);[m
+   const [categories, setCategories] = useState<Category[]>([]);[m
+[31m-  const [selectedCategory, setSelectedCategory] = useState<string>('');[m
+[32m+[m[32m  const [selectedCategory, setSelectedCategory] = useState<string>("");[m
+   const [loading, setLoading] = useState(true);[m
+   const [error, setError] = useState<string | null>(null);[m
+ [m
+[31m-  // Fetch categories[m
+[32m+[m[32m  // 1) Fetch categories (runs once)[m
+   useEffect(() => {[m
+     const fetchCategories = async () => {[m
+[31m-      const response = await categoriesApi.getAll();[m
+[31m-      if (response.success && response.data) {[m
+[31m-        setCategories(response.data);[m
+[31m-        // Auto-select first category if none selected[m
+[31m-        if (!selectedCategory) {[m
+[31m-          setSelectedCategory(response.data[0]?.name || '');[m
+[32m+[m[32m      try {[m
+[32m+[m[32m        const response = await categoriesApi.getAll();[m
+[32m+[m[32m        if (response.success && response.data) {[m
+[32m+[m[32m          setCategories(response.data);[m
+[32m+[m[32m        } else {[m
+[32m+[m[32m          setCategories([]);[m
+         }[m
+[32m+[m[32m      } catch {[m
+[32m+[m[32m        setCategories([]);[m
+       }[m
+     };[m
+     fetchCategories();[m
+   }, []);[m
+ [m
+[32m+[m[32m  // 2) Auto-select first category after categories load (no dependency on the fetch function)[m
+[32m+[m[32m  useEffect(() => {[m
+[32m+[m[32m    if (!selectedCategory && categories.length > 0) {[m
+[32m+[m[32m      setSelectedCategory(categories[0].name || "");[m
+[32m+[m[32m    }[m
+[32m+[m[32m  }, [categories, selectedCategory]);[m
+[32m+[m
+   // Fetch menu items when category changes[m
+   useEffect(() => {[m
+     const fetchMenuItems = async () => {[m
+       if (!selectedCategory) return;[m
+[31m-      [m
+[32m+[m
+       setLoading(true);[m
+       setError(null);[m
+ [m
+       try {[m
+[31m-        const categoryId = categories.find(cat => cat.name === selectedCategory)?.id;[m
+[31m-        [m
+[32m+[m[32m        const categoryId = categories.find([m
+[32m+[m[32m          (cat) => cat.name === selectedCategory[m
+[32m+[m[32m        )?.id;[m
+[32m+[m
+         const filters = {[m
+           available: true,[m
+[31m-          sort: 'name' as const,[m
+[31m-          order: 'asc' as const,[m
+[31m-          category_id: categoryId[m
+[32m+[m[32m          sort: "name" as const,[m
+[32m+[m[32m          order: "asc" as const,[m
+[32m+[m[32m          category_id: categoryId,[m
+         };[m
+ [m
+         const response = await menuApi.getAll(filters);[m
+[36m@@ -50,11 +61,11 @@[m [mexport default function DiscoverOurMenu() {[m
+         if (response.success && response.data) {[m
+           setMenuItems(response.data);[m
+         } else {[m
+[31m-          setError(response.error || 'Failed to load menu items');[m
+[32m+[m[32m          setError(response.error || "Failed to load menu items");[m
+           setMenuItems([]);[m
+         }[m
+[31m-      } catch (err) {[m
+[31m-        setError('Failed to load menu items');[m
+[32m+[m[32m      } catch {[m
+[32m+[m[32m        setError("Failed to load menu items");[m
+         setMenuItems([]);[m
+       }[m
+ [m
+[36m@@ -71,7 +82,7 @@[m [mexport default function DiscoverOurMenu() {[m
+     return ([m
+       <div className="w-full max-w-[375px] mx-auto flex justify-center items-center py-16 md:max-w-[1440px]">[m
+         <div className="flex flex-col items-center gap-4">[m
+[31m-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>[m
+[32m+[m[32m          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900" />[m
+           <p className="text-gray-600">Loading menu...</p>[m
+         </div>[m
+       </div>[m
+[36m@@ -87,8 +98,8 @@[m [mexport default function DiscoverOurMenu() {[m
+             <p className="text-lg font-semibold">Oops! Something went wrong</p>[m
+             <p className="text-sm">{error}</p>[m
+           </div>[m
+[31m-          <button [m
+[31m-            onClick={() => window.location.reload()} [m
+[32m+[m[32m          <button[m
+[32m+[m[32m            onClick={() => window.location.reload()}[m
+             className="px-6 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors"[m
+           >[m
+             Try Again[m
+[36m@@ -116,11 +127,15 @@[m [mexport default function DiscoverOurMenu() {[m
+           menuItems.map((item) => ([m
+             <OurMenuCard[m
+               key={item.id}[m
+[31m-              image={item.image_url || '/images/placeholder-food.jpg'}[m
+[32m+[m[32m              image={item.image_url || "/images/placeholder-food.jpg"}[m
+               name={item.name}[m
+               originalPrice={item.discount_price ? `${item.price} THB` : undefined}[m
+[31m-              price={item.discount_price ? `${item.discount_price} THB` : `${item.price} THB`}[m
+[31m-              description={item.description || ''}[m
+[32m+[m[32m              price={[m
+[32m+[m[32m                item.discount_price[m
+[32m+[m[32m                  ? `${item.discount_price} THB`[m
+[32m+[m[32m                  : `${item.price} THB`[m
+[32m+[m[32m              }[m
+[32m+[m[32m              description={item.description || ""}[m
+               specialPromotion={!!item.discount_price}[m
+             />[m
+           ))[m
+[36m@@ -136,7 +151,6 @@[m [mexport default function DiscoverOurMenu() {[m
+           </div>[m
+         )}[m
+       </div>[m
+[31m-[m
+     </div>[m
+   );[m
+ }[m
+[1mdiff --git a/src/components/MenuCategoryBar.tsx b/src/components/MenuCategoryBar.tsx[m
+[1mindex 9e9af32..7ed8c29 100644[m
+[1m--- a/src/components/MenuCategoryBar.tsx[m
+[1m+++ b/src/components/MenuCategoryBar.tsx[m
+[36m@@ -1,7 +1,7 @@[m
+ "use client";[m
+ import React, { useState, useEffect } from "react";[m
+[31m-import { categoriesApi } from '@/lib/api';[m
+[31m-import type { Category } from '@/types/content';[m
+[32m+[m[32mimport { categoriesApi } from "@/lib/api";[m
+[32m+[m[32mimport type { Category } from "@/types/content";[m
+ [m
+ interface MenuCategoryBarProps {[m
+   selectedCategory: string;[m
+[36m@@ -16,38 +16,38 @@[m [mexport default function MenuCategoryBar({[m
+   const [loading, setLoading] = useState(true);[m
+   const [error, setError] = useState<string | null>(null);[m
+ [m
+[32m+[m[32m  // 1) Fetch categories (runs once)[m
+   useEffect(() => {[m
+     const fetchCategories = async () => {[m
+       setLoading(true);[m
+       setError(null);[m
+[31m-[m
+       try {[m
+         const response = await categoriesApi.getAll();[m
+[31m-        [m
+         if (response.success && response.data) {[m
+           setCategories(response.data);[m
+[31m-          console.log('Loaded categories:', response.data); // Debug log[m
+[31m-          [m
+[31m-          // Auto-select first category if none selected[m
+[31m-          if (!selectedCategory && response.data.length > 0) {[m
+[31m-            onSelectCategory(response.data[0].name);[m
+[31m-          }[m
+[32m+[m[32m          console.log("Loaded categories:", response.data);[m
+         } else {[m
+[31m-          setError(response.error || 'Failed to load categories');[m
+[31m-          console.error('Failed to fetch categories:', response.error);[m
+[32m+[m[32m          setError(response.error || "Failed to load categories");[m
+[32m+[m[32m          setCategories([]);[m
+         }[m
+       } catch (err) {[m
+[31m-        setError('Failed to load categories');[m
+[31m-        console.error('Error fetching categories:', err);[m
+[32m+[m[32m        console.error("Error fetching categories:", err);[m
+[32m+[m[32m        setError("Failed to load categories");[m
+[32m+[m[32m        setCategories([]);[m
+[32m+[m[32m      } finally {[m
+[32m+[m[32m        setLoading(false);[m
+       }[m
+[31m-[m
+[31m-      setLoading(false);[m
+     };[m
+[31m-[m
+     fetchCategories();[m
+   }, []);[m
+ [m
+[31m-  // Show loading state for 4 items[m
+[32m+[m[32m  // 2) Auto-select first category after categories load[m
+[32m+[m[32m  useEffect(() => {[m
+[32m+[m[32m    if (!selectedCategory && categories.length > 0) {[m
+[32m+[m[32m      onSelectCategory(categories[0].name);[m
+[32m+[m[32m    }[m
+[32m+[m[32m  }, [categories, selectedCategory, onSelectCategory]);[m
+[32m+[m
+   if (loading) {[m
+     return ([m
+       <nav className="w-full overflow-x-auto scrollbar-hide">[m
+[36m@@ -57,7 +57,7 @@[m [mexport default function MenuCategoryBar({[m
+               key={i}[m
+               className="h-[35px] flex items-center justify-center md:h-[25px] animate-pulse"[m
+             >[m
+[31m-              <div className="bg-gray-300 rounded h-4 w-20"></div>[m
+[32m+[m[32m              <div className="bg-gray-300 rounded h-4 w-20" />[m
+             </li>[m
+           ))}[m
+         </ul>[m
+[36m@@ -74,13 +74,12 @@[m [mexport default function MenuCategoryBar({[m
+     );[m
+   }[m
+ [m
+[31m-  // Show error state[m
+   if (error || categories.length === 0) {[m
+     return ([m
+       <nav className="w-full overflow-x-auto scrollbar-hide">[m
+         <ul className="flex gap-6 md:gap-[80px] whitespace-nowrap">[m
+           <li className="text-red-500 text-sm">[m
+[31m-            {error || 'No categories found'}[m
+[32m+[m[32m            {error || "No categories found"}[m
+           </li>[m
+         </ul>[m
+       </nav>[m
+[36m@@ -104,7 +103,7 @@[m [mexport default function MenuCategoryBar({[m
+           </li>[m
+         ))}[m
+       </ul>[m
+[31m-      [m
+[32m+[m
+       <style jsx>{`[m
+         .scrollbar-hide {[m
+           -ms-overflow-style: none;[m
+[1mdiff --git a/src/components/MenuDetail.tsx b/src/components/MenuDetail.tsx[m
+[1mindex 4056cc2..a786f86 100644[m
+[1m--- a/src/components/MenuDetail.tsx[m
+[1m+++ b/src/components/MenuDetail.tsx[m
+[36m@@ -3,6 +3,17 @@[m [mimport React, { useEffect, useMemo, useState } from "react";[m
+ import Image from "next/image";[m
+ import { useCart } from "@/context/CartContext";[m
+ [m
+[32m+[m
+[32m+[m[32mconst addOnList = [[m
+[32m+[m[32m  { key: "cheese", name: "Cheese", price: 0 },[m
+[32m+[m[32m  { key: "bacon", name: "Extra Bacon", price: 50 },[m
+[32m+[m[32m  { key: "sauce", name: "Extra Sauce", price: 30 },[m
+[32m+[m[32m  { key: "egg", name: "Extra Egg", price: 15 },[m
+[32m+[m[32m] as const;[m
+[32m+[m
+[32m+[m[32mtype AddOnKey = (typeof addOnList)[number]["key"];[m
+[32m+[m
+[32m+[m
+ function TimePill({ label }: { label: string }) {[m
+   return ([m
+     <span className="inline-flex min-w-[2rem] min-h-[2rem] items-center justify-center rounded-md bg-white px-2 py-1 text-base font-extrabold leading-none text-[#EA7D33]">[m
+[36m@@ -11,8 +22,18 @@[m [mfunction TimePill({ label }: { label: string }) {[m
+   );[m
+ }[m
+ [m
+[31m-function RadioRow({ name, label, price, checked, onChange }: {[m
+[31m-  name: string; label: string; price: string; checked: boolean; onChange: () => void;[m
+[32m+[m[32mfunction RadioRow({[m
+[32m+[m[32m  name,[m
+[32m+[m[32m  label,[m
+[32m+[m[32m  price,[m
+[32m+[m[32m  checked,[m
+[32m+[m[32m  onChange,[m
+[32m+[m[32m}: {[m
+[32m+[m[32m  name: string;[m
+[32m+[m[32m  label: string;[m
+[32m+[m[32m  price: string;[m
+[32m+[m[32m  checked: boolean;[m
+[32m+[m[32m  onChange: () => void;[m
+ }) {[m
+   return ([m
+     <label className="flex cursor-pointer items-center justify-between px-1 font-['Schibsted_Grotesk']">[m
+[36m@@ -34,8 +55,16 @@[m [mfunction RadioRow({ name, label, price, checked, onChange }: {[m
+   );[m
+ }[m
+ [m
+[31m-function CheckboxRow({ label, price, checked, onChange }: {[m
+[31m-  label: string; price: string; checked: boolean; onChange: () => void;[m
+[32m+[m[32mfunction CheckboxRow({[m
+[32m+[m[32m  label,[m
+[32m+[m[32m  price,[m
+[32m+[m[32m  checked,[m
+[32m+[m[32m  onChange,[m
+[32m+[m[32m}: {[m
+[32m+[m[32m  label: string;[m
+[32m+[m[32m  price: string;[m
+[32m+[m[32m  checked: boolean;[m
+[32m+[m[32m  onChange: () => void;[m
+ }) {[m
+   return ([m
+     <label className="flex cursor-pointer items-center justify-between px-1 font-['Schibsted_Grotesk']">[m
+[36m@@ -56,7 +85,13 @@[m [mfunction CheckboxRow({ label, price, checked, onChange }: {[m
+   );[m
+ }[m
+ [m
+[31m-function SectionTitle({ children, className = "" }: { children: React.ReactNode; className?: string }) {[m
+[32m+[m[32mfunction SectionTitle({[m
+[32m+[m[32m  children,[m
+[32m+[m[32m  className = "",[m
+[32m+[m[32m}: {[m
+[32m+[m[32m  children: React.ReactNode;[m
+[32m+[m[32m  className?: string;[m
+[32m+[m[32m}) {[m
+   return ([m
+     <div className={`text-left text-lg font-['Bebas_Neue'] font-extrabold tracking-wide text-[#073027] ${className}`}>[m
+       {children}[m
+[36m@@ -64,28 +99,30 @@[m [mfunction SectionTitle({ children, className = "" }: { children: React.ReactNode;[m
+   );[m
+ }[m
+ [m
+[32m+[m[32m/* ---------- page ---------- */[m
+ export default function MenuDetail() {[m
+   const [portion, setPortion] = useState<"regular" | "large">("regular");[m
+   const [secondsLeft, setSecondsLeft] = useState(7 * 3600 + 36 * 60 + 57);[m
+   const [qty, setQty] = useState(1);[m
+   const [isAdded, setIsAdded] = useState(false);[m
+ [m
+[31m-  const addOnList = [[m
+[31m-    { key: "cheese", name: "Cheese", price: 0 },[m
+[31m-    { key: "bacon", name: "Extra Bacon", price: 50 },[m
+[31m-    { key: "sauce", name: "Extra Sauce", price: 30 },[m
+[31m-    { key: "egg", name: "Extra Egg", price: 15 },[m
+[31m-  ] as const;[m
+[31m-[m
+[31m-  type AddOnKey = (typeof addOnList)[number]["key"];[m
+   const [addOns, setAddOns] = useState<Record<AddOnKey, boolean>>({[m
+[31m-    cheese: false, bacon: false, sauce: false, egg: false,[m
+[32m+[m[32m    cheese: false,[m
+[32m+[m[32m    bacon: false,[m
+[32m+[m[32m    sauce: false,[m
+[32m+[m[32m    egg: false,[m
+   });[m
+ [m
+   const { addItem } = useCart();[m
+ [m
+   const portionUpcharge = useMemo(() => (portion === "large" ? 100 : 0), [portion]);[m
+[31m-  const addOnsTotal = useMemo(() => addOnList.reduce((sum, a) => (addOns[a.key] ? sum + a.price : sum), 0), [addOns]);[m
+[32m+[m
+[32m+[m[32m  // Now we don't include addOnList in deps because it's stable (module-level)[m
+[32m+[m[32m  const addOnsTotal = useMemo([m
+[32m+[m[32m    () => addOnList.reduce((sum, a) => (addOns[a.key] ? sum + a.price : sum), 0),[m
+[32m+[m[32m    [addOns][m
+[32m+[m[32m  );[m
+[32m+[m
+   const baseDiscounted = 90;[m
+   const linePrice = baseDiscounted + portionUpcharge + addOnsTotal;[m
+   const total = linePrice * qty;[m
+[36m@@ -96,17 +133,29 @@[m [mexport default function MenuDetail() {[m
+     return () => clearInterval(id);[m
+   }, []);[m
+ [m
+[31m-  const handleAddToCart = () => {[m
+[31m-    if (isAdded) return;[m
+[31m-    addItem({[m
+[31m-      id: "carbonara",[m
+[31m-      name: "Carbonara",[m
+[31m-      price: linePrice,[m
+[31m-      qty,[m
+[31m-      image: "/images/Carbonara.png",[m
+[31m-    });[m
+[31m-    setIsAdded(true);[m
+[31m-  };[m
+[32m+[m[32m const handleAddToCart = () => {[m
+[32m+[m[32m  if (isAdded) return;[m
+[32m+[m
+[32m+[m[32m  // build a stable key from options so different choices create separate cart rows[m
+[32m+[m[32m  const selectedAddOnKeys = Object.entries(addOns)[m
+[32m+[m[32m    .filter(([, on]) => on)[m
+[32m+[m[32m    .map(([k]) => k)[m
+[32m+[m[32m    .sort()[m
+[32m+[m[32m    .join(",");[m
+[32m+[m
+[32m+[m[32m  const optionKey = `${portion}|${selectedAddOnKeys || "none"}`;[m
+[32m+[m[32m  const lineId = `${baseId}__${optionKey}`; // e.g., "creamy-deliyocy__large|bacon,sauce"[m
+[32m+[m
+[32m+[m[32m  addItem({[m
+[32m+[m[32m    id: lineId,[m
+[32m+[m[32m    name: displayName,[m
+[32m+[m[32m    price: linePrice,[m
+[32m+[m[32m    qty,[m
+[32m+[m[32m    image: "/images/Carbonara.png", // keep for now; swap to real image when you have it[m
+[32m+[m[32m  });[m
+[32m+[m
+[32m+[m[32m  setIsAdded(true);[m
+[32m+[m[32m};[m
+ [m
+   return ([m
+     <main className="min-h-dvh bg-[#FFF5E2] text-[#073027] overflow-x-hidden">[m
+[36m@@ -114,7 +163,12 @@[m [mexport default function MenuDetail() {[m
+         <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.1fr_0.9fr]">[m
+           <section>[m
+             <div className="relative mx-[calc(50%-50vw)] md:mx-0 aspect-[4/3] overflow-hidden rounded-none md:rounded-lg bg-white">[m
+[31m-              <Image fill src="/images/Carbonara.png" alt="Carbonara" className="object-fill object-center" />[m
+[32m+[m[32m              <Image[m
+[32m+[m[32m                fill[m
+[32m+[m[32m                src="/images/Carbonara.png"[m
+[32m+[m[32m                alt="Carbonara"[m
+[32m+[m[32m                className="object-fill object-center"[m
+[32m+[m[32m              />[m
+               <div className="absolute right-0 -top-1 z-10">[m
+                 <span className="inline-block bg-[#EF9748] px-6 py-2 text-sm font-['Schibsted_Grotesk'] text-black [--notch:18px] [clip-path:polygon(0_0,100%_0,100%_100%,0_100%,var(--notch)_50%)]">[m
+                   Best Seller[m
+[36m@@ -153,8 +207,20 @@[m [mexport default function MenuDetail() {[m
+ [m
+               <SectionTitle>Portion</SectionTitle>[m
+               <div className="mt-3 space-y-2">[m
+[31m-                <RadioRow name="portion" label="Regular" price="Free" checked={portion === "regular"} onChange={() => setPortion("regular")} />[m
+[31m-                <RadioRow name="portion" label="Large" price="+ 100 B" checked={portion === "large"} onChange={() => setPortion("large")} />[m
+[32m+[m[32m                <RadioRow[m
+[32m+[m[32m                  name="portion"[m
+[32m+[m[32m                  label="Regular"[m
+[32m+[m[32m                  price="Free"[m
+[32m+[m[32m                  checked={portion === "regular"}[m
+[32m+[m[32m                  onChange={() => setPortion("regular")}[m
+[32m+[m[32m                />[m
+[32m+[m[32m                <RadioRow[m
+[32m+[m[32m                  name="portion"[m
+[32m+[m[32m                  label="Large"[m
+[32m+[m[32m                  price="+ 100 B"[m
+[32m+[m[32m                  checked={portion === "large"}[m
+[32m+[m[32m                  onChange={() => setPortion("large")}[m
+[32m+[m[32m                />[m
+               </div>[m
+ [m
+               <SectionTitle className="mt-6">Add-on</SectionTitle>[m
+[36m@@ -165,7 +231,9 @@[m [mexport default function MenuDetail() {[m
+                     label={a.name}[m
+                     price={a.price === 0 ? "Free" : `${a.price} B`}[m
+                     checked={addOns[a.key]}[m
+[31m-                    onChange={() => setAddOns((prev) => ({ ...prev, [a.key]: !prev[a.key] }))}[m
+[32m+[m[32m                    onChange={() =>[m
+[32m+[m[32m                      setAddOns((prev) => ({ ...prev, [a.key]: !prev[a.key] }))[m
+[32m+[m[32m                    }[m
+                   />[m
+                 ))}[m
+               </div>[m
+[1mdiff --git a/src/context/CartContext.tsx b/src/context/CartContext.tsx[m
+[1mindex 68d800d..112d316 100644[m
+[1m--- a/src/context/CartContext.tsx[m
+[1m+++ b/src/context/CartContext.tsx[m
+[36m@@ -4,71 +4,89 @@[m [mimport React, { createContext, useContext, useMemo, useState } from "react";[m
+ export type CartItem = {[m
+   id: string;[m
+   name: string;[m
+[31m-  price: number;[m
+[32m+[m[32m  price: number; // unit price[m
+   qty: number;[m
+   image: string;[m
+ };[m
+ [m
+ type CartContextType = {[m
+   items: CartItem[];[m
+[31m-  setItems: React.Dispatch<React.SetStateAction<CartItem[]>>;[m
+[32m+[m[32m  addItem: (item: CartItem) => void;[m
+[32m+[m[32m  inc: (id: string) => void;[m
+[32m+[m[32m  dec: (id: string) => void;[m
+[32m+[m[32m  removeItem: (id: string) => void;[m
+   subtotal: number;[m
+   deliveryFee: number;[m
+   tax: number;[m
+   coupon: number;[m
+   total: number;[m
+   count: number;[m
+[31m-  inc: (id: string) => void;[m
+[31m-  dec: (id: string) => void;[m
+[31m-  removeItem: (id: string) => void;[m
+[31m-  addItem: (item: CartItem) => void;[m
+ };[m
+ [m
+ const CartContext = createContext<CartContextType | undefined>(undefined);[m
+ [m
+ export function CartProvider({ children }: { children: React.ReactNode }) {[m
+[31m-  const [items, setItems] = useState<CartItem[]>([[m
+[31m-    { id: "1", name: "Stir  Fried Crispy pork Belly With Egg", price: 150, qty: 2, image: "/images/menu1.png" },[m
+[31m-    { id: "2", name: "Stir  Fried Crispy pork Belly With Egg", price: 150, qty: 0, image: "/images/menu2.png" },[m
+[31m-    { id: "3", name: "Stir  Fried Crispy pork Belly With Egg", price: 150, qty: 0, image: "/images/menu3.png" },[m
+[31m-    { id: "4", name: "Stir  Fried Crispy pork Belly With Egg", price: 150, qty: 0, image: "/images/Hungry3.jpg" },[m
+[31m-  ]);[m
+[32m+[m[32m  // start EMPTY[m
+[32m+[m[32m  const [items, setItems] = useState<CartItem[]>([]);[m
+ [m
+[31m-  const inc = (id: string) =>[m
+[31m-    setItems((arr) => arr.map((it) => (it.id === id ? { ...it, qty: it.qty + 1 } : it)));[m
+[31m-[m
+[31m-  const dec = (id: string) =>[m
+[31m-    setItems((arr) => arr.map((it) => (it.id === id ? { ...it, qty: Math.max(0, it.qty - 1) } : it)));[m
+[31m-[m
+[31m-  const removeItem = (id: string) => setItems((arr) => arr.filter((it) => it.id !== id));[m
+[31m-[m
+[31m-  const addItem = (item: CartItem) =>[m
+[32m+[m[32m  const addItem = (incoming: CartItem) => {[m
+     setItems((arr) => {[m
+[31m-      const idx = arr.findIndex((it) => it.id === item.id);[m
+[31m-      if (idx === -1) return [...arr, item];[m
+[32m+[m[32m      const idx = arr.findIndex((x) => x.id === incoming.id);[m
+[32m+[m[32m      if (idx === -1) return [...arr, incoming];[m
+       const copy = [...arr];[m
+[31m-      copy[idx] = { ...copy[idx], qty: copy[idx].qty + item.qty, price: item.price, image: item.image, name: item.name };[m
+[32m+[m[32m      copy[idx] = { ...copy[idx], qty: copy[idx].qty + incoming.qty };[m
+       return copy;[m
+     });[m
+[32m+[m[32m  };[m
+[32m+[m
+[32m+[m[32m  const inc = (id: string) =>[m
+[32m+[m[32m    setItems((arr) =>[m
+[32m+[m[32m      arr.map((it) => (it.id === id ? { ...it, qty: it.qty + 1 } : it))[m
+[32m+[m[32m    );[m
+[32m+[m
+[32m+[m[32m  const dec = (id: string) =>[m
+[32m+[m[32m    setItems((arr) =>[m
+[32m+[m[32m      arr[m
+[32m+[m[32m        .map((it) => (it.id === id ? { ...it, qty: Math.max(0, it.qty - 1) } : it))[m
+[32m+[m[32m        .filter((it) => it.qty > 0)[m
+[32m+[m[32m    );[m
+[32m+[m
+[32m+[m[32m  const removeItem = (id: string) =>[m
+[32m+[m[32m    setItems((arr) => arr.filter((it) => it.id !== id));[m
+ [m
+[31m-  const subtotal = useMemo(() => items.reduce((sum, it) => sum + it.price * it.qty, 0), [items]);[m
+[32m+[m[32m  const subtotal = useMemo([m
+[32m+[m[32m    () => items.reduce((sum, it) => sum + it.price * it.qty, 0),[m
+[32m+[m[32m    [items][m
+[32m+[m[32m  );[m
+   const deliveryFee = subtotal > 0 ? 50 : 0;[m
+   const tax = Math.round(subtotal * 0.07);[m
+[31m-  const coupon = subtotal > 0 ? 50 : 0;[m
+[32m+[m[32m  const coupon = subtotal > 0 ? 0 : 0; // keep 0 for now; hook up later if needed[m
+   const total = subtotal + deliveryFee + tax - coupon;[m
+[31m-  const count = useMemo(() => items.reduce((s, it) => s + it.qty, 0), [items]);[m
+ [m
+[31m-  return ([m
+[31m-    <CartContext.Provider[m
+[31m-      value={{ items, setItems, subtotal, deliveryFee, tax, coupon, total, count, inc, dec, removeItem, addItem }}[m
+[31m-    >[m
+[31m-      {children}[m
+[31m-    </CartContext.Provider>[m
+[32m+[m[32m  const count = useMemo([m
+[32m+[m[32m    () => items.reduce((sum, it) => sum + it.qty, 0),[m
+[32m+[m[32m    [items][m
+   );[m
+[32m+[m
+[32m+[m[32m  const value: CartContextType = {[m
+[32m+[m[32m    items,[m
+[32m+[m[32m    addItem,[m
+[32m+[m[32m    inc,[m
+[32m+[m[32m    dec,[m
+[32m+[m[32m    removeItem,[m
+[32m+[m[32m    subtotal,[m
+[32m+[m[32m    deliveryFee,[m
+[32m+[m[32m    tax,[m
+[32m+[m[32m    coupon,[m
+[32m+[m[32m    total,[m
+[32m+[m[32m    count,[m
+[32m+[m[32m  };[m
+[32m+[m
+[32m+[m[32m  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;[m
+ }[m
+ [m
+ export function useCart() {[m
+[31m-  const context = useContext(CartContext);[m
+[31m-  if (context === undefined) throw new Error("useCart must be used within a CartProvider");[m
+[31m-  return context;[m
+[32m+[m[32m  const ctx = useContext(CartContext);[m
+[32m+[m[32m  if (!ctx) throw new Error("useCart must be used within a CartProvider");[m
+[32m+[m[32m  return ctx;[m
+ }[m

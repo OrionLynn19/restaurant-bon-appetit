@@ -1,7 +1,18 @@
+// src/components/MenuDetail.tsx
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import { useCart } from "@/context/CartContext";
+
+const addOnList = [
+  { key: "cheese", name: "Cheese", price: 0 },
+  { key: "bacon", name: "Extra Bacon", price: 50 },
+  { key: "sauce", name: "Extra Sauce", price: 30 },
+  { key: "egg", name: "Extra Egg", price: 15 },
+] as const;
+
+type AddOnKey = (typeof addOnList)[number]["key"];
 
 function TimePill({ label }: { label: string }) {
   return (
@@ -11,8 +22,18 @@ function TimePill({ label }: { label: string }) {
   );
 }
 
-function RadioRow({ name, label, price, checked, onChange }: {
-  name: string; label: string; price: string; checked: boolean; onChange: () => void;
+function RadioRow({
+  name,
+  label,
+  price,
+  checked,
+  onChange,
+}: {
+  name: string;
+  label: string;
+  price: string;
+  checked: boolean;
+  onChange: () => void;
 }) {
   return (
     <label className="flex cursor-pointer items-center justify-between px-1 font-['Schibsted_Grotesk']">
@@ -34,8 +55,16 @@ function RadioRow({ name, label, price, checked, onChange }: {
   );
 }
 
-function CheckboxRow({ label, price, checked, onChange }: {
-  label: string; price: string; checked: boolean; onChange: () => void;
+function CheckboxRow({
+  label,
+  price,
+  checked,
+  onChange,
+}: {
+  label: string;
+  price: string;
+  checked: boolean;
+  onChange: () => void;
 }) {
   return (
     <label className="flex cursor-pointer items-center justify-between px-1 font-['Schibsted_Grotesk']">
@@ -56,7 +85,13 @@ function CheckboxRow({ label, price, checked, onChange }: {
   );
 }
 
-function SectionTitle({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function SectionTitle({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <div className={`text-left text-lg font-['Bebas_Neue'] font-extrabold tracking-wide text-[#073027] ${className}`}>
       {children}
@@ -64,28 +99,35 @@ function SectionTitle({ children, className = "" }: { children: React.ReactNode;
   );
 }
 
+/* ---------- page ---------- */
 export default function MenuDetail() {
+  // get the dish name from /menu/detail/[name]
+  const params = useParams<{ name: string }>();
+  const displayName = decodeURIComponent(params?.name ?? "Menu Item");
+  const baseId = displayName.toLowerCase().replace(/\s+/g, "-");
+
   const [portion, setPortion] = useState<"regular" | "large">("regular");
   const [secondsLeft, setSecondsLeft] = useState(7 * 3600 + 36 * 60 + 57);
   const [qty, setQty] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
 
-  const addOnList = [
-    { key: "cheese", name: "Cheese", price: 0 },
-    { key: "bacon", name: "Extra Bacon", price: 50 },
-    { key: "sauce", name: "Extra Sauce", price: 30 },
-    { key: "egg", name: "Extra Egg", price: 15 },
-  ] as const;
-
-  type AddOnKey = (typeof addOnList)[number]["key"];
   const [addOns, setAddOns] = useState<Record<AddOnKey, boolean>>({
-    cheese: false, bacon: false, sauce: false, egg: false,
+    cheese: false,
+    bacon: false,
+    sauce: false,
+    egg: false,
   });
 
   const { addItem } = useCart();
 
   const portionUpcharge = useMemo(() => (portion === "large" ? 100 : 0), [portion]);
-  const addOnsTotal = useMemo(() => addOnList.reduce((sum, a) => (addOns[a.key] ? sum + a.price : sum), 0), [addOns]);
+
+  const addOnsTotal = useMemo(
+    () => addOnList.reduce((sum, a) => (addOns[a.key] ? sum + a.price : sum), 0),
+    [addOns]
+  );
+
+  // base discounted for promo page
   const baseDiscounted = 90;
   const linePrice = baseDiscounted + portionUpcharge + addOnsTotal;
   const total = linePrice * qty;
@@ -98,13 +140,25 @@ export default function MenuDetail() {
 
   const handleAddToCart = () => {
     if (isAdded) return;
+
+    // encode options so each choice is a distinct line
+    const selectedAddOnKeys = Object.entries(addOns)
+      .filter(([, on]) => on)
+      .map(([k]) => k)
+      .sort()
+      .join(",");
+
+    const optionKey = `${portion}|${selectedAddOnKeys || "none"}`;
+    const lineId = `${baseId}__promo__${optionKey}`; // promo gets a different suffix
+
     addItem({
-      id: "carbonara",
-      name: "Carbonara",
-      price: linePrice,
+      id: lineId,
+      name: `${displayName} (Promo)`, // clear label in cart
+      price: linePrice,               // unit price incl. portion/add-ons
       qty,
       image: "/images/Carbonara.png",
     });
+
     setIsAdded(true);
   };
 
@@ -114,7 +168,12 @@ export default function MenuDetail() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.1fr_0.9fr]">
           <section>
             <div className="relative mx-[calc(50%-50vw)] md:mx-0 aspect-[4/3] overflow-hidden rounded-none md:rounded-lg bg-white">
-              <Image fill src="/images/Carbonara.png" alt="Carbonara" className="object-fill object-center" />
+              <Image
+                fill
+                src="/images/Carbonara.png"
+                alt={displayName}
+                className="object-fill object-center"
+              />
               <div className="absolute right-0 -top-1 z-10">
                 <span className="inline-block bg-[#EF9748] px-6 py-2 text-sm font-['Schibsted_Grotesk'] text-black [--notch:18px] [clip-path:polygon(0_0,100%_0,100%_100%,0_100%,var(--notch)_50%)]">
                   Best Seller
@@ -123,7 +182,7 @@ export default function MenuDetail() {
             </div>
 
             <div className="mt-6 space-y-3 text-left">
-              <h1 className="text-3xl font-['Bebas_Neue'] md:text-4xl">CARBONARA</h1>
+              <h1 className="text-3xl font-['Bebas_Neue'] md:text-4xl">{displayName.toUpperCase()}</h1>
               <p className="text-sm font-['Schibsted_Grotesk'] text-[#28564D] md:text-base">
                 Lorem Ipsum Dolor Sit Amet Consectetur. Dui Et Varius Vel Est. Integer In Quam Justo Vestibulum Lectus Etiam.
                 A Sit Imperdiet Aliquam Tortor Tincidunt. Lorem Ipsum Dolor Sit Amet Consectetur. Dui Et Varius Vel Est.
@@ -153,8 +212,20 @@ export default function MenuDetail() {
 
               <SectionTitle>Portion</SectionTitle>
               <div className="mt-3 space-y-2">
-                <RadioRow name="portion" label="Regular" price="Free" checked={portion === "regular"} onChange={() => setPortion("regular")} />
-                <RadioRow name="portion" label="Large" price="+ 100 B" checked={portion === "large"} onChange={() => setPortion("large")} />
+                <RadioRow
+                  name="portion"
+                  label="Regular"
+                  price="Free"
+                  checked={portion === "regular"}
+                  onChange={() => setPortion("regular")}
+                />
+                <RadioRow
+                  name="portion"
+                  label="Large"
+                  price="+ 100 B"
+                  checked={portion === "large"}
+                  onChange={() => setPortion("large")}
+                />
               </div>
 
               <SectionTitle className="mt-6">Add-on</SectionTitle>
@@ -165,7 +236,9 @@ export default function MenuDetail() {
                     label={a.name}
                     price={a.price === 0 ? "Free" : `${a.price} B`}
                     checked={addOns[a.key]}
-                    onChange={() => setAddOns((prev) => ({ ...prev, [a.key]: !prev[a.key] }))}
+                    onChange={() =>
+                      setAddOns((prev) => ({ ...prev, [a.key]: !prev[a.key] }))
+                    }
                   />
                 ))}
               </div>
@@ -199,11 +272,17 @@ export default function MenuDetail() {
                   disabled={isAdded}
                   className="relative inline-flex items-center justify-between gap-2 font-['Schibsted_Grotesk'] rounded-lg bg-[#EA7D33] px-4 py-3 text-sm text-[#073027] ring-2 ring-[#0B3C33] shadow-[0_4px_0_#0B3C33] transition-transform hover:translate-y-[1px] hover:shadow-[0_3px_0_#0B3C33] active:translate-y-[2px] active:shadow-[0_2px_0_#0B3C33] w-full md:w-auto disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  <span className="flex items-center gap-1">
-                    Add <span className="font-bold text-[#D62B1F]">{qty}</span> Cart
-                  </span>
-                  <span className="mx-1">&gt;</span>
-                  <span className="text-sm font-bold tracking-wide">{fmtB(total)}</span>
+                  {isAdded ? (
+                    <span className="flex items-center gap-1">Added ✓</span>
+                  ) : (
+                    <>
+                      <span className="flex items-center gap-1">
+                        Add <span className="font-bold text-[#D62B1F]">{qty}</span> Cart
+                      </span>
+                      <span className="mx-1">&gt;</span>
+                      <span className="text-sm font-bold tracking-wide">{fmtB(total)}</span>
+                    </>
+                  )}
                 </button>
               </div>
             </div>
