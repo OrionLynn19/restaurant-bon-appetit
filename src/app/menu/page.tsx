@@ -39,6 +39,19 @@ export default function Menu() {
     return () => window.removeEventListener("hashchange", handleHash);
   }, [categories]);
 
+  // Add this useEffect to listen for category changes:
+  useEffect(() => {
+    const handleCategoryChange = (event: CustomEvent) => {
+      setSelectedCategory(event.detail.categoryName);
+    };
+
+    window.addEventListener('categoryChange', handleCategoryChange as EventListener);
+    
+    return () => {
+      window.removeEventListener('categoryChange', handleCategoryChange as EventListener);
+    };
+  }, []);
+
   // When tab is clicked, update hash
   const handleTabClick = useCallback((cat: string) => {
     setSelectedCategory(cat);

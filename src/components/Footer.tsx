@@ -2,6 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import { categoriesApi } from "@/lib/api";
+import type { Category } from "@/types/content";
+import { useRouter } from "next/navigation";
 
 function slugify(cat: string) {
   return cat
@@ -11,17 +15,75 @@ function slugify(cat: string) {
     .replace(/(^-|-$)/g, "");
 }
 
-const categories = [
-  "Special Promotions",
-  "European Cuisine",
-  "Dessert & Drinks",
-  "Salad",
-];
-
 export default function Footer() {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  // Fetch categories from API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await categoriesApi.getAll();
+        if (response.success && response.data) {
+          setCategories(response.data);
+        } else {
+          // Fallback to hardcoded categories if API fails
+          setCategories([
+            { id: "1", name: "Special Promotions", description: "", image_url: "", created_at: "", updated_at: "" },
+            { id: "2", name: "European Cuisine", description: "", image_url: "", created_at: "", updated_at: "" },
+            { id: "3", name: "Dessert & Drinks", description: "", image_url: "", created_at: "", updated_at: "" },
+            { id: "4", name: "Salad", description: "", image_url: "", created_at: "", updated_at: "" },
+          ]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+        // Fallback to hardcoded categories
+        setCategories([
+          { id: "1", name: "Special Promotions", description: "", image_url: "", created_at: "", updated_at: "" },
+          { id: "2", name: "European Cuisine", description: "", image_url: "", created_at: "", updated_at: "" },
+          { id: "3", name: "Dessert & Drinks", description: "", image_url: "", created_at: "", updated_at: "" },
+          { id: "4", name: "Salad", description: "", image_url: "", created_at: "", updated_at: "" },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  // Handle menu category click (UPDATED)
+  const handleCategoryClick = async (categoryName: string) => {
+    const hash = slugify(categoryName);
+    
+    if (typeof window !== "undefined") {
+      if (window.location.pathname === "/menu") {
+        // Already on menu page - just update hash and trigger category change
+        window.location.hash = hash;
+        
+        // Dispatch a custom event to notify the menu page
+        window.dispatchEvent(new CustomEvent('categoryChange', { 
+          detail: { categoryName } 
+        }));
+        
+        // Scroll to menu section
+        setTimeout(() => {
+          const menuSection = document.getElementById("discover-our-menu");
+          if (menuSection) {
+            menuSection.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100);
+      } else {
+        // Navigate to menu page with hash
+        router.push(`/menu#${hash}`);
+      }
+    }
+  };
+
   return (
     <footer className="mt-1 text-sm w-full bg-white">
-      {/* Desktop Footer (unchanged) */}
+      {/* Desktop Footer */}
       <div className="hidden sm:block">
         <Image
           className="w-full h-[267px] object-cover object-center sm:h-[200px] xs:h-[120px]"
@@ -109,8 +171,7 @@ export default function Footer() {
                 <h3
                   className="text-[34px] pb-2 text-[#EF9748]"
                   style={{
-                    fontFamily:
-                      "var(--font-bebas), Arial, Helvetica, sans-serif",
+                    fontFamily: "var(--font-bebas), Arial, Helvetica, sans-serif",
                   }}
                 >
                   ADDRESS
@@ -118,8 +179,7 @@ export default function Footer() {
                 <p
                   className="text-md font-[500] mb-2 text-black"
                   style={{
-                    fontFamily:
-                      "var(--font-schibsted), Arial, Helvetica, sans-serif",
+                    fontFamily: "var(--font-schibsted), Arial, Helvetica, sans-serif",
                   }}
                 >
                   Floor 4, 991 Rama I Rd Bangkok, 10330
@@ -127,8 +187,7 @@ export default function Footer() {
                 <p
                   className="text-md font-[500] mb-2 text-black"
                   style={{
-                    fontFamily:
-                      "var(--font-schibsted), Arial, Helvetica, sans-serif",
+                    fontFamily: "var(--font-schibsted), Arial, Helvetica, sans-serif",
                   }}
                 >
                   Floor 4, 991 Rama I Rd Bangkok, 10330
@@ -136,8 +195,7 @@ export default function Footer() {
                 <p
                   className="text-md font-[500] mb-2 text-black"
                   style={{
-                    fontFamily:
-                      "var(--font-schibsted), Arial, Helvetica, sans-serif",
+                    fontFamily: "var(--font-schibsted), Arial, Helvetica, sans-serif",
                   }}
                 >
                   Floor 4, 991 Rama I Rd Bangkok, 10330
@@ -153,39 +211,27 @@ export default function Footer() {
                 <h3
                   className="text-[#EF9748] text-[34px] pb-2"
                   style={{
-                    fontFamily:
-                      "var(--font-bebas), Arial, Helvetica, sans-serif",
+                    fontFamily: "var(--font-bebas), Arial, Helvetica, sans-serif",
                   }}
                 >
                   MENU
                 </h3>
 
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    type="button"
-                    className="font-[500] text-black text-md mb-1 block hover:text-[#837e7d] text-left w-full"
-                    onClick={() => {
-                      const hash = `#${slugify(cat)}`;
-                      const currentPath =
-                        typeof window !== "undefined"
-                          ? window.location.pathname
-                          : "";
-                      if (currentPath === "/menu") {
-                        window.location.hash = hash;
-                        const section =
-                          document.getElementById("discover-our-menu");
-                        if (section) {
-                          section.scrollIntoView({ behavior: "smooth" });
-                        }
-                      } else {
-                        window.location.assign(`/menu${hash}`);
-                      }
-                    }}
-                  >
-                    {cat}
-                  </button>
-                ))}
+                {/* Show loading state or categories */}
+                {loading ? (
+                  <div className="text-gray-500 text-sm">Loading menu...</div>
+                ) : (
+                  categories.map((category) => (
+                    <button
+                      key={category.id}
+                      type="button"
+                      className="font-[500] text-black text-md mb-1 block hover:text-[#837e7d] text-left w-full"
+                      onClick={() => handleCategoryClick(category.name)}
+                    >
+                      {category.name}
+                    </button>
+                  ))
+                )}
               </div>
             </section>
             {/* Our Services */}
@@ -194,8 +240,7 @@ export default function Footer() {
                 <h3
                   className="text-[#EF9748] text-[34px] pb-2"
                   style={{
-                    fontFamily:
-                      "var(--font-bebas), Arial, Helvetica, sans-serif",
+                    fontFamily: "var(--font-bebas), Arial, Helvetica, sans-serif",
                   }}
                 >
                   Explore
@@ -232,8 +277,7 @@ export default function Footer() {
                 <h3
                   className="text-[#EF9748] text-[34px] pb-2"
                   style={{
-                    fontFamily:
-                      "var(--font-bebas), Arial, Helvetica, sans-serif",
+                    fontFamily: "var(--font-bebas), Arial, Helvetica, sans-serif",
                   }}
                 >
                   Contact Us
@@ -255,8 +299,8 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      {/* Mobile Footer (grid, only on <sm screens) */}
-      <div className="block sm:hidden w-full  bg-white pb-20">
+      {/* Mobile Footer */}
+      <div className="block sm:hidden w-full bg-white pb-20">
         <Image
           className="w-full h-[267px] object-cover object-center sm:h-[200px] xs:h-[120px] pb-3"
           src="/images/footer-background.png"
@@ -287,8 +331,7 @@ export default function Footer() {
                 <h3
                   className="text-[#EF9748] text-[16px] pb-2"
                   style={{
-                    fontFamily:
-                      "var(--font-bebas), Arial, Helvetica, sans-serif",
+                    fontFamily: "var(--font-bebas), Arial, Helvetica, sans-serif",
                   }}
                 >
                   Follow Us
@@ -341,7 +384,6 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Line"
-                    className="text-xs"
                   >
                     <Image
                       src="/images/tik tok.png"
@@ -360,8 +402,7 @@ export default function Footer() {
                 <h3
                   className="text-[#EF9748] text-[24px] pb-1"
                   style={{
-                    fontFamily:
-                      "var(--font-bebas), Arial, Helvetica, sans-serif",
+                    fontFamily: "var(--font-bebas), Arial, Helvetica, sans-serif",
                   }}
                 >
                   ADDRESS
@@ -369,8 +410,7 @@ export default function Footer() {
                 <p
                   className="text-[10px] scale-[0.8] origin-left leading-none text-black"
                   style={{
-                    fontFamily:
-                      "var(--font-schibsted), Arial, Helvetica, sans-serif",
+                    fontFamily: "var(--font-schibsted), Arial, Helvetica, sans-serif",
                   }}
                 >
                   Floor 4, 991 Rama I Rd Bangkok, 10330
@@ -378,8 +418,7 @@ export default function Footer() {
                 <p
                   className="text-[10px] scale-[0.8] origin-left leading-none text-black"
                   style={{
-                    fontFamily:
-                      "var(--font-schibsted), Arial, Helvetica, sans-serif",
+                    fontFamily: "var(--font-schibsted), Arial, Helvetica, sans-serif",
                   }}
                 >
                   Floor 4, 991 Rama I Rd Bangkok, 10330
@@ -387,8 +426,7 @@ export default function Footer() {
                 <p
                   className="text-[10px] scale-[0.8] origin-left leading-none text-black"
                   style={{
-                    fontFamily:
-                      "var(--font-schibsted), Arial, Helvetica, sans-serif",
+                    fontFamily: "var(--font-schibsted), Arial, Helvetica, sans-serif",
                   }}
                 >
                   Floor 4, 991 Rama I Rd Bangkok, 10330
@@ -399,8 +437,7 @@ export default function Footer() {
                 <h3
                   className="text-[#EF9748] text-[24px] pb-1"
                   style={{
-                    fontFamily:
-                      "var(--font-bebas), Arial, Helvetica, sans-serif",
+                    fontFamily: "var(--font-bebas), Arial, Helvetica, sans-serif",
                   }}
                 >
                   Explore
@@ -413,7 +450,7 @@ export default function Footer() {
                 </Link>
                 <Link
                   href="/menu"
-                  className="text-black  text-[10px] scale-[0.8] origin-left leading-none hover:text-[#837e7d]"
+                  className="text-black text-[10px] scale-[0.8] origin-left leading-none hover:text-[#837e7d]"
                 >
                   Menu
                 </Link>
@@ -438,42 +475,33 @@ export default function Footer() {
                 <h3
                   className="text-[#EF9748] text-[24px] pb-1"
                   style={{
-                    fontFamily:
-                      "var(--font-bebas), Arial, Helvetica, sans-serif",
+                    fontFamily: "var(--font-bebas), Arial, Helvetica, sans-serif",
                   }}
                 >
                   MENU
                 </h3>
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    type="button"
-                    className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0 hover:text-[#837e7d] text-left w-full"
-                    onClick={() => {
-                      const hash = `#${slugify(cat)}`;
-                      const currentPath =
-                        typeof window !== "undefined"
-                          ? window.location.pathname
-                          : "";
-                      if (currentPath === "/menu") {
-                        window.location.hash = hash;
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      } else {
-                        window.location.assign(`/menu${hash}`);
-                      }
-                    }}
-                  >
-                    {cat}
-                  </button>
-                ))}
+                {/* Show loading state or categories for mobile */}
+                {loading ? (
+                  <div className="text-gray-500 text-[10px]">Loading...</div>
+                ) : (
+                  categories.map((category) => (
+                    <button
+                      key={category.id}
+                      type="button"
+                      className="text-[10px] scale-[0.8] origin-left leading-none text-black m-0 p-0 hover:text-[#837e7d] text-left w-full"
+                      onClick={() => handleCategoryClick(category.name)}
+                    >
+                      {category.name}
+                    </button>
+                  ))
+                )}
               </div>
               {/* Bottom: Contact section */}
               <div className="flex flex-col gap-y-1 pt-1">
                 <h3
                   className="text-[#EF9748] text-[22px] pb-1"
                   style={{
-                    fontFamily:
-                      "var(--font-bebas), Arial, Helvetica, sans-serif",
+                    fontFamily: "var(--font-bebas), Arial, Helvetica, sans-serif",
                   }}
                 >
                   Contact Us
