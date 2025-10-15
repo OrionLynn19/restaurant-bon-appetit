@@ -16,13 +16,12 @@ export default function OrderAndDeliveryCard() {
           <div className="grid grid-cols-1 md:grid-cols-2">
            
             <div className="p-6 md:p-7 border-b md:border-b-0 md:border-r border-[#E4E4E4]">
-              <p className="text-gray-400 italic">Order details will be here...</p>
+              <OrderDetails />
             </div>
 
-         
             <div className="p-6 md:p-7">
               <div className="flex justify-between items-center mb-5">
-                <h2 className="text-[18px] font-extrabold tracking-wide text-[#0F3B2F] uppercase">
+                <h2 className="text-[24px] md:text-[40px] tracking-wide font-bebas text-[#0F3B2F] uppercase">
                   Delivery Details
                 </h2>
                 <div className="flex items-center gap-3 text-[#0F3B2F] text-lg">

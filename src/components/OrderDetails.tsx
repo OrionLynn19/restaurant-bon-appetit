@@ -52,11 +52,11 @@ export default function OrderDetails() {
   const total = subtotal + deliveryFee + tax - coupon;
 
   return (
-    <section className="p-4 md:p-6 lg:p-7 text-[#073027] font-['Schibsted_Grotesk']">
-      <h3 className="text-[32px] md:text-[40px] font-['Bebas_Neue'] tracking-wide uppercase">
+    <section className=" text-[#073027] font-['Schibsted_Grotesk']">
+      <h3 className="text-[24px] md:text-[40px] font-['Bebas_Neue'] tracking-wide uppercase">
         Order Details
       </h3>
-      <p className="mt-1 text-[14px] md:text-[20px] text-[#6B7280]">
+      <p className=" text-[14px] md:text-[20px] text-[#6B7280]">
         Order Confirmation Number : 66xxxxxxx
       </p>
 
@@ -77,22 +77,22 @@ export default function OrderDetails() {
             </div>
 
             <div className="min-w-0">
-              <p className="text-[16px] leading-tight md:text-[24px] text-wrap">
+              <p className="text-[16px] leading-tight md:text-[18px] text-wrap">
                 {it.name}
               </p>
-              <p className="mt-1 md:mt-5 text-[14px] md:text-[24px]">
+              <p className="mt-1 md:mt-5 text-[14px] md:text-[18px]">
                 Qty: <span className="text-[#073027]">{it.qty}</span>
               </p>
             </div>
 
-            <div className="pl-2 text-[14px] md:text-[24px] tabular-nums">
+            <div className="pl-2 text-[14px] md:text-[18px] tabular-nums">
               {it.price}B
             </div>
           </div>
         ))}
       </div>
 
-      <div className="space-y-1.5 text-[16px] md:text-[20px]">
+      <div className="space-y-1.5 text-[16px] md:text-[18px]">
         <Row label="Subtotal" value={`${subtotal}B`} />
         <Row label="Delivery Fee" value={`${deliveryFee}B`} />
         <Row label="Tax(7%)" value={`${tax}B`} />
