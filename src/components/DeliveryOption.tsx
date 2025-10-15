@@ -28,10 +28,9 @@ export default function DeliveryOption({
               aria-pressed={mode === "delivery"}
               className={`
                 font-['Bebas_Neue'] font-normal capitalize leading-none text-[20px] md:text-[40px] px-1 py-2 md:py-2 transition-colors cursor-pointer
-                ${
-                  mode === "delivery"
-                    ? "text-[#073027] border-b border-[#073027]"
-                    : "text-[#073027] border-b border-transparent"
+                ${mode === "delivery"
+                  ? "text-[#073027] border-b border-[#073027]"
+                  : "text-[#073027] border-b border-transparent"
                 }
               `}
             >
@@ -46,10 +45,9 @@ export default function DeliveryOption({
                 text-[20px] md:text-[40px]
                 px-1 py-2 md:py-2
                 transition-colors cursor-pointer
-                ${
-                  mode === "pickngo"
-                    ? "text-[#073027] border-b border-[#073027]"
-                    : "text-[#073027] border-b border-transparent"
+                ${mode === "pickngo"
+                  ? "text-[#073027] border-b border-[#073027]"
+                  : "text-[#073027] border-b border-transparent"
                 }
               `}
             >
@@ -106,7 +104,8 @@ export default function DeliveryOption({
             <div className="px-0">
               <button
                 onClick={() => console.log("Confirm order")}
-                className="w-full bg-[#EF9748] shadow-[0_3px_0_0_#073027] rounded-[8px] border-2 border-[#073027] px-5 py-3 font-bebas text-[18px] hover:bg-[#FAB170]"
+                className="w-full md:w-auto bg-[#EF9748] shadow-[0_3px_0_0_#073027] rounded-[8px] border-2 border-[#073027] px-5 py-1  hover:bg-[#FAB170] hover:translate-y-[1px] hover:shadow-[0_2px_0_0_#073027] active:bg-[#d46a1f] active:translate-y-[2px] active:shadow-[0_1px_0_0_#073027]
+                  transition-transform duration-150"
               >
                 CONFIRM ORDER
               </button>
