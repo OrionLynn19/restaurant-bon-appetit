@@ -1,3 +1,4 @@
+// src/components/OrderSummary.tsx
 "use client";
 
 import Image from "next/image";
@@ -7,8 +8,8 @@ type Props = {
   subtotal: number;
   deliveryFee: number;
   tax: number;
-  coupon: number;
-  total: number;
+  coupon: number; // initial discount from parent (can be 0)
+  total: number;  // initial total from parent
   onApply?: (code: string) => void;
   onConfirm?: () => void;
   className?: string;
@@ -27,31 +28,133 @@ export default function OrderSummary({
   hideConfirmOnMobile = false,
 }: Props) {
   const [code, setCode] = React.useState("");
+  const [applying, setApplying] = React.useState(false);
+  const [applyError, setApplyError] = React.useState<string | null>(null);
+
+  // Local coupon application (keeps Subtotal unchanged)
+  const [applied, setApplied] = React.useState(false);
+  const [appliedDiscount, setAppliedDiscount] = React.useState<number>(0);
+  const [computedTotal, setComputedTotal] = React.useState<number>(total);
+
+  // Keep initial total in sync until a coupon is applied locally
+  React.useEffect(() => {
+    if (!applied) setComputedTotal(total);
+  }, [total, applied]);
+
+  // ✅ Recompute total whenever cart numbers change while coupon is applied
+  React.useEffect(() => {
+    if (!applied) return;
+    const cappedDiscount = Math.min(
+      Math.max(0, Math.floor(appliedDiscount)),
+      Math.max(0, Math.floor(subtotal))
+    );
+    const newTotal = Math.max(
+      0,
+      Math.floor(subtotal + deliveryFee + tax - cappedDiscount)
+    );
+    setComputedTotal(newTotal);
+  }, [applied, appliedDiscount, subtotal, deliveryFee, tax]);
+
+  const handleApply = async () => {
+    setApplyError(null);
+    const trimmed = code.trim();
+    if (!trimmed) {
+      setApplyError("Please enter a code.");
+      return;
+    }
+
+    onApply?.(trimmed);
+
+    setApplying(true);
+    try {
+      const res = await fetch("/api/coupon/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // send cart cookie
+        body: JSON.stringify({ code: trimmed }),
+      });
+
+      const data: {
+        valid: boolean;
+        reason?: string;
+        discount?: number;
+      } = await res.json();
+
+      if (!res.ok) {
+        setApplyError(data?.reason || "Failed to apply coupon.");
+        setApplying(false);
+        return;
+      }
+      if (!data.valid) {
+        setApplyError(data?.reason || "Coupon is not valid.");
+        setApplying(false);
+        return;
+      }
+
+      const newDiscount = Math.max(0, Math.floor(data.discount ?? 0));
+
+      // Do NOT change Subtotal. Only recompute Total locally.
+      const cappedDiscount = Math.min(newDiscount, Math.max(0, Math.floor(subtotal)));
+      const newTotal = Math.max(
+        0,
+        Math.floor(subtotal + deliveryFee + tax - cappedDiscount)
+      );
+
+      setApplied(true);
+      setAppliedDiscount(newDiscount);
+      setComputedTotal(newTotal);
+      setApplying(false);
+    } catch {
+      setApplyError("Network error. Please try again.");
+      setApplying(false);
+    }
+  };
+
+  // Display values: keep Subtotal from props; override Coupon/Total if applied locally
+  const displayCoupon = applied
+    ? Math.min(
+        Math.max(0, Math.floor(appliedDiscount)),
+        Math.max(0, Math.floor(subtotal))
+      )
+    : coupon;
+
+  const displayTotal = applied ? computedTotal : total;
 
   return (
     <div className={className}>
-      {/* <h2 className="font-['Bebas_Neue'] font-normal text-[#073027] text-[20px] md:text-[32px]">
-        Order Summary
-      </h2> */}
       <h5 className="font-normal font-schibsted text-[14px] md:text-[20px] text-[#000000] mt-3">
         Discount Coupon
       </h5>
+
       <div className="flex justify-between mt-2 gap-2">
         <input
           type="text"
           placeholder="Promo Code"
           value={code}
           onChange={(e) => setCode(e.target.value)}
-          className="flex w-full md:w-auto min-w-0 rounded-sm px-2 bg-[#FFFFFF] border-white shadow-lg font-schibsted text-[14px] md:text-[20px] "
+          className="flex w-full md:w-auto min-w-0 rounded-sm px-2 bg-[#FFFFFF] border-white shadow-lg font-schibsted text-[14px] md:text-[20px]"
         />
         <button
-          onClick={() => onApply?.(code)}
+          onClick={handleApply}
+          disabled={applying}
           className="bg-[#EF9748] font-bebas text-[14px] md:text-[20px] shadow-[0_3px_0_0_#073027] rounded-[8px] border-2 border-[#073027] px-3 py-1  hover:bg-[#FAB170] hover:translate-y-[1px] hover:shadow-[0_2px_0_0_#073027] active:bg-[#d46a1f] active:translate-y-[2px] active:shadow-[0_1px_0_0_#073027]
-                  transition-transform duration-150"
+                  transition-transform duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Apply
+          {applying ? "Applying..." : "Apply"}
         </button>
       </div>
+
+      {applyError && (
+        <p className="mt-2 text-[12px] md:text-[14px] text-red-600 font-schibsted">
+          {applyError}
+        </p>
+      )}
+      {applied && !applyError && (
+        <p className="mt-2 text-[12px] md:text-[14px] text-[#073027] font-schibsted">
+          Coupon applied. Discount: {displayCoupon}B
+        </p>
+      )}
+
       <div className="flex justify-between text-[14px] md:text-[20px] font-schibsted mt-4 ">
         <p>Subtotal</p>
         <p>{subtotal}B</p>
@@ -66,21 +169,19 @@ export default function OrderSummary({
       </div>
       <div className="flex justify-between text-[14px] md:text-[20px] font-schibsted mt-4">
         <div className="flex gap-0.5">
-          <Image
-            src="/images/couponicon.svg"
-            alt="Coupon"
-            width={20}
-            height={20}
-          />
+          <Image src="/images/couponicon.svg" alt="Coupon" width={20} height={20} />
           <p>Coupon</p>
         </div>
-        <p>{coupon}B</p>
+        <p>-{displayCoupon}B</p>
       </div>
+
       <p className=" w-full h-[2px] bg-[#073027] mt-3"></p>
+
       <div className="flex justify-between text-[14px] md:text-[20px] font-schibsted mt-4">
         <p>Total</p>
-        <p>{total}B</p>
+        <p>{displayTotal}B</p>
       </div>
+
       <div
         className={`${
           hideConfirmOnMobile ? "hidden md:flex" : "flex"

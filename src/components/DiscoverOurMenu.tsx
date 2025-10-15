@@ -1,3 +1,4 @@
+// src/components/DiscoverOurMenu.tsx
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { menuApi, categoriesApi } from "@/lib/api";
@@ -20,14 +21,16 @@ export default function DiscoverOurMenu({
   const [error, setError] = useState<string | null>(null);
   const hasAutoSelected = useRef(false);
 
-  // Add safety check for onSelectCategory
-  const safeSelectCategory = useCallback((category: string) => {
-    if (typeof onSelectCategory === 'function') {
-      onSelectCategory(category);
-    } else {
-      console.error('onSelectCategory is not a function:', onSelectCategory);
-    }
-  }, [onSelectCategory]);
+  const safeSelectCategory = useCallback(
+    (category: string) => {
+      if (typeof onSelectCategory === "function") {
+        onSelectCategory(category);
+      } else {
+        console.error("onSelectCategory is not a function:", onSelectCategory);
+      }
+    },
+    [onSelectCategory]
+  );
 
   // 1) Fetch categories once
   useEffect(() => {
@@ -46,7 +49,7 @@ export default function DiscoverOurMenu({
     fetchCategories();
   }, []);
 
-  // 2) Auto-select first category only once (with safety check)
+  // 2) Auto-select first category once
   useEffect(() => {
     if (!selectedCategory && categories.length > 0 && !hasAutoSelected.current) {
       hasAutoSelected.current = true;
@@ -63,9 +66,7 @@ export default function DiscoverOurMenu({
       setError(null);
 
       try {
-        const categoryId = categories.find(
-          (cat) => cat.name === selectedCategory
-        )?.id;
+        const categoryId = categories.find((c) => c.name === selectedCategory)?.id;
 
         const filters = {
           available: true,
@@ -134,7 +135,7 @@ export default function DiscoverOurMenu({
         <div className="w-[375px] h-[35px] flex items-center px-4 md:border-none md:w-full md:max-w-[791px] md:h-[25px] md:mx-auto md:px-0 md:gap-[0]">
           <MenuCategoryBar
             selectedCategory={selectedCategory}
-            onSelectCategory={safeSelectCategory} // Use the safe version
+            onSelectCategory={safeSelectCategory}
           />
         </div>
       </div>
@@ -145,12 +146,9 @@ export default function DiscoverOurMenu({
           menuItems.map((item) => (
             <OurMenuCard
               key={item.id}
-              id={item.id}
               image={item.image_url || "/images/placeholder-food.jpg"}
               name={item.name}
-              originalPrice={
-                item.discount_price ? `${item.price} THB` : undefined
-              }
+              originalPrice={item.discount_price ? `${item.price} THB` : undefined}
               price={
                 item.discount_price
                   ? `${item.discount_price} THB`

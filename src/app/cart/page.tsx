@@ -4,7 +4,6 @@ import React from "react";
 import CartScreen from "@/components/CartScreen";
 
 import DeliveryOption from "@/components/DeliveryOption";
-import PaymentSection from "@/components/PaymentSection";
 import RecommendedMenu from "@/components/RecommendedMenu";
 
 export default function CartPage() {
@@ -15,7 +14,7 @@ export default function CartPage() {
         <CartScreen />
         <RecommendedMenu />
         <DeliveryOption />
-        <PaymentSection />
+        
       </div>
     </div>
 

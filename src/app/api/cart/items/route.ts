@@ -1,11 +1,23 @@
+// src/app/api/cart/items/route.ts
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { getOrCreateCartId, toNumber } from "../_utils";
 
 export async function POST(req: Request) {
   const cartId = await getOrCreateCartId();
-  const body = await req.json();
-  const { id, name, price, qty, image } = body || {};
+  const body: unknown = await req.json().catch(() => ({}));
+  const { id, name, price, qty, image } =
+    (typeof body === "object" && body !== null ? (body as Record<string, unknown>) : {}) as {
+      id?: string;
+      name?: string;
+      price?: number | string;
+      qty?: number | string;
+      image?: string;
+    };
+
+  if (!id) {
+    return NextResponse.json({ error: "Missing id" }, { status: 400 });
+  }
 
   // 1) try increment existing
   const { data: existing, error: selErr } = await supabaseAdmin
@@ -36,10 +48,10 @@ export async function POST(req: Request) {
     const { error: insErr } = await supabaseAdmin.from("cart_items").insert({
       id,
       cart_id: cartId,
-      name,
-      price,
+      name: name ?? "",
+      price: toNumber(price ?? 0),
       qty: toNumber(qty ?? 0),
-      image,
+      image: image ?? "",
     });
     if (insErr) return NextResponse.json({ error: insErr.message }, { status: 500 });
   }
@@ -52,10 +64,7 @@ export async function POST(req: Request) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  const subtotal = (items ?? []).reduce(
-    (s, it) => s + toNumber(it.price) * toNumber(it.qty),
-    0
-  );
+  const subtotal = (items ?? []).reduce((s, it) => s + toNumber(it.price) * toNumber(it.qty), 0);
   const count = (items ?? []).reduce((s, it) => s + toNumber(it.qty), 0);
 
   return NextResponse.json({ items: items ?? [], subtotal, count });

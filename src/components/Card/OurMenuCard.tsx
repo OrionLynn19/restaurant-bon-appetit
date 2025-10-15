@@ -3,7 +3,6 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useCart } from "@/context/CartContext";
 
 interface OurMenuCardProps {
   image: string;
@@ -17,30 +16,16 @@ interface OurMenuCardProps {
 export default function OurMenuCard(props: OurMenuCardProps) {
   const { image, name, price, originalPrice, description, specialPromotion } = props;
   const router = useRouter();
-  const { addItem } = useCart();
 
-  const handleDetail = async () => {
-    // Build a stable id from the name
-    const id = name.toLowerCase().replace(/\s+/g, "-");
-    // Convert price "180 THB" -> 180
-    const unitPrice = Number((price.match(/[\d.]+/) ?? ["0"])[0]);
-
-    // Update cart via context so the Cart button enables immediately
-    await addItem({
-      id,
-      name,
-      price: unitPrice,
-      qty: 1,
-      image,
-    });
-
+  // 👉 Only navigate to the detail page. Do NOT add to cart here.
+  const handleDetail = () => {
     router.push(`/menu/detail/${encodeURIComponent(name)}`);
   };
 
   return (
     <div className="md:bg-white rounded-lg md:shadow-md flex flex-col items-center gap-2 w-[153px] h-[243px] md:flex-row md:w-full md:max-w-[644px] md:h-[238px] md:gap-0 md:overflow-hidden md:relative">
       {/* Left: Image */}
-      <div className="relative flex justify-center items-center w-[153px] h-[153px] md:w=[238px] md:h-[238px] md:rounded-tl-[8px] md:rounded-bl-[8px] overflow-hidden md:flex-shrink-0">
+      <div className="relative flex justify-center items-center w-[153px] h-[153px] md:w-[238px] md:h-[238px] md:rounded-tl-[8px] md:rounded-bl-[8px] overflow-hidden md:flex-shrink-0">
         <Image
           src={image}
           alt={name}
@@ -54,14 +39,8 @@ export default function OurMenuCard(props: OurMenuCardProps) {
         {specialPromotion && (
           <>
             {/* Desktop badge */}
-            <span className="hidden md:block md:absolute md:top=0 md:right=0 z-10">
-              <svg
-                width="104"
-                height="25"
-                viewBox="0 0 104 25"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+            <span className="hidden md:block md:absolute md:top-0 md:right-0 z-10">
+              <svg width="104" height="25" viewBox="0 0 104 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <mask id="desktop-badge-mask">
                     <rect x="0" y="0" width="104" height="25" fill="white" />
@@ -79,13 +58,7 @@ export default function OurMenuCard(props: OurMenuCardProps) {
 
             {/* Mobile badge */}
             <span className="absolute top-[12px] right-0 z-10 md:hidden">
-              <svg
-                width="71"
-                height="17"
-                viewBox="0 0 71 17"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+              <svg width="71" height="17" viewBox="0 0 71 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <mask id="badge-mask">
                     <rect x="0" y="0" width="71" height="17" fill="white" />
@@ -136,7 +109,7 @@ export default function OurMenuCard(props: OurMenuCardProps) {
 
             <button
               className="w-7 h-7 rounded-full bg-[#EF9748] flex items-center justify-center text-[18px] border-black border-[1.5px] p-2 md:w-[40px] md:h-[40px] md:rounded-[25px] md:border-[1.5px] md:p-0 cursor-pointer"
-              aria-label="Add to cart"
+              aria-label="View item"
               onClick={handleDetail}
             >
               <span className="text-black">+</span>

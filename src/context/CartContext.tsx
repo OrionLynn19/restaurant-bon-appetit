@@ -1,3 +1,4 @@
+// src/context/CartContext.tsx
 "use client";
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 
@@ -28,7 +29,6 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
 
-  // --- Load from server ---
   async function refreshFromServer() {
     try {
       const res = await fetch("/api/cart", { cache: "no-store", credentials: "include" });
@@ -45,9 +45,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     refreshFromServer();
   }, []);
 
-  // --- Main actions ---
   const addItem = async (incoming: CartItem) => {
-    // Optimistic UI so the button enables immediately
+    // Optimistic UI
     setItems((prev) => {
       const existing = prev.find((x) => x.id === incoming.id);
       if (existing) {
@@ -56,22 +55,24 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return [...prev, incoming];
     });
 
-    // Send to API (match /api/cart POST body shape)
     try {
       const res = await fetch("/api/cart", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        credentials: "include", // ✅ ensure cookie is sent
         body: JSON.stringify({
-          id: incoming.id,
-          name: incoming.name,
-          price: incoming.price,
-          qty: incoming.qty,
-          image: incoming.image,
+          items: [
+            {
+              id: incoming.id,
+              name: incoming.name,
+              price: incoming.price,
+              qty: incoming.qty,
+              image: incoming.image,
+            },
+          ],
         }),
       });
       await res.json();
-      // Sync actual data
       refreshFromServer();
     } catch (e) {
       console.warn("POST /api/cart error:", e);
@@ -84,7 +85,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const res = await fetch(`/api/cart/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        credentials: "include", // ✅
         body: JSON.stringify({ qty }),
       });
       await res.json();
@@ -110,7 +111,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const removeItem = async (id: string) => {
     setItems((prev) => prev.filter((x) => x.id !== id));
     try {
-      const res = await fetch(`/api/cart/${id}`, { method: "DELETE", credentials: "include" });
+      const res = await fetch(`/api/cart/${id}`, { method: "DELETE", credentials: "include" }); // ✅
       await res.json();
       refreshFromServer();
     } catch (e) {
@@ -118,13 +119,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // --- Totals ---
   const subtotal = useMemo(() => items.reduce((sum, it) => sum + it.price * it.qty, 0), [items]);
   const deliveryFee = subtotal > 0 ? 50 : 0;
   const tax = Math.round(subtotal * 0.07);
   const coupon = 0;
   const total = subtotal + deliveryFee + tax - coupon;
-
   const count = useMemo(() => items.reduce((sum, it) => sum + it.qty, 0), [items]);
 
   const value: CartContextType = {

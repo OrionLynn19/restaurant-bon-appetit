@@ -11,7 +11,7 @@ const ONE_YEAR = 60 * 60 * 24 * 365;
  * Works for anonymous users as well.
  */
 export async function getOrCreateCartId(): Promise<string> {
-  const jar = await cookies();              // ✅ treat cookies() as async in your setup
+  const jar = await cookies();                 // ✅ await, in your setup cookies() is async
   let cartId = jar.get(COOKIE)?.value;
 
   if (!cartId) {

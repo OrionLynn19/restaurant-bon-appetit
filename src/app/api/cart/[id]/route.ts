@@ -1,3 +1,4 @@
+// src/app/api/cart/[id]/route.ts
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { getOrCreateCartId, toNumber } from "@/app/api/cart/_utils";
@@ -11,10 +12,7 @@ type CartItemRow = {
 };
 
 function calc(items: CartItemRow[]) {
-  const subtotal = (items ?? []).reduce(
-    (s, it) => s + toNumber(it.price) * toNumber(it.qty),
-    0
-  );
+  const subtotal = (items ?? []).reduce((s, it) => s + toNumber(it.price) * toNumber(it.qty), 0);
   const count = (items ?? []).reduce((s, it) => s + toNumber(it.qty), 0);
   return { subtotal, count };
 }
@@ -33,7 +31,8 @@ async function readCart(cartId: string) {
 
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
   const cartId = await getOrCreateCartId();
-  const { qty } = (await req.json()) as { qty: number };
+  const body: unknown = await req.json().catch(() => ({}));
+  const qty = typeof body === "object" && body !== null ? (body as { qty?: number | string }).qty : undefined;
   const q = toNumber(qty);
 
   if (q <= 0) {
