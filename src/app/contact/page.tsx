@@ -119,7 +119,7 @@ export default function Contact() {
       {/* Map with 3 pins */}
       <section className="mx-auto mt-5 max-w-6xl px-4">
         <div className="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
-          <div ref={mapRef} className="h-[360px] w-full" />
+          <div id="contact-map" ref={mapRef} className="h-[360px] w-full relative z-0" />
         </div>
       </section>
 
