@@ -4,7 +4,7 @@ import DeliForm, { DeliverySpot, Mode } from "./DeliForm";
 import PaymentSection from "@/components/PaymentSection";
 import OrderSummary from "@/components/OrderSummary";
 import { useCart } from "../context/CartContext";
-import { useRouter } from "next/navigation";
+import { useOrder } from "../app/hook/useOrder";
 
 export default function DeliveryOption({
   className = "",
@@ -12,74 +12,24 @@ export default function DeliveryOption({
   className?: string;
 }) {
   const { subtotal, deliveryFee, tax, coupon, total } = useCart();
-  const router = useRouter();
-
   const [mode, setMode] = React.useState<Mode>("delivery");
   const [address, setAddress] = React.useState<string>(
     "Angel Home Apartment, LakHok..."
   );
   const [spot, setSpot] = React.useState<DeliverySpot>("Place At Given Spot");
 
-  const [code, setCode] = React.useState("");
-  const [applied, setApplied] = React.useState(false);
-  const [appliedDiscount, setAppliedDiscount] = React.useState<number>(0);
-  const [computedTotal, setComputedTotal] = React.useState<number>(total);
-  const [confirming, setConfirming] = React.useState(false);
-
-  React.useEffect(() => {
-    if (!applied) setComputedTotal(total);
-  }, [total, applied]);
-
-  React.useEffect(() => {
-    if (!applied) return;
-    const cappedDiscount = Math.min(
-      Math.max(0, Math.floor(appliedDiscount)),
-      Math.max(0, Math.floor(subtotal))
-    );
-    const newTotal = Math.max(
-      0,
-      Math.floor(subtotal + deliveryFee + tax - cappedDiscount)
-    );
-    setComputedTotal(newTotal);
-  }, [applied, appliedDiscount, subtotal, deliveryFee, tax]);
-
-  const handleConfirm = async () => {
-    try {
-      setConfirming(true);
-
-      const res = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          subtotal,
-          delivery_fee: deliveryFee,
-          coupon_code: code.trim().toUpperCase() || undefined,
-          tax,
-          coupon: applied ? appliedDiscount : coupon,
-          total: computedTotal,
-        }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || "Failed to create order");
-        return;
-      }
-
-      const orderId = data.order?.id;
-      if (orderId) {
-        router.push(`/deliverydetail?orderId=${orderId}`);
-      } else {
-        alert("Order created, but ID not found.");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Error confirming order.");
-    } finally {
-      setConfirming(false);
-    }
-  };
+  const {
+    code,
+    setCode,
+    applying,
+    applyError,
+    applyCoupon,
+    applied,
+    appliedDiscount,
+    computedTotal,
+    confirming,
+    handleConfirm,
+  } = useOrder({ subtotal, deliveryFee, tax, coupon, total });
 
   return (
     <section className={`w-full max-w-[1312px] ${className}`}>
@@ -133,15 +83,27 @@ export default function DeliveryOption({
             <h3 className="mb-6 text-[20px] md:text-[32px] text-[#073027] font-['Bebas_Neue']">
               Order Summary
             </h3>
+
             <OrderSummary
               subtotal={subtotal}
               deliveryFee={deliveryFee}
               tax={tax}
               coupon={coupon}
               total={total}
-              hideConfirmOnMobile
-              onApply={(code) => setCode(code)}
+
+              code={code}
+              setCode={setCode}
+              applying={applying}
+              applyError={applyError}
+              applyCoupon={applyCoupon}
+              applied={applied}
+              appliedDiscount={appliedDiscount}
+              computedTotal={computedTotal}
+
+              confirming={confirming}
               onConfirm={handleConfirm}
+
+              hideConfirmOnMobile
             />
           </div>
 
