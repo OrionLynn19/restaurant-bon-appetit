@@ -120,7 +120,7 @@ export default function OrderSummary({
         body: JSON.stringify({
           subtotal,
           delivery_fee: deliveryFee,
-           coupon_code: code.trim().toUpperCase() || undefined,
+          coupon_code: code.trim().toUpperCase() || undefined,
           tax,
           coupon: applied ? appliedDiscount : coupon,
           total: computedTotal,
@@ -149,9 +149,9 @@ export default function OrderSummary({
 
   const displayCoupon = applied
     ? Math.min(
-        Math.max(0, Math.floor(appliedDiscount)),
-        Math.max(0, Math.floor(subtotal))
-      )
+      Math.max(0, Math.floor(appliedDiscount)),
+      Math.max(0, Math.floor(subtotal))
+    )
     : coupon;
 
   const displayTotal = applied ? computedTotal : total;
@@ -219,9 +219,8 @@ export default function OrderSummary({
       </div>
 
       <div
-        className={`${
-          hideConfirmOnMobile ? "hidden md:flex" : "flex"
-        } justify-center md:justify-end text-[20px] font-bebas mt-4`}
+        className={`${hideConfirmOnMobile ? "hidden md:flex" : "flex"
+          } justify-center md:justify-end text-[20px] font-bebas mt-4`}
       >
         <button
           onClick={handleConfirm}
