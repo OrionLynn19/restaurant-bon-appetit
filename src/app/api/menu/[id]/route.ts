@@ -24,10 +24,10 @@ type PatchFields = Pick<UpdatableFields, 'available' | 'discount_price' | 'prep_
 // READ - GET /api/menu/[id] - Get single menu item
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> } // ✅ Changed to Promise
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<MenuItem>>> {
   try {
-    const resolvedParams = await params; // ✅ Await the params
+    const resolvedParams = await params;
     
     const { data, error } = await supabase
       .from('menu_items')
@@ -38,7 +38,7 @@ export async function GET(
           name
         )
       `)
-      .eq('id', resolvedParams.id) // ✅ Use resolvedParams.id
+      .eq('id', resolvedParams.id)
       .single();
 
     if (error) {
@@ -73,10 +73,10 @@ export async function GET(
 // UPDATE - PUT /api/menu/[id] - Update single menu item
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> } // ✅ Changed to Promise
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<MenuItem>>> {
   try {
-    const resolvedParams = await params; // ✅ Await the params
+    const resolvedParams = await params;
     const body: UpdateMenuItemRequest = await request.json();
     const { 
       name, 
@@ -125,7 +125,6 @@ export async function PUT(
             { status: 400 }
           );
         }
-        // Check if discount price is less than regular price
         if (price !== undefined && discount_price >= price) {
           return NextResponse.json(
             { success: false, error: 'Discount price must be less than regular price' },
@@ -153,7 +152,6 @@ export async function PUT(
     }
 
     if (category_id !== undefined) {
-      // Check if category exists
       const { data: categoryExists, error: categoryError } = await supabase
         .from('categories')
         .select('id')
@@ -169,11 +167,10 @@ export async function PUT(
       updateData.category_id = category_id;
     }
 
-    // Update menu item
     const { data, error } = await supabase
       .from('menu_items')
       .update(updateData)
-      .eq('id', resolvedParams.id) // ✅ Use resolvedParams.id
+      .eq('id', resolvedParams.id)
       .select(`
         *,
         categories:category_id (
@@ -216,19 +213,17 @@ export async function PUT(
 // PARTIAL UPDATE - PATCH /api/menu/[id] - Partial update (quick toggles)
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> } // ✅ Changed to Promise
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<MenuItem>>> {
   try {
-    const resolvedParams = await params; // ✅ Await the params
+    const resolvedParams = await params;
     const body = await request.json();
     
-    // Only allow specific fields for PATCH operations
     const allowedFields = ['available', 'discount_price', 'prep_time_minutes'] as const;
     const updateData: PatchFields & { updated_at: string } = {
       updated_at: new Date().toISOString()
     };
 
-    // Only include allowed fields that are provided
     Object.keys(body).forEach(key => {
       if (allowedFields.includes(key as (typeof allowedFields)[number])) {
         // @ts-expect-error index is narrowed by includes check
@@ -236,14 +231,13 @@ export async function PATCH(
       }
     });
 
-    if (Object.keys(updateData).length === 1) { // Only updated_at
+    if (Object.keys(updateData).length === 1) {
       return NextResponse.json(
         { success: false, error: 'No valid fields provided for update' },
         { status: 400 }
       );
     }
 
-    // Validate discount_price if provided
     if (updateData.discount_price !== undefined && updateData.discount_price !== null) {
       if (updateData.discount_price < 0) {
         return NextResponse.json(
@@ -253,7 +247,6 @@ export async function PATCH(
       }
     }
 
-    // Validate prep_time_minutes if provided
     if (updateData.prep_time_minutes !== undefined && updateData.prep_time_minutes !== null) {
       if (updateData.prep_time_minutes < 0) {
         return NextResponse.json(
@@ -266,7 +259,7 @@ export async function PATCH(
     const { data, error } = await supabase
       .from('menu_items')
       .update(updateData)
-      .eq('id', resolvedParams.id) // ✅ Use resolvedParams.id
+      .eq('id', resolvedParams.id)
       .select(`
         *,
         categories:category_id (
@@ -309,16 +302,15 @@ export async function PATCH(
 // DELETE - DELETE /api/menu/[id] - Delete single menu item
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> } // ✅ Changed to Promise
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<MenuItem>>> {
   try {
-    const resolvedParams = await params; // ✅ Await the params
+    const resolvedParams = await params;
     
-    // First check if menu item exists
     const { data: existingItem, error: checkError } = await supabase
       .from('menu_items')
       .select('id, name')
-      .eq('id', resolvedParams.id) // ✅ Use resolvedParams.id
+      .eq('id', resolvedParams.id)
       .single();
 
     if (checkError) {
@@ -331,11 +323,10 @@ export async function DELETE(
       throw checkError;
     }
 
-    // Delete the menu item
     const { data, error } = await supabase
       .from('menu_items')
       .delete()
-      .eq('id', resolvedParams.id) // ✅ Use resolvedParams.id
+      .eq('id', resolvedParams.id)
       .select()
       .single();
 
