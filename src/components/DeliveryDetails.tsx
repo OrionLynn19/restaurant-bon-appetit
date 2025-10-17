@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
+
 type Props = {
   /** Provided by /deliverydetail?page?orderId=... */
   orderId?: string;
 };
 
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function DeliveryDetails({ orderId }: Props) {
-  
   return (
     <section
       aria-labelledby="delivery-title"

@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 import type { Category, ApiResponse } from '@/types/content';
 
 // GET /api/categories - Get all categories
-export async function GET(request: NextRequest): Promise<NextResponse<ApiResponse<Category[]>>> {
+export async function GET(): Promise<NextResponse<ApiResponse<Category[]>>> {
   try {
     const { data, error } = await supabase
       .from('categories')

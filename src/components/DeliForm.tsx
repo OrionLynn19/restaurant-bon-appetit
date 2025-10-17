@@ -12,7 +12,6 @@ export type Mode = "delivery" | "pickngo";
 type IconSlots = {
   addressLeft?: React.ReactNode;
   editRight?: React.ReactNode;
-  spotLeft?: React.ReactNode;
   chevron?: React.ReactNode;
   optionPlace?: React.ReactNode;
   optionHand?: React.ReactNode;
@@ -61,7 +60,6 @@ export default function DeliForm({
         aria-hidden="true"
       />
     ),
-    spotLeft,
     chevron = (
       <Image
         src="/images/chevronIcon.png"

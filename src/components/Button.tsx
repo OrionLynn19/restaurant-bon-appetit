@@ -3,12 +3,9 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 
-type ButtonProps = {
-  href: string;
-  children?: ReactNode;
-};
 
-export default function Button({ href, children }: ButtonProps) {
+
+export default function Button() {
   return (
     <Link
         href="/reserve"

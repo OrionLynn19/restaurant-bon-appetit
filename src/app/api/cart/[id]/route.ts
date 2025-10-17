@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { getOrCreateCartId, toNumber } from "@/app/api/cart/_utils";
 
@@ -6,10 +6,14 @@ export const revalidate = 0;
 export const dynamic = "force-dynamic";
 
 // Update quantity for a single cart line
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(
+  req: NextRequest, 
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     const cartId = await getOrCreateCartId();
-    const itemId = decodeURIComponent(params.id);
+    const resolvedParams = await params; // Await the params Promise
+    const itemId = decodeURIComponent(resolvedParams.id);
 
     // body: { qty: number }
     const raw = await req.json().catch(() => ({} as Record<string, unknown>));
@@ -58,10 +62,14 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
 }
 
 // Delete a single cart line
-export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(
+  _req: NextRequest, 
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     const cartId = await getOrCreateCartId();
-    const itemId = decodeURIComponent(params.id);
+    const resolvedParams = await params; // Await the params Promise
+    const itemId = decodeURIComponent(resolvedParams.id);
 
     const { error: delErr } = await supabaseAdmin
       .from("cart_items")

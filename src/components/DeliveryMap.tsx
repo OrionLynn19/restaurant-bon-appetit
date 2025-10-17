@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function DeliveryMap() {
   return (
     <div className="relative gap-[48px] md:p-8">
@@ -14,17 +16,21 @@ export default function DeliveryMap() {
           BON APPÉTIT SILOM
         </h2>
       </div>
+      
       {/* Map image container */}
       <div
         className="border border-gray-400 rounded-md overflow-hidden mt-4 md:mt-12 
                       w-[343px] h-[217px] md:w-[1312px] md:h-[467.52px] md:rounded-lg relative mx-auto"
       >
-        <img
+        <Image
           src="/images/mapimage.png"
           alt="Delivery Route Map"
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
+          priority // Since this is likely above the fold
         />
       </div>
+      
       {/* Desktop Delivery Status Card */}
       <div
         className="hidden md:flex flex-col w-[1312px] mx-auto mt-6 bg-white rounded-[9.55px] shadow p-6 gap-6"
@@ -43,17 +49,21 @@ export default function DeliveryMap() {
         </div>
         <div className="flex items-center justify-between w-full mt-2">
           {/* Icon 1 */}
-          <img
+          <Image
             src="/images/icon-park-solid_pot.png"
             alt="pot"
+            width={48}
+            height={48}
             className="w-[48px] h-[48px]"
           />
           {/* Line */}
           <div className="flex-1 h-[4px] bg-[#073027] mx-2 rounded" />
           {/* Icon 2 */}
-          <img
+          <Image
             src="/images/ri_e-bike-2-fill.png"
             alt="bike"
+            width={48}
+            height={48}
             className="w-[48px] h-[48px]"
             style={{
               filter:
@@ -63,21 +73,26 @@ export default function DeliveryMap() {
           {/* Line */}
           <div className="flex-1 h-[4px] bg-[#073027] mx-2 rounded" />
           {/* Icon 3 */}
-          <img
+          <Image
             src="/images/mingcute_location-3-fill.png"
             alt="location"
+            width={48}
+            height={48}
             className="w-[48px] h-[48px]"
           />
           {/* Line */}
           <div className="flex-1 h-[4px] bg-[#073027] mx-2 rounded" />
           {/* Icon 4 */}
-          <img
+          <Image
             src="/images/clarity_note-solid.png"
             alt="note"
+            width={48}
+            height={48}
             className="w-[48px] h-[48px]"
           />
         </div>
       </div>
+      
       {/* Mobile Delivery Status Card */}
       <div
         className="flex md:hidden flex-col w-[343px] mx-auto mt-4 bg-white rounded-[4px] shadow p-3 gap-6"
@@ -96,17 +111,21 @@ export default function DeliveryMap() {
         </div>
         <div className="flex items-center justify-between w-full mt-2">
           {/* Icon 1 */}
-          <img
+          <Image
             src="/images/icon-park-solid_pot.png"
             alt="pot"
+            width={28}
+            height={28}
             className="w-[28px] h-[28px]"
           />
           {/* Line */}
           <div className="flex-1 h-[2px] bg-[#073027] mx-1 rounded" />
           {/* Icon 2 */}
-          <img
+          <Image
             src="/images/ri_e-bike-2-fill.png"
             alt="bike"
+            width={28}
+            height={28}
             className="w-[28px] h-[28px]"
             style={{
               filter:
@@ -116,17 +135,21 @@ export default function DeliveryMap() {
           {/* Line */}
           <div className="flex-1 h-[2px] bg-[#073027] mx-1 rounded" />
           {/* Icon 3 */}
-          <img
+          <Image
             src="/images/mingcute_location-3-fill.png"
             alt="location"
+            width={28}
+            height={28}
             className="w-[28px] h-[28px]"
           />
           {/* Line */}
           <div className="flex-1 h-[2px] bg-[#073027] mx-1 rounded" />
           {/* Icon 4 */}
-          <img
+          <Image
             src="/images/clarity_note-solid.png"
             alt="note"
+            width={28}
+            height={28}
             className="w-[28px] h-[28px]"
           />
         </div>
