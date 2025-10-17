@@ -24,9 +24,11 @@ type PatchFields = Pick<UpdatableFields, 'available' | 'discount_price' | 'prep_
 // READ - GET /api/menu/[id] - Get single menu item
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> } // ✅ Changed to Promise
 ): Promise<NextResponse<ApiResponse<MenuItem>>> {
   try {
+    const resolvedParams = await params; // ✅ Await the params
+    
     const { data, error } = await supabase
       .from('menu_items')
       .select(`
@@ -36,7 +38,7 @@ export async function GET(
           name
         )
       `)
-      .eq('id', params.id)
+      .eq('id', resolvedParams.id) // ✅ Use resolvedParams.id
       .single();
 
     if (error) {
@@ -71,9 +73,10 @@ export async function GET(
 // UPDATE - PUT /api/menu/[id] - Update single menu item
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> } // ✅ Changed to Promise
 ): Promise<NextResponse<ApiResponse<MenuItem>>> {
   try {
+    const resolvedParams = await params; // ✅ Await the params
     const body: UpdateMenuItemRequest = await request.json();
     const { 
       name, 
@@ -170,7 +173,7 @@ export async function PUT(
     const { data, error } = await supabase
       .from('menu_items')
       .update(updateData)
-      .eq('id', params.id)
+      .eq('id', resolvedParams.id) // ✅ Use resolvedParams.id
       .select(`
         *,
         categories:category_id (
@@ -213,9 +216,10 @@ export async function PUT(
 // PARTIAL UPDATE - PATCH /api/menu/[id] - Partial update (quick toggles)
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> } // ✅ Changed to Promise
 ): Promise<NextResponse<ApiResponse<MenuItem>>> {
   try {
+    const resolvedParams = await params; // ✅ Await the params
     const body = await request.json();
     
     // Only allow specific fields for PATCH operations
@@ -262,7 +266,7 @@ export async function PATCH(
     const { data, error } = await supabase
       .from('menu_items')
       .update(updateData)
-      .eq('id', params.id)
+      .eq('id', resolvedParams.id) // ✅ Use resolvedParams.id
       .select(`
         *,
         categories:category_id (
@@ -305,14 +309,16 @@ export async function PATCH(
 // DELETE - DELETE /api/menu/[id] - Delete single menu item
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> } // ✅ Changed to Promise
 ): Promise<NextResponse<ApiResponse<MenuItem>>> {
   try {
+    const resolvedParams = await params; // ✅ Await the params
+    
     // First check if menu item exists
     const { data: existingItem, error: checkError } = await supabase
       .from('menu_items')
       .select('id, name')
-      .eq('id', params.id)
+      .eq('id', resolvedParams.id) // ✅ Use resolvedParams.id
       .single();
 
     if (checkError) {
@@ -329,7 +335,7 @@ export async function DELETE(
     const { data, error } = await supabase
       .from('menu_items')
       .delete()
-      .eq('id', params.id)
+      .eq('id', resolvedParams.id) // ✅ Use resolvedParams.id
       .select()
       .single();
 
