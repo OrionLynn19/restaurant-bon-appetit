@@ -8,7 +8,7 @@ export async function GET(_request?: NextRequest): Promise<NextResponse<ApiRespo
     const { data, error } = await supabase
       .from('categories')
       .select('*')
-      .order('sort_order', { ascending: true, nullsLast: true })
+      .order('sort_order', { ascending: true, nullsFirst: false }) // ✅ Changed nullsLast to nullsFirst: false
       .order('name', { ascending: true });
 
     if (error) {
