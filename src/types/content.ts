@@ -32,9 +32,19 @@ export interface MenuItem {
   available: boolean;
   prep_time_minutes?: number; // Added this field
   category_id: string;
-  categories?: Category; // Joined category data from Supabase
+  categories?: string[]; // Joined category data from Supabase
   created_at: string;
   updated_at: string;
+}
+
+export interface StaticMenuItem {
+  image: string;                    // Static image path
+  name: string;
+  price: number;
+  originalPrice?: number;           // For discounts
+  description: string;
+  categories: string[];             // Array of category names
+  specialPromotion?: boolean;
 }
 
 export interface ApiResponse<T> {
