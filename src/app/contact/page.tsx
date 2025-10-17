@@ -12,7 +12,7 @@ type Branch = {
   phone: string;
   hours: string;
   gmaps: string;
-  image: string;     // from /public/images/...
+  image: string; // from /public/images/...
   lat: number;
   lng: number;
 };
@@ -39,7 +39,7 @@ const branches: Branch[] = [
     hours: "9am–12pm (Everyday)",
     gmaps: "https://maps.google.com/?q=Bon%20Appetit%20Pathum%20Thani",
     image: "/images/our-story-4.png",
-    lat: 14.020, // Pathum Thani approx
+    lat: 14.02, // Pathum Thani approx
     lng: 100.525,
   },
   {
@@ -64,8 +64,7 @@ export default function Contact() {
 
       // Use CDN icons so markers show up without extra config
       const icon = L.icon({
-        iconUrl:
-          "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+        iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
         shadowUrl:
           "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
         iconAnchor: [12, 41],
@@ -75,7 +74,8 @@ export default function Contact() {
       // init map once
       if (
         mapRef.current &&
-        !(mapRef.current as HTMLDivElement & { _leaflet_id?: number })._leaflet_id
+        !(mapRef.current as HTMLDivElement & { _leaflet_id?: number })
+          ._leaflet_id
       ) {
         const map = L.map(mapRef.current, {
           center: [13.77, 100.54],
@@ -107,7 +107,7 @@ export default function Contact() {
   return (
     <div className="bg-[#fff9ef] text-stone-800">
       {/* Caption + Title */}
-      <section className="mx-auto max-w-6xl px-4 pt-6 text-center">
+      <section className="mx-auto max-w-6xl px-4 pt-[36px] md:pt-[50px] text-center">
         <p className="mb-1 text-[11px] font-semibold uppercase tracking-[.25em] text-amber-500">
           •DELICIOUS FOODS•
         </p>
@@ -119,12 +119,16 @@ export default function Contact() {
       {/* Map with 3 pins */}
       <section className="mx-auto mt-5 max-w-6xl px-4">
         <div className="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
-          <div id="contact-map" ref={mapRef} className="h-[360px] w-full relative z-0" />
+          <div
+            id="contact-map"
+            ref={mapRef}
+            className="h-[360px] w-full relative z-0"
+          />
         </div>
       </section>
 
       {/* 3 photos together on desktop */}
-      <section className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-4 py-8 md:grid-cols-3">
+      <section className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-4 py-12 md:py-24 md:grid-cols-3">
         {branches.map((b, i) => (
           <article
             key={b.name}

@@ -2,6 +2,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useCart } from "@/context/CartContext";
 
 type UseOrderParams = {
   subtotal: number;
@@ -11,8 +12,15 @@ type UseOrderParams = {
   total: number;
 };
 
-export function useOrder({ subtotal, deliveryFee, tax, coupon, total }: UseOrderParams) {
+export function useOrder({
+  subtotal,
+  deliveryFee,
+  tax,
+  coupon,
+  total,
+}: UseOrderParams) {
   const router = useRouter();
+  const { clearCart } = useCart();
 
   const [code, setCode] = useState("");
   const [applying, setApplying] = useState(false);
@@ -79,7 +87,10 @@ export function useOrder({ subtotal, deliveryFee, tax, coupon, total }: UseOrder
       }
 
       const newDiscount = Math.max(0, Math.floor(data.discount ?? 0));
-      const cappedDiscount = Math.min(newDiscount, Math.max(0, Math.floor(subtotal)));
+      const cappedDiscount = Math.min(
+        newDiscount,
+        Math.max(0, Math.floor(subtotal))
+      );
       const newTotal = Math.max(
         0,
         Math.floor(subtotal + deliveryFee + tax - cappedDiscount)
@@ -90,13 +101,13 @@ export function useOrder({ subtotal, deliveryFee, tax, coupon, total }: UseOrder
       setComputedTotal(newTotal);
       setApplying(false);
       setCode(trimmed);
-    } catch (e) {
+    } catch (err) {
       setApplyError("Network error. Please try again.");
       setApplying(false);
+      console.error("Error applying coupon:", err);
     }
   };
 
-  // create order and redirect
   const handleConfirm = async () => {
     setConfirming(true);
     try {
@@ -119,6 +130,8 @@ export function useOrder({ subtotal, deliveryFee, tax, coupon, total }: UseOrder
         alert(data?.error || "Failed to create order");
         return;
       }
+
+      await clearCart();
 
       const orderId = data?.order?.id;
       if (orderId) {

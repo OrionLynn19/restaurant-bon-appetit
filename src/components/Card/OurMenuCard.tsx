@@ -7,17 +7,17 @@ import { useRouter } from "next/navigation";
 interface OurMenuCardProps {
   image: string;
   name: string;
-  price: string;             // e.g. "180 THB"
-  originalPrice?: string;    // e.g. "220 THB"
-  description?: string;      // longer text (shown on desktop)
+  price: string;
+  originalPrice?: string;
+  description?: string;
   specialPromotion?: boolean;
 }
 
 export default function OurMenuCard(props: OurMenuCardProps) {
-  const { image, name, price, originalPrice, description, specialPromotion } = props;
+  const { image, name, price, originalPrice, description, specialPromotion } =
+    props;
   const router = useRouter();
 
-  // 👉 Only navigate to the detail page. Do NOT add to cart here.
   const handleDetail = () => {
     router.push(`/menu/detail/${encodeURIComponent(name)}`);
   };
@@ -40,14 +40,27 @@ export default function OurMenuCard(props: OurMenuCardProps) {
           <>
             {/* Desktop badge */}
             <span className="hidden md:block md:absolute md:top-0 md:right-0 z-10">
-              <svg width="104" height="25" viewBox="0 0 104 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg
+                width="104"
+                height="25"
+                viewBox="0 0 104 25"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <defs>
                   <mask id="desktop-badge-mask">
                     <rect x="0" y="0" width="104" height="25" fill="white" />
                     <polygon points="0,1 20,12.5 0,24" fill="black" />
                   </mask>
                 </defs>
-                <rect x="0" y="0" width="104" height="25" fill="#EF9748" mask="url(#desktop-badge-mask)" />
+                <rect
+                  x="0"
+                  y="0"
+                  width="104"
+                  height="25"
+                  fill="#EF9748"
+                  mask="url(#desktop-badge-mask)"
+                />
                 <foreignObject x="32" y="5" width="62" height="15">
                   <div className="w-[62px] h-[15px] flex items-center justify-center font-schibsted font-medium text-[12px] text-black leading-[15px] p-0 m-0">
                     Best Seller
@@ -58,14 +71,27 @@ export default function OurMenuCard(props: OurMenuCardProps) {
 
             {/* Mobile badge */}
             <span className="absolute top-[12px] right-0 z-10 md:hidden">
-              <svg width="71" height="17" viewBox="0 0 71 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg
+                width="71"
+                height="17"
+                viewBox="0 0 71 17"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <defs>
                   <mask id="badge-mask">
                     <rect x="0" y="0" width="71" height="17" fill="white" />
                     <polygon points="0,0.3 13.2,8.62 0,16.75" fill="black" />
                   </mask>
                 </defs>
-                <rect x="0" y="0" width="71" height="17" fill="#EF9748" mask="url(#badge-mask)" />
+                <rect
+                  x="0"
+                  y="0"
+                  width="71"
+                  height="17"
+                  fill="#EF9748"
+                  mask="url(#badge-mask)"
+                />
                 <foreignObject x="26" y="4" width="41" height="10">
                   <div className="w-[41px] h-[10px] flex items-center justify-center font-schibsted font-normal text-[8px] text-black leading-[10px] p-0 m-0">
                     Best Seller

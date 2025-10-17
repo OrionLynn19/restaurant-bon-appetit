@@ -12,7 +12,7 @@ const montserrat = Montserrat({
 export default function AboutUsSection() {
   return (
     <section
-      className={`${montserrat.className} w-full bg-[rgba(255,252,241,1)] px-6 py-16`}
+      className={`${montserrat.className} w-full bg-[rgba(255,252,241,1)] px-6 pb-12 md:pb-24 pt-[36px] md:pt-[50px]`}
     >
       <div className="max-w-6xl mx-auto">
         {/* Section title */}
@@ -34,18 +34,18 @@ export default function AboutUsSection() {
 
         {/* Grid layout */}
         <div className="grid md:grid-cols-2 gap-10 items-center">
-          
           <div className="text-center md:text-left transform md:-translate-x-10">
             <h3 className="text-lg md:text-2xl font-extrabold text-[#073027] mb-4 leading-snug">
               AT BON APPÉTIT, EVERY DISH <br></br>IS CRAFTED WITH LOVE.
             </h3>
 
             <p className="text-sm md:text-base text-gray-900 font-medium mb-6 leading-relaxed">
-              At Bon Appétit, We Believe That Every Meal Tells A Story. Our Chefs
-              Pour Their Passion Into Each Dish, Using Only The Finest Ingredients
-              Sourced From Local Farms. With A Commitment To Excellence, We Create
-              A Dining Experience That Delights The Senses And Warms The Heart.
-              Join Us To Savor The Flavors Of Our Culinary Journey.
+              At Bon Appétit, We Believe That Every Meal Tells A Story. Our
+              Chefs Pour Their Passion Into Each Dish, Using Only The Finest
+              Ingredients Sourced From Local Farms. With A Commitment To
+              Excellence, We Create A Dining Experience That Delights The Senses
+              And Warms The Heart. Join Us To Savor The Flavors Of Our Culinary
+              Journey.
             </p>
 
             <div className="flex justify-center md:justify-start">

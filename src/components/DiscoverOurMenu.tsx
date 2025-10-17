@@ -32,7 +32,6 @@ export default function DiscoverOurMenu({
     [onSelectCategory]
   );
 
-  // 1) Fetch categories once
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -49,15 +48,17 @@ export default function DiscoverOurMenu({
     fetchCategories();
   }, []);
 
-  // 2) Auto-select first category once
   useEffect(() => {
-    if (!selectedCategory && categories.length > 0 && !hasAutoSelected.current) {
+    if (
+      !selectedCategory &&
+      categories.length > 0 &&
+      !hasAutoSelected.current
+    ) {
       hasAutoSelected.current = true;
       safeSelectCategory(categories[0].name || "");
     }
   }, [categories, selectedCategory, safeSelectCategory]);
 
-  // 3) Fetch menu items whenever selectedCategory changes
   useEffect(() => {
     const fetchMenuItems = async () => {
       if (!selectedCategory) return;
@@ -66,7 +67,9 @@ export default function DiscoverOurMenu({
       setError(null);
 
       try {
-        const categoryId = categories.find((c) => c.name === selectedCategory)?.id;
+        const categoryId = categories.find(
+          (c) => c.name === selectedCategory
+        )?.id;
 
         const filters = {
           available: true,
@@ -96,7 +99,6 @@ export default function DiscoverOurMenu({
     }
   }, [selectedCategory, categories]);
 
-  // Loading
   if (loading) {
     return (
       <div className="w-full max-w-[375px] mx-auto flex justify-center items-center py-16 md:max-w-[1440px]">
@@ -108,7 +110,6 @@ export default function DiscoverOurMenu({
     );
   }
 
-  // Error
   if (error) {
     return (
       <div className="w-full max-w-[375px] mx-auto flex justify-center items-center py-16 md:max-w-[1440px]">
@@ -132,7 +133,10 @@ export default function DiscoverOurMenu({
     <div className="w-full max-w-[375px] mx-auto flex flex-col gap-8 md:max-w-[1440px] md:mx-auto md:gap-12 md:items-center">
       {/* Category Bar */}
       <div className="w-[375px] h-[82px] flex flex-col gap-8 justify-center md:w-full md:h-auto md:gap-12 md:items-center">
-        <div className="w-[375px] h-[35px] flex items-center px-4 md:border-none md:w-full md:max-w-[791px] md:h-[25px] md:mx-auto md:px-0 md:gap-[0]">
+        <h2 className="w-[375px] h-[15px] text-center font-bebas text-[22px] text-[#073027] tracking-[0px] md:w-full md:h-[22px] md:text-[32px] md:capitalize font-normal leading-[1] md:text-center">
+          DISCOVER OUR MENU
+        </h2>
+        <div className="w-[375px] h-[35px] flex items-center border-b border-[#696969] md:border-b-0 md:border-none px-4 md:w-full md:max-w-[791px] md:h-[25px] md:mx-auto md:px-0">
           <MenuCategoryBar
             selectedCategory={selectedCategory}
             onSelectCategory={safeSelectCategory}
@@ -148,7 +152,9 @@ export default function DiscoverOurMenu({
               key={item.id}
               image={item.image_url || "/images/placeholder-food.jpg"}
               name={item.name}
-              originalPrice={item.discount_price ? `${item.price} THB` : undefined}
+              originalPrice={
+                item.discount_price ? `${item.price} THB` : undefined
+              }
               price={
                 item.discount_price
                   ? `${item.discount_price} THB`
@@ -163,7 +169,9 @@ export default function DiscoverOurMenu({
             <div className="flex flex-col items-center gap-4">
               <div className="text-6xl">🍽️</div>
               <div>
-                <p className="text-lg font-semibold">No items in this category</p>
+                <p className="text-lg font-semibold">
+                  No items in this category
+                </p>
                 <p className="text-sm">Check back later for new menu items</p>
               </div>
             </div>

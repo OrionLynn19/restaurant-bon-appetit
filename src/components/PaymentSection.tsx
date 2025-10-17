@@ -44,16 +44,7 @@ export default function PaymentSection({
         noPadding ? "" : "py-14 md:py-16"
       } ${className}`}
     >
-      {/* <div className="mx-auto w-full max-w-7xl px-6 md:px-12">
-        <div className="grid gap-10 md:grid-cols-2"> */}
       <div className="relative">
-        {/* <h3
-          id="payment-title"
-          className="mb-6 text-[20px] md:text-[22px] font-extrabold tracking-[0.08em] text-[#0F3B2F] uppercase"
-        >
-          PAYMENT
-        </h3> */}
-
         {/* Selected row (scaled up) */}
         <div className="flex items-center justify-between rounded-xl bg-[#FFF9F0] ">
           <div className="flex items-center gap-6">

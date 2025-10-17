@@ -39,20 +39,24 @@ export default function Menu() {
     return () => window.removeEventListener("hashchange", handleHash);
   }, [categories]);
 
-  // Add this useEffect to listen for category changes:
   useEffect(() => {
     const handleCategoryChange = (event: CustomEvent) => {
       setSelectedCategory(event.detail.categoryName);
     };
 
-    window.addEventListener('categoryChange', handleCategoryChange as EventListener);
-    
+    window.addEventListener(
+      "categoryChange",
+      handleCategoryChange as EventListener
+    );
+
     return () => {
-      window.removeEventListener('categoryChange', handleCategoryChange as EventListener);
+      window.removeEventListener(
+        "categoryChange",
+        handleCategoryChange as EventListener
+      );
     };
   }, []);
 
-  // When tab is clicked, update hash
   const handleTabClick = useCallback((cat: string) => {
     setSelectedCategory(cat);
     window.location.hash = slugify(cat);
@@ -64,12 +68,12 @@ export default function Menu() {
         <div className="mt-15"></div>
         <MenuPageSlider />
         <div className="md:mb-20 mb-15"></div>
-        
-        <DiscoverOurMenu 
+
+        <DiscoverOurMenu
           selectedCategory={selectedCategory}
           onSelectCategory={handleTabClick}
         />
-        
+
         <div className="md:mb-25 mb-15"></div>
         <CartButton />
       </div>

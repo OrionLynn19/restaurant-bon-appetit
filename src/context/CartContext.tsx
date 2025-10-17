@@ -23,6 +23,7 @@ type CartContextType = {
   inc: (id: string) => Promise<void>;
   dec: (id: string) => Promise<void>;
   removeItem: (id: string) => Promise<void>;
+  clearCart: () => Promise<void>;
   subtotal: number;
   deliveryFee: number;
   tax: number;
@@ -55,9 +56,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     void refreshFromServer();
   }, []);
 
-  // --- ADD ITEM (server expects a single flat object, not items: []) ---
   const addItem = async (incoming: CartItem) => {
-    // Optimistic update
     setItems((prev) => {
       const existing = prev.find((x) => x.id === incoming.id);
       if (existing) {
@@ -84,9 +83,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const json = await res.json();
       if (!res.ok) {
         console.error("POST /api/cart failed:", json?.error);
-        await refreshFromServer(); // rollback to server truth
+        await refreshFromServer();
       } else {
-        await refreshFromServer(); // sync
+        await refreshFromServer();
       }
     } catch (e) {
       console.warn("POST /api/cart error:", e);
@@ -155,6 +154,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const clearCart = async () => {
+    setItems([]);
+
+    await refreshFromServer();
+  };
+
   const subtotal = useMemo(
     () => items.reduce((sum, it) => sum + it.price * it.qty, 0),
     [items]
@@ -174,6 +179,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     inc,
     dec,
     removeItem,
+    clearCart,
     subtotal,
     deliveryFee,
     tax,
