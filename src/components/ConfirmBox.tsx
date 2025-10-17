@@ -1,7 +1,6 @@
 "use client"; 
-import  { useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-
 
 interface ConfirmBoxProps {
   fullName: string;
@@ -15,7 +14,8 @@ interface ConfirmBoxProps {
   onCancel: () => void;
 }
 
-export default function confirmBox({
+// ✅ FIXED: Changed from 'confirmBox' to 'ConfirmBox'
+export default function ConfirmBox({
   fullName,
   phoneNumber,
   date,
